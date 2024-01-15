@@ -107,6 +107,23 @@ export default function Signup(query) {
                   type={isVisible ? "text" : "password"}
                   className="max-w-xs"
                 />
+                <Input
+                  label="Vahvista salasana"
+                  variant="bordered"
+                  placeholder="Syötä salasana uudelleen"
+                  labelPlacement="outside"
+                  endContent={
+                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                      {isVisible ? (
+                        <EyeSlashFill size={22} className="text-2xl text-default-400 pointer-events-none" />
+                      ) : (
+                        <EyeFill size={22} className="text-2xl text-default-400 pointer-events-none" />
+                      )}
+                    </button>
+                  }
+                  type={isVisible ? "text" : "password"}
+                  className="max-w-xs"
+                />
               <button className="flip-card__btn">Luo käyttäjä</button>
             </form>
           </div>
