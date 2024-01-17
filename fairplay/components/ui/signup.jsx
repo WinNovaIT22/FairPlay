@@ -12,7 +12,7 @@ export default function Signup() {
   const [isVisiblePassword2, setIsVisiblePassword2] = React.useState(false);
   const [value, setValue] = React.useState('');
   const [searchQuery, setSearchQuery] = useState('');
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
     vehicle: "",
