@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
-
-const prisma = new PrismaClient();
+import { db } from "../../../utils/db"
 
 export async function GET(request) {
   try {
@@ -10,7 +8,7 @@ export async function GET(request) {
 
     if (params) {
       const searchTerms = params.split(/\s+/).filter(Boolean);    
-      const data = await prisma.kaksipyoraiset_data.findMany({
+      const data = await db.kaksipyoraiset_data.findMany({
         where: {
           AND: searchTerms.map((term) => ({
             OR: [
@@ -25,10 +23,10 @@ export async function GET(request) {
       return NextResponse.json({ data }, { status: 200 });
     } else {
       const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
-      const pageSize = 50;
+      const pageSize = 30;
       const skip = (page - 1) * pageSize;
 
-      const initialData = await prisma.kaksipyoraiset_data.findMany({
+      const initialData = await db.kaksipyoraiset_data.findMany({
         take: pageSize,
         skip,
       });
@@ -37,9 +35,9 @@ export async function GET(request) {
     }
   } catch (error) {
     console.error('Error fetching data:', error);
-    await prisma.$disconnect();
+    await db.$disconnect();
     return NextResponse.json({ message: 'Error' }, { status: 500 });
   } finally {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }
 }

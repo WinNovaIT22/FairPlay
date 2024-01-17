@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { db } from "@utils/db"
+import { db } from "../../../utils/db"
 import { hash } from "bcrypt"
 
 export async function POST(req) {
     try {
         const body = await req.json()
-        const { firstname, lastname, email, password } = body
+        const { firstname, lastname, vehicle, email, password } = body
 
         const existingUserByEmail = await db.user.findUnique({
             where: { email: email }
@@ -19,6 +19,7 @@ export async function POST(req) {
             data: {
                 firstname,
                 lastname,
+                vehicle,
                 email,
                 password: hashedPassword
             }
