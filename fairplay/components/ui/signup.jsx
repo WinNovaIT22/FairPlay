@@ -98,7 +98,7 @@ export default function Signup() {
               <Input
                 type="text"
                 name="firstname"
-                variant="bordered"
+                variant="faded"
                 label="Etunimi"
                 placeholder="Syötä etunimi"
                 labelPlacement="outside"
@@ -106,7 +106,7 @@ export default function Signup() {
               />
               <Input
                 type="text"
-                variant="bordered"
+                variant="faded"
                 name="lastname"
                 label="Sukunimi"
                 placeholder="Syötä sukunimi"
@@ -115,7 +115,7 @@ export default function Signup() {
               />
             </div>
               <Autocomplete
-                variant="bordered"
+                variant="faded"
                 inputValue={searchQuery}
                 isLoading={list.isLoading}
                 items={list.items}
@@ -137,7 +137,7 @@ export default function Signup() {
               </Autocomplete>
               <Input
                 type="email"
-                variant="bordered"
+                variant="faded"
                 label="Sähköposti"
                 name="email"
                 placeholder="Syötä sähköposti"
@@ -155,7 +155,7 @@ export default function Signup() {
                 label="Salasana"
                 name="password"
                 onChange={handleInputChange}
-                variant="bordered"
+                variant="faded"
                 placeholder="Syötä salasana"
                 labelPlacement="outside"
                 endContent={
@@ -172,7 +172,7 @@ export default function Signup() {
               />
               <Input
                 label="Salasana uudelleen"
-                variant="bordered"
+                variant="faded"
                 placeholder="Syötä salasana uudelleen"
                 labelPlacement="outside"
                 endContent={
