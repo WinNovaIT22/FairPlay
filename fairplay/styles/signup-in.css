@@ -1,117 +1,73 @@
-.wrapper {
-    --input-focus: #2d8cf0;
-    --font-color: #323232;
-    --font-color-sub: #666;
-    --bg-color: #fff;
-    --bg-color-alt: #666;
-    --main-color: #323232;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  .center-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh; 
-  }
-  
-  /* switch card */
-  
-  .card-side::before {
-    position: absolute;
-    content: 'Log in';
-    left: -70px;
-    top: 0;
-    width: 100px;
-    text-decoration: underline;
-    color: var(--font-color);
-    font-weight: 600;
-  }
-  
-  .card-side::after {
-    position: absolute;
-    content: 'Sign up';
-    left: 70px;
-    top: 0;
-    width: 100px;
-    text-decoration: none;
-    color: var(--font-color);
-    font-weight: 600;
-  }
-  
-  .toggle {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  /* card */ 
-  
-  .flip-card__inner {
-    width: 450px;
-    height: 350px;
-    position: relative;
-    background-color: transparent;
-    perspective: 1000px;
-    text-align: center;
-  }
-  
-  .flip-card__front, .flip-card__back {
-    padding: 20px;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    background: lightgrey;
-    gap: 20px;
-    border-radius: 5px;
-    border: 2px solid var(--main-color);
-    box-shadow: 4px 4px var(--main-color);
-  }
-  
-  .flip-card__back {
-    width: 100%;
-    transform: rotateY(180deg);
-  }
-  
-  .flip-card__form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-  .name-inputs {
-    display: flex;
-    gap: 10px;
-  }
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
 
-  .title {
-    margin: 20px 0 20px 0;
-    font-size: 25px;
-    font-weight: 900;
-    text-align: center;
-    color: var(--main-color);
-  }
-  
-  .flip-card__btn:active, .button-confirm:active {
-    box-shadow: 0px 0px var(--main-color);
-    transform: translate(3px, 3px);
-  }
-  
-  .flip-card__btn {
-    margin: 20px 0 20px 0;
-    width: 120px;
-    height: 40px;
-    border-radius: 5px;
-    border: 2px solid var(--main-color);
-    background-color: var(--bg-color);
-    box-shadow: 4px 4px var(--main-color);
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--font-color);
-    cursor: pointer;
-  } 
+.card {
+  width: 700px; /* Adjusted width */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 20px; /* Adjusted margin */
+}
+
+.card-header {
+  background-color: #0047AB;
+  font-weight: 999;
+  padding: 32px; /* Adjusted padding */
+  text-align: center;
+}
+
+.card-header .text-header {
+  margin: 0;
+  font-size: 36px; /* Adjusted font size */
+  color: rgb(255, 255, 255);
+}
+
+.card-body {
+  padding: 32px; /* Adjusted padding */
+}
+
+.form-group {
+  margin-bottom: 20px; /* Adjusted margin */
+}
+
+.form-group label {
+  display: block;
+  font-size: 18px; /* Adjusted font size */
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 5px; /* Adjusted margin */
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 16px; /* Adjusted padding */
+  font-size: 18px; /* Adjusted font size */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn {
+  padding: 24px 48px; /* Adjusted padding */
+  margin-left: 26px; /* Adjusted margin */
+  font-size: 24px; /* Adjusted font size */
+  border: none;
+  border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #ccc;
+  color: #00008B;
+}

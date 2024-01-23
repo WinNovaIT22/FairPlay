@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import React, { useState, useEffect } from "react";
 import "../../styles/signup-in.css"
 import { Envelope, EyeFill, EyeSlashFill, Search } from 'react-bootstrap-icons';
-import { Input, Autocomplete, AutocompleteItem } from '@nextui-org/react';
+import { Input, Autocomplete, AutocompleteItem,Button } from '@nextui-org/react';
 import { useAsyncList } from "@react-stately/data";
 
 export default function Signup() {
@@ -89,12 +89,11 @@ export default function Signup() {
   };
 
   return (
-    <div className="wrapper">
-      <div className="card-switch">
-        <div className="flip-card__inner">
-          <div className="flip-card__front">
-            <div className="title">Rekisteröidy</div>
-              <form className="flip-card__form flex flex-wrap justify-center" onSubmit={onSubmit}>
+    <div className="card">
+      <div className="card-header">
+            <div className="text-header">Rekisteröidy</div>
+            </div>
+              <form className="card-body flex flex-wrap justify-center" onSubmit={onSubmit}>
                 <div className="flex items-center gap-4">
                   <Input
                     type="text"
@@ -188,11 +187,8 @@ export default function Signup() {
                   type={isVisiblePassword2 ? "text" : "password"}
                   className="max-w-xs"
                 />
-              <button className="flip-card__btn" type="submit">Luo käyttäjä</button>
+              <Button style={{ backgroundColor: '#0047AB', color: '#FFFFFF' }} type="submit">Luo käyttäjä</Button>
             </form>
           </div>
-        </div>
-      </div>
-    </div>
   );
 }
