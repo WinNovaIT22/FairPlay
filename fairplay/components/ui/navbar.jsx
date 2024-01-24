@@ -12,7 +12,7 @@ export default function Navbar() {
       <DropdownMenu variant="faded" aria-label="Settings Menu">
         <DropdownItem key="account" startContent={<PersonFill />}>Käyttäjätiedot</DropdownItem>
         <DropdownItem key="vehicles" startContent={<Bicycle />}>Ajoneuvosi</DropdownItem>
-        <DropdownItem key="info" startContent={<InfoCircle />}>Ohjeita käyttöön</DropdownItem>
+        <DropdownItem key="info" href="/ohjeita" startContent={<InfoCircle />}>Ohjeita käyttöön</DropdownItem>
         <DropdownItem key="logout" className="text-danger" color="danger" startContent={<BoxArrowInRight />}>Kirjaudu ulos</DropdownItem>
       </DropdownMenu>
     </Dropdown>

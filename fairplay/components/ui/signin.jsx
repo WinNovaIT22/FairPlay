@@ -4,7 +4,7 @@ import React from "react";
 import Link from 'next/link';
 import { Envelope, EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import { signIn } from 'next-auth/react'
-import { Input } from '@nextui-org/react';
+import { Input,Button } from '@nextui-org/react';
 import "../../styles/signup-in.css"
 
 export default function Signin() {
@@ -23,11 +23,10 @@ export default function Signin() {
   };
 
   return (
-    <div className="wrapper">
-      <div className="card-switch">
-        <div className="flip-card__inner">
-          <div className="flip-card__front">
-            <div className="title">Kirjaudu</div>
+    <div className="card">
+      <div className="card-header">
+            <div className="text-header">Kirjaudu</div>
+            </div>
               <form className="flip-card__form" onSubmit={onSubmit}>
                 <Input
                     type="email"
@@ -54,15 +53,12 @@ export default function Signin() {
                     </button>
                   }
                 />
-              <button className="flip-card__btn" type="submit">Sisään</button>
+              <Button style={{ backgroundColor: '#0047AB', color: '#FFFFFF' }} type="submit">Kirjaudu sisään</Button>
             </form>
             <p className="register-link">
               Eikö sinulla ole tunnuksia?{' '}
               <Link legacyBehavior href="/rekisteroidy"><a><br></br>Tee käyttäjä tästä</a></Link>
             </p>
           </div>
-        </div>
-      </div>
-    </div>
   );
 }
