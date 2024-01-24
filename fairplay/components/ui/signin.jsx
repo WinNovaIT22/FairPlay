@@ -2,10 +2,9 @@
 
 import React from "react";
 import Link from 'next/link';
-import { Envelope, EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
-import { signIn } from 'next-auth/react'
-import { Input,Button } from '@nextui-org/react';
-import "../../styles/signup-in.css"
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { signIn } from 'next-auth/react';
+import { Input, Button } from '@nextui-org/react';
 
 export default function Signin() {
   const [isVisible, setIsVisible] = React.useState(false);
@@ -23,42 +22,45 @@ export default function Signin() {
   };
 
   return (
-    <div className="card">
-      <div className="card-header">
-            <div className="text-header">Kirjaudu</div>
-            </div>
-              <form className="flip-card__form" onSubmit={onSubmit}>
-                <Input
-                    type="email"
-                    variant="bordered"
-                    label="Sähköposti"
-                    placeholder="Syötä sähköposti"
-                    labelPlacement="outside"
-                    startContent={
-                      <Envelope size={22} className="mr-2 text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                    }
-                />
-                <Input
-                  label="Salasana"
-                  variant="bordered"
-                  placeholder="Syötä salasana"
-                  labelPlacement="outside"
-                  endContent={
-                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
-                      {isVisible ? (
-                        <EyeSlashFill size={22} className="text-2xl text-default-400 pointer-events-none" />
-                      ) : (
-                        <EyeFill size={22} className="text-2xl text-default-400 pointer-events-none" />
-                      )}
-                    </button>
-                  }
-                />
-              <Button style={{ backgroundColor: '#0047AB', color: '#FFFFFF' }} type="submit">Kirjaudu sisään</Button>
-            </form>
-            <p className="register-link">
-              Eikö sinulla ole tunnuksia?{' '}
-              <Link legacyBehavior href="/rekisteroidy"><a><br></br>Tee käyttäjä tästä</a></Link>
-            </p>
-          </div>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="w-80 border border-gray-300 rounded-md shadow-md overflow-hidden m-4">
+        <div className="bg-blue-600 text-white text-center py-4">
+          <div className="text-xl font-black">Kirjaudu</div>
+        </div>
+        <form className="p-4" onSubmit={onSubmit}>
+          <Input
+            type="email"
+            radius="sm"
+            label="Sähköposti"
+            variant="faded"
+            placeholder="Syötä sähköposti"
+            labelPlacement="outside"
+          />
+          <Input
+            label="Salasana"
+            radius="sm"
+            variant="faded"
+            placeholder="Syötä salasana"
+            labelPlacement="outside"
+            endContent={
+              <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                {isVisible ? (
+                  <IoEyeOffOutline size={22} className="text-2xl text-default-400 pointer-events-none" />
+                ) : (
+                  <IoEyeOutline size={22} className="text-2xl text-default-400 pointer-events-none" />
+                )}
+              </button>
+            }
+          />
+          <Button className="bg-blue-600 text-white font-bold" radius="md" type="submit">Sisään</Button>
+        </form>
+        <p className="text-center mt-4">
+          Eikö sinulla ole käyttäjää?<br></br>
+          <Link legacyBehavior href="/rekisteroidy">
+            <a className="text-blue-700">Tee se tästä!</a>
+          </Link>
+        </p>
+      </div>
+    </div>
   );
 }

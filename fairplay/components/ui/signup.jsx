@@ -1,16 +1,16 @@
 "use client"
-import { useRouter } from 'next/navigation'
+
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from "react";
-import "../../styles/signup-in.css"
-import { Envelope, EyeFill, EyeSlashFill, Search } from 'react-bootstrap-icons';
-import { Input, Autocomplete, AutocompleteItem,Button } from '@nextui-org/react';
+import Link from 'next/link';
+import { IoSearchOutline, IoMailOutline, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { Input, Autocomplete, AutocompleteItem, Button } from '@nextui-org/react';
 import { useAsyncList } from "@react-stately/data";
 
 export default function Signup() {
   const router = useRouter();
   const [isVisiblePassword1, setIsVisiblePassword1] = React.useState(false);
   const [isVisiblePassword2, setIsVisiblePassword2] = React.useState(false);
-  const [value, setValue] = React.useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState({
     firstname: "",
@@ -23,14 +23,6 @@ export default function Signup() {
   const toggleVisibilityPassword1 = () => setIsVisiblePassword1(!isVisiblePassword1);
   const toggleVisibilityPassword2 = () => setIsVisiblePassword2(!isVisiblePassword2);
 
-  const validateEmail = (value) => value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
-
-  const isInvalid = React.useMemo(() => {
-    if (value === "") return false;
-
-    return validateEmail(value) ? false : true;
-  }, [value]);
-
   let list = useAsyncList({
     async load({ filterText }) {
       try {
@@ -38,7 +30,7 @@ export default function Signup() {
         const responseData = await response.json();
 
         return {
-          items: responseData.data || [], 
+          items: responseData.data || [],
         };
       } catch (error) {
         console.error("Error loading data:", error);
@@ -52,7 +44,7 @@ export default function Signup() {
     if (searchQuery.trim() !== "") {
       list.setFilterText(searchQuery);
     } else {
-      setSearchQuery(""); 
+      setSearchQuery("");
     }
   }, [searchQuery]);
 
@@ -77,9 +69,9 @@ export default function Signup() {
       });
 
       if (response.ok) {
-        router.push('/kirjaudu')
+        router.push('/kirjaudu');
         const data = await response.json();
-        console.log(data); 
+        console.log(data);
       } else {
         console.error("Error creating user:", response.status);
       }
@@ -89,106 +81,114 @@ export default function Signup() {
   };
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <div className="text-header">Rekisteröidy</div>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="w-96 border border-gray-200 rounded-md shadow-md overflow-hidden m-4">
+        <div className="bg-blue-600 text-white text-center py-4">
+          <div className="text-xl font-black">Rekisteröidy</div>
         </div>
-          <form className="card-body flex flex-wrap justify-center" onSubmit={onSubmit}>
-            <div className="flex items-center gap-4">
-              <Input
-                type="text"
-                name="firstname"
-                variant="faded"
-                label="Etunimi"
-                placeholder="Syötä etunimi"
-                labelPlacement="outside"
-                onChange={handleInputChange}
-              />
-              <Input
-                type="text"
-                variant="faded"
-                name="lastname"
-                label="Sukunimi"
-                placeholder="Syötä sukunimi"
-                labelPlacement="outside"
-                onChange={handleInputChange}
-              />
-            </div>
-              <Autocomplete
-                variant="faded"
-                inputValue={searchQuery}
-                isLoading={list.isLoading}
-                items={list.items}
-                label="Ajoneuvo"
-                name="vehicle"
-                placeholder="Hae oma ajoneuvosi"
-                labelPlacement="outside"
-                onChange={handleInputChange}
-                onInputChange={(value) => setSearchQuery(value)} 
-                startContent={
-                  <Search size={22} className="mr-2 text-2xl text-default-500 pointer-events-none flex-shrink-0" />
-                }
-              >
-                {(item) => (
-                  <AutocompleteItem key={item.id} value={item.merkkiSelvakielinen} textValue={`${item.merkkiSelvakielinen} ${item.kaupallinenNimi}`} className="py-2">
-                    {item.merkkiSelvakielinen} {item.kaupallinenNimi}
-                  </AutocompleteItem>
-                )}
-              </Autocomplete>
-              <Input
-                type="email"
-                variant="faded"
-                label="Sähköposti"
-                name="email"
-                placeholder="Syötä sähköposti"
-                labelPlacement="outside"
-                onChange={handleInputChange}
-                isInvalid={true}
-                color={isInvalid ? "danger" : "success"}
-                errorMessage={isInvalid && "Please enter a valid email"}
-                startContent={
-                  <Envelope size={22} className="mr-2 text-2xl text-default-500 pointer-events-none flex-shrink-0" />
-                }
-                className="max-w-xs"
-              />
-              <Input
-                label="Salasana"
-                name="password"
-                onChange={handleInputChange}
-                variant="faded"
-                placeholder="Syötä salasana"
-                labelPlacement="outside"
-                endContent={
-                  <button className="focus:outline-none" type="button" onClick={toggleVisibilityPassword1}>
-                    {isVisiblePassword1 ? (
-                      <EyeSlashFill size={22} className="text-2xl text-default-400 pointer-events-none" />
-                    ) : (
-                      <EyeFill size={22} className="text-2xl text-default-400 pointer-events-none" />
-                    )}
-                  </button>
-                }
-                type={isVisiblePassword1 ? "text" : "password"}
-                className="max-w-xs"
-              />
-              <Input
-                label="Salasana uudelleen"
-                variant="faded"
-                placeholder="Syötä salasana uudelleen"
-                labelPlacement="outside"
-                endContent={
-                  <button className="focus:outline-none" type="button" onClick={toggleVisibilityPassword2}>
-                    {isVisiblePassword2 ? (
-                      <EyeSlashFill size={22} className="text-2xl text-default-400 pointer-events-none" />
-                    ) : (
-                      <EyeFill size={22} className="text-2xl text-default-400 pointer-events-none" />
-                    )}
-                  </button>
-                }
-                type={isVisiblePassword2 ? "text" : "password"}
-                className="max-w-xs"
-              />
-            <Button style={{ backgroundColor: '#0047AB', color: '#FFFFFF' }} type="submit">Luo käyttäjä</Button>
-          </form>
+        <form className="p-4" onSubmit={onSubmit}>
+          <div className="flex items-center space-x-4 mb-4">
+            <Input
+              type="text"
+              name="firstname"
+              radius="sm"
+              variant="faded"
+              label="Etunimi"
+              placeholder="Syötä etunimi"
+              labelPlacement="outside"
+              onChange={handleInputChange}
+            />
+            <Input
+              type="text"
+              variant="faded"
+              name="lastname"
+              radius="sm"
+              label="Sukunimi"
+              placeholder="Syötä sukunimi"
+              labelPlacement="outside"
+              onChange={handleInputChange}
+            />
+          </div>
+          <Autocomplete
+            variant="faded"
+            inputValue={searchQuery}
+            isLoading={list.isLoading}
+            items={list.items}
+            label="Ajoneuvo"
+            radius="sm"
+            name="vehicle"
+            placeholder="Hae oma ajoneuvosi"
+            labelPlacement="outside"
+            onChange={handleInputChange}
+            onInputChange={(value) => setSearchQuery(value)}
+            startContent={<IoSearchOutline size={22} className="mr-1 text-2xl text-blue-500 pointer-events-none flex-shrink-0" />}
+          >
+            {(item) => (
+              <AutocompleteItem key={item.id} value={item.merkkiSelvakielinen} textValue={`${item.merkkiSelvakielinen} ${item.kaupallinenNimi}`} className="py-2">
+                {item.merkkiSelvakielinen} {item.kaupallinenNimi}
+              </AutocompleteItem>
+            )}
+          </Autocomplete>
+          <Input
+            type="email"
+            variant="faded"
+            label="Sähköposti"
+            radius="sm"
+            name="email"
+            placeholder="Syötä sähköposti"
+            labelPlacement="outside"
+            onChange={handleInputChange}
+            startContent={<IoMailOutline size={22} className="mr-1 text-2xl text-blue-500 pointer-events-none flex-shrink-0" />}
+            className="max-w-xs"
+          />
+          <Input
+            label="Salasana"
+            name="password"
+            onChange={handleInputChange}
+            variant="faded"
+            placeholder="Syötä salasana"
+            radius="sm"
+            labelPlacement="outside"
+            endContent={
+              <button className="focus:outline-none" type="button" onClick={toggleVisibilityPassword1}>
+                {isVisiblePassword1 ? (
+                  <IoEyeOffOutline size={22} className="text-2xl text-blue-500 pointer-events-none" />
+                ) : (
+                    <IoEyeOutline size={22} className="text-2xl text-blue-500 pointer-events-none" />
+                  )}
+              </button>
+            }
+            type={isVisiblePassword1 ? "text" : "password"}
+            className="max-w-xs"
+          />
+          <Input
+            label="Salasana uudelleen"
+            name="password"
+            variant="faded"
+            placeholder="Syötä salasana uudelleen"
+            radius="sm"
+            labelPlacement="outside"
+            endContent={
+              <button className="focus:outline-none" type="button" onClick={toggleVisibilityPassword2}>
+                {isVisiblePassword2 ? (
+                  <IoEyeOffOutline size={22} className="text-2xl text-blue-500 pointer-events-none" />
+                ) : (
+                    <IoEyeOutline size={22} className="text-2xl text-blue-500 pointer-events-none" />
+                  )}
+              </button>
+            }
+            type={isVisiblePassword2 ? "text" : "password"}
+            className="max-w-xs"
+          />
+          <Button className="bg-blue-600 text-white font-bold" radius="md" type="submit">Luo käyttäjä</Button>
+        </form>
+        <p className="text-center mt-4">
+          Onko sinulla jo käyttäjä?<br></br>
+          <Link legacyBehavior href="/kirjaudu">
+            <a className="text-blue-700">Kirjaudu tästä!</a>
+          </Link>
+        </p>
       </div>
+    </div>
   );
 }
