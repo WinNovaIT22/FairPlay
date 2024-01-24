@@ -3,6 +3,8 @@
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from "react";
 import Link from 'next/link';
+import addNotification from 'react-push-notification';
+import { Notifications } from 'react-push-notification';
 import { IoSearchOutline, IoMailOutline, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Input, Autocomplete, AutocompleteItem, Button } from '@nextui-org/react';
 import { useAsyncList } from "@react-stately/data";
@@ -60,10 +62,10 @@ export default function Signup() {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/user", {
-        method: "POST",
+      const response = await fetch('/api/user', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
@@ -72,16 +74,24 @@ export default function Signup() {
         router.push('/kirjaudu');
         const data = await response.json();
         console.log(data);
+
+        addNotification({
+          title: 'Warning',
+          subtitle: 'This is a subtitle',
+          message: 'This is a very long message',
+          native: true
+      });
       } else {
-        console.error("Error creating user:", response.status);
+        console.error('Error creating user:', response.status);
       }
     } catch (error) {
-      console.error("Error creating user:", error);
+      console.error('Error creating user:', error);
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
+            <Notifications />
       <div className="w-96 border border-gray-200 rounded-md shadow-md overflow-hidden m-4">
         <div className="bg-blue-600 text-white text-center py-4">
           <div className="text-xl font-black">Rekisteröidy</div>
@@ -119,6 +129,7 @@ export default function Signup() {
             name="vehicle"
             placeholder="Hae oma ajoneuvosi"
             labelPlacement="outside"
+            scrollShadowProps={{ isEnabled: false }}
             onChange={handleInputChange}
             onInputChange={(value) => setSearchQuery(value)}
             startContent={<IoSearchOutline size={22} className="mr-1 text-2xl text-blue-500 pointer-events-none flex-shrink-0" />}

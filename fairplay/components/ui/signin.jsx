@@ -45,9 +45,9 @@ export default function Signin() {
             endContent={
               <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
                 {isVisible ? (
-                  <IoEyeOffOutline size={22} className="text-2xl text-default-400 pointer-events-none" />
+                  <IoEyeOffOutline size={22} className="text-2xl text-blue-500 pointer-events-none" />
                 ) : (
-                  <IoEyeOutline size={22} className="text-2xl text-default-400 pointer-events-none" />
+                  <IoEyeOutline size={22} className="text-2xl text-blue-500 pointer-events-none" />
                 )}
               </button>
             }
