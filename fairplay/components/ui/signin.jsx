@@ -1,13 +1,19 @@
 "use client"
 
-import React from "react";
+import { useRouter } from 'next/navigation';
+import React, { useState } from "react";
 import Link from 'next/link';
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { signIn } from 'next-auth/react';
 import { Input, Button } from '@nextui-org/react';
 
 export default function Signin() {
+  const router = useRouter()
   const [isVisible, setIsVisible] = React.useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -15,10 +21,23 @@ export default function Signin() {
     e.preventDefault();
 
     const signInData = await signIn('credentials', {
-      email: values.email,
-      password: values.password
+      email: formData.email,
+      password: formData.password,
     })
-    console.log(signInData)
+    
+    if(!signInData?.error) {
+      console.log(signInData.error)
+    } else {
+      router.push('/')
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   return (
@@ -35,6 +54,7 @@ export default function Signin() {
             variant="faded"
             placeholder="Syötä sähköposti"
             labelPlacement="outside"
+            onChange={handleInputChange}
           />
           <Input
             label="Salasana"
@@ -42,6 +62,7 @@ export default function Signin() {
             variant="faded"
             placeholder="Syötä salasana"
             labelPlacement="outside"
+            onChange={handleInputChange}
             endContent={
               <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
                 {isVisible ? (
@@ -51,6 +72,8 @@ export default function Signin() {
                 )}
               </button>
             }
+            type={isVisible ? "text" : "password"}
+            className="max-w-xs"
           />
           <Button className="bg-blue-600 text-white font-bold" radius="md" type="submit">Sisään</Button>
         </form>
