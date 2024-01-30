@@ -84,10 +84,10 @@ export default function Signup() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-96 border border-gray-200 rounded-md shadow-md overflow-hidden m-4">
-        <div className="bg-blue-600 text-white text-center py-4">
+        <div className="bg-blue-800 text-white text-center py-4">
           <div className="text-xl font-black">Rekisteröidy</div>
         </div>
-        <form className="p-4" onSubmit={onSubmit}>
+        <form className="p-4 flex flex-col items-center" onSubmit={onSubmit}>
           <div className="flex items-center space-x-4 mb-4">
             <Input
               type="text"
@@ -120,6 +120,7 @@ export default function Signup() {
             name="vehicle"
             placeholder="Hae oma ajoneuvosi"
             labelPlacement="outside"
+            className="mb-3"
             scrollShadowProps={{ isEnabled: false }}
             onChange={handleInputChange}
             onInputChange={(value) => setSearchQuery(value)}
@@ -137,11 +138,11 @@ export default function Signup() {
             label="Sähköposti"
             radius="sm"
             name="email"
+            className="mb-3"
             placeholder="Syötä sähköposti"
             labelPlacement="outside"
             onChange={handleInputChange}
             startContent={<IoMailOutline size={22} className="mr-1 text-2xl text-blue-500 pointer-events-none flex-shrink-0" />}
-            className="max-w-xs"
           />
           <Input
             label="Salasana"
@@ -150,6 +151,7 @@ export default function Signup() {
             variant="faded"
             placeholder="Syötä salasana"
             radius="sm"
+            className="mb-3"
             labelPlacement="outside"
             endContent={
               <button className="focus:outline-none" type="button" onClick={toggleVisibilityPassword1}>
@@ -161,7 +163,6 @@ export default function Signup() {
               </button>
             }
             type={isVisiblePassword1 ? "text" : "password"}
-            className="max-w-xs"
           />
           <Input
             label="Salasana uudelleen"
@@ -169,6 +170,7 @@ export default function Signup() {
             variant="faded"
             placeholder="Syötä salasana uudelleen"
             radius="sm"
+            className="mb-5"
             labelPlacement="outside"
             endContent={
               <button className="focus:outline-none" type="button" onClick={toggleVisibilityPassword2}>
@@ -180,16 +182,16 @@ export default function Signup() {
               </button>
             }
             type={isVisiblePassword2 ? "text" : "password"}
-            className="max-w-xs"
           />
-          <Button className="bg-blue-600 text-white font-bold" radius="md" type="submit">Luo käyttäjä</Button>
+          <Button className="bg-blue-800 text-white font-semibold w-full tracking-widest text-xl" radius="md" type="submit">Luo käyttäjä</Button>
+
+            <p className="text-center mt-6">
+              Onko sinulla jo käyttäjä?<br></br>
+            <Link legacyBehavior href="/kirjaudu">
+              <a className="text-blue-700">Kirjaudu tästä</a>
+            </Link>
+          </p>
         </form>
-        <p className="text-center mt-4">
-          Onko sinulla jo käyttäjä?<br></br>
-          <Link legacyBehavior href="/kirjaudu">
-            <a className="text-blue-700">Kirjaudu tästä!</a>
-          </Link>
-        </p>
       </div>
     </div>
   );
