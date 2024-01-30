@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from "react";
 import Link from 'next/link';
 import { IoSearchOutline, IoMailOutline, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import { Input, Autocomplete, AutocompleteItem, Button } from '@nextui-org/react';
+import { Input, Autocomplete, AutocompleteItem, Button, Checkbox } from '@nextui-org/react';
 import { useAsyncList } from "@react-stately/data";
 
 export default function Signup() {
@@ -84,8 +84,8 @@ export default function Signup() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-96 border border-gray-200 rounded-md shadow-md overflow-hidden m-4">
-        <div className="bg-blue-800 text-white text-center py-4">
-          <div className="text-xl font-black">Rekisteröidy</div>
+        <div className="bg-blue-950 text-white text-center py-4">
+          <div className="text-xl font-bold">Rekisteröidy</div>
         </div>
         <form className="p-4 flex flex-col items-center" onSubmit={onSubmit}>
           <div className="flex items-center space-x-4 mb-4">
@@ -124,7 +124,7 @@ export default function Signup() {
             scrollShadowProps={{ isEnabled: false }}
             onChange={handleInputChange}
             onInputChange={(value) => setSearchQuery(value)}
-            startContent={<IoSearchOutline size={22} className="mr-1 text-2xl text-blue-500 pointer-events-none flex-shrink-0" />}
+            startContent={<IoSearchOutline size={22} className="mr-1 text-2xl text-slate-950 pointer-events-none flex-shrink-0" />}
           >
             {(item) => (
               <AutocompleteItem key={item.id} value={item.merkkiSelvakielinen} textValue={`${item.merkkiSelvakielinen} ${item.kaupallinenNimi}`} className="py-2">
@@ -142,7 +142,7 @@ export default function Signup() {
             placeholder="Syötä sähköposti"
             labelPlacement="outside"
             onChange={handleInputChange}
-            startContent={<IoMailOutline size={22} className="mr-1 text-2xl text-blue-500 pointer-events-none flex-shrink-0" />}
+            startContent={<IoMailOutline size={22} className="mr-1 text-2xl text-slate-950 pointer-events-none flex-shrink-0" />}
           />
           <Input
             label="Salasana"
@@ -156,9 +156,9 @@ export default function Signup() {
             endContent={
               <button className="focus:outline-none" type="button" onClick={toggleVisibilityPassword1}>
                 {isVisiblePassword1 ? (
-                  <IoEyeOffOutline size={22} className="text-2xl text-blue-500 pointer-events-none" />
+                  <IoEyeOffOutline size={22} className="text-2xl text-slate-950 pointer-events-none" />
                 ) : (
-                    <IoEyeOutline size={22} className="text-2xl text-blue-500 pointer-events-none" />
+                    <IoEyeOutline size={22} className="text-2xl text-slate-950 pointer-events-none" />
                   )}
               </button>
             }
@@ -170,20 +170,22 @@ export default function Signup() {
             variant="faded"
             placeholder="Syötä salasana uudelleen"
             radius="sm"
-            className="mb-5"
+            className="mb-3"
             labelPlacement="outside"
             endContent={
               <button className="focus:outline-none" type="button" onClick={toggleVisibilityPassword2}>
                 {isVisiblePassword2 ? (
-                  <IoEyeOffOutline size={22} className="text-2xl text-blue-500 pointer-events-none" />
+                  <IoEyeOffOutline size={22} className="text-2xl text-slate-950 pointer-events-none" />
                 ) : (
-                    <IoEyeOutline size={22} className="text-2xl text-blue-500 pointer-events-none" />
+                    <IoEyeOutline size={22} className="text-2xl text-slate-950 pointer-events-none" />
                   )}
               </button>
             }
             type={isVisiblePassword2 ? "text" : "password"}
           />
-          <Button className="bg-blue-800 text-white font-semibold w-full tracking-widest text-xl" radius="md" type="submit">Luo käyttäjä</Button>
+          <Checkbox size="sm" className="mb-5">Hyväksyn "käyttöehdot" ja "tietosuojaseloste"</Checkbox>
+
+          <Button className="bg-blue-950 text-white font-semibold w-full tracking-widest text-xl" radius="md" type="submit">Luo käyttäjä</Button>
 
             <p className="text-center mt-6">
               Onko sinulla jo käyttäjä?<br></br>
