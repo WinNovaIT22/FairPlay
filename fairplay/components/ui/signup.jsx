@@ -84,7 +84,7 @@ export default function Signup() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-96 border border-gray-200 rounded-md shadow-md overflow-hidden m-4">
-        <div className="bg-blue-950 text-white text-center py-4">
+        <div className="bg-blue-900 text-white text-center py-4">
           <div className="text-xl font-bold">Rekisteröidy</div>
         </div>
         <form className="p-4 flex flex-col items-center" onSubmit={onSubmit}>

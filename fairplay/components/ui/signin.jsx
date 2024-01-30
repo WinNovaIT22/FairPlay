@@ -19,18 +19,23 @@ export default function Signin() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    const signInData = await signIn('credentials', {
-      email: formData.email,
-      password: formData.password,
-    })
-    
-    if(!signInData?.error) {
-      console.log(signInData.error)
-    } else {
-      router.push('/')
+  
+    try {
+      const signInData = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+      });
+  
+      if (signInData?.error) {
+        console.error("Sign-in error:", signInData.error);
+      } else {
+        router.push('/');
+      }
+    } catch (error) {
+      console.error("Unexpected error during sign-in:", error);
     }
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -43,7 +48,7 @@ export default function Signin() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-80 border border-gray-300 rounded-md shadow-md overflow-hidden m-4">
-        <div className="bg-blue-950 text-white text-center py-4">
+        <div className="bg-blue-900 text-white text-center py-4">
           <div className="text-xl font-bold">Kirjaudu</div>
         </div>
         <form className="p-4 flex flex-col items-center" onSubmit={onSubmit}>

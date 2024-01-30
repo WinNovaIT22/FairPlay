@@ -16,8 +16,8 @@ export const authOptions: NextAuthOptions = {
         CredentialsProvider({
           name: "Credentials",
           credentials: {
-            email: { label: "Sähköposti", type: "email" },
-            password: { label: "Salasana", type: "password" }
+            email: { label: "Email", type: "email", placeholder: "john@mail.com" },
+            password: { label: "Password", type: "password" }
           },
           async authorize(credentials) {
             if (!credentials?.email ||!credentials?.password) {
@@ -45,5 +45,6 @@ export const authOptions: NextAuthOptions = {
             }
           }
         })
-      ]
+    ],
+    secret: process.env.NEXTAUTH_SECRET,
 }
