@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import Link from 'next/link';
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { signIn } from 'next-auth/react';
+import "../../styles/globals.css"
 import { Input, Button } from '@nextui-org/react';
 
 export default function Signin() {
@@ -56,6 +57,7 @@ export default function Signin() {
             type="email"
             radius="sm"
             label="Sähköposti"
+            name="email"
             variant="faded"
             className="mb-3"
             placeholder="Syötä sähköposti"
@@ -65,6 +67,7 @@ export default function Signin() {
           <Input
             label="Salasana"
             radius="sm"
+            name="password"
             variant="faded"
             placeholder="Syötä salasana"
             labelPlacement="outside"
@@ -86,7 +89,7 @@ export default function Signin() {
           <p className="text-center mt-6">
             Eikö sinulla ole käyttäjää?<br></br>
             <Link legacyBehavior href="/rekisteroidy">
-              <a className="text-blue-700">Tee se tästä</a>
+              <a className="text-blue-700 underline">Tee se tästä</a>
             </Link>
           </p>
         </form>

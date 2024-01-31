@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'PatchedPersonalUseOnlyBlack';
+  src: local('PatchedPersonalUseOnlyBlack'), url('/fonts/PatchedPersonalUseOnlyBlack-GOyOG.otf') format('trueType');
+}
+
+.fontti {
+  font-family: PatchedPersonalUseOnlyBlack;
+}
+
 .main {
   width: 100vw;
   min-height: 100vh;

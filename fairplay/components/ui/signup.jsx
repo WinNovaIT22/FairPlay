@@ -7,6 +7,12 @@ import { IoSearchOutline, IoMailOutline, IoEyeOutline, IoEyeOffOutline } from "r
 import { Input, Autocomplete, AutocompleteItem, Button, Checkbox } from '@nextui-org/react';
 import { useAsyncList } from "@react-stately/data";
 
+import localFont from 'next/font/local'
+
+const myFont = localFont({
+    src: './PatchedPersonalUseOnlyBlack-GOyOG.otf' 
+})
+
 export default function Signup() {
   const router = useRouter();
   const [isVisiblePassword1, setIsVisiblePassword1] = React.useState(false);
@@ -22,6 +28,10 @@ export default function Signup() {
 
   const toggleVisibilityPassword1 = () => setIsVisiblePassword1(!isVisiblePassword1);
   const toggleVisibilityPassword2 = () => setIsVisiblePassword2(!isVisiblePassword2);
+
+  const [emailValid, setEmailValid] = useState(true);
+  const [passwordValid, setPasswordValid] = useState(true);
+  const [confirmPasswordValid, setConfirmPasswordValid] = useState(true);
 
   let list = useAsyncList({
     async load({ filterText }) {
@@ -54,11 +64,36 @@ export default function Signup() {
       ...prevData,
       [name]: value,
     }));
+
+    if (name === 'email') setEmailValid(true);
+    if (name === 'password') setPasswordValid(true);
+    if (name === 'confirmPassword') setConfirmPasswordValid(true);
+  };
+
+  const validateForm = () => {
+    if (!isValidEmail(formData.email)) {
+      setEmailValid(false);
+    }
+    if (formData.password.length < 8) {
+      setPasswordValid(false);
+    }
+    if (formData.password !== formData.confirmPassword) {
+      setConfirmPasswordValid(false);
+    }
+  };
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    validateForm();
 
+    if (!emailValid || !passwordValid || !confirmPasswordValid) {
+      return;
+    }
     try {
       const response = await fetch('/api/user', {
         method: 'POST',
@@ -85,7 +120,7 @@ export default function Signup() {
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-96 border border-gray-200 rounded-md shadow-md overflow-hidden m-4">
         <div className="bg-blue-900 text-white text-center py-4">
-          <div className="text-xl font-bold">Rekisteröidy</div>
+          <div className={`tracking-widest text-xl ${myFont.className}`}>Rekisteröidy</div>
         </div>
         <form className="p-4 flex flex-col items-center" onSubmit={onSubmit}>
           <div className="flex items-center space-x-4 mb-4">
@@ -140,6 +175,9 @@ export default function Signup() {
             name="email"
             className="mb-3"
             placeholder="Syötä sähköposti"
+            isInvalid={!emailValid}
+            color={!emailValid ? "danger" : ""}
+            errorMessage={!emailValid && "Please enter a valid email"}
             labelPlacement="outside"
             onChange={handleInputChange}
             startContent={<IoMailOutline size={22} className="mr-1 text-2xl text-slate-950 pointer-events-none flex-shrink-0" />}
@@ -166,7 +204,7 @@ export default function Signup() {
           />
           <Input
             label="Salasana uudelleen"
-            name="password"
+            name="confirmPassword"
             variant="faded"
             placeholder="Syötä salasana uudelleen"
             radius="sm"
@@ -185,12 +223,12 @@ export default function Signup() {
           />
           <Checkbox size="sm" className="mb-5">Hyväksyn "käyttöehdot" ja "tietosuojaseloste"</Checkbox>
 
-          <Button className="bg-blue-950 text-white font-semibold w-full tracking-widest text-xl" radius="md" type="submit">Luo käyttäjä</Button>
+          <Button className={`bg-blue-950 text-white w-full tracking-widest text-md ${myFont.className}`} radius="md" type="submit">Luo käyttäjä</Button>
 
             <p className="text-center mt-6">
               Onko sinulla jo käyttäjä?<br></br>
             <Link legacyBehavior href="/kirjaudu">
-              <a className="text-blue-700">Kirjaudu tästä</a>
+              <a className="text-blue-700 underline">Kirjaudu tästä</a>
             </Link>
           </p>
         </form>
