@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div class="flex items-center justify-center h-screen mt-4">
-      <div class="bg-white w-3/4 p-5 content-center shadow-md relative rounded-md">
+      <div class="bg-white w-3/6 p-5 content-center shadow-md relative rounded-md">
         <button
           class="bg-green-200 text-green-700 rounded-xl px-3 py-1 absolute right-2 text-sm"
         >
