@@ -14,36 +14,38 @@ export const authOptions: NextAuthOptions = {
     },
     providers: [
         CredentialsProvider({
-          name: "Credentials",
-          credentials: {
-            email: { label: "Email", type: "email" },
-            password: { label: "Password", type: "password" }
-          },
-          async authorize(credentials) {
-            if (!credentials?.email || !credentials?.password) {
-                return null;
-            }
+            id: 'credentials',
+            name: "Credentials",
+            credentials: {
+                email: {},
+                password: {},
+            },
+            async authorize(credentials) {
+                console.log(credentials)
+                if (!credentials?.email || !credentials?.password) {
+                    return null;
+                }
 
-            const existingUser = await db.user.findUnique({
-                where: { email: credentials?.email }
-            })
-            if(!existingUser) {
-                return null;
-            }
+                const user = await db.user.findUnique({
+                    where: { email: credentials?.email }
+                })
+                if(!user) {
+                    return null;
+                }
 
-            const passwordMatch = await compare(credentials.password, existingUser.password)
+                const passwordMatch = await compare(credentials.password, user.password)
 
-            if(!passwordMatch) {
-                return null;
-            }
+                if(!passwordMatch) {
+                    return null;
+                }
 
-            return {
-                id: `${existingUser.id}`,
-                firstname: existingUser.firstname,
-                lastname: existingUser.lastname,
-                email: existingUser.email,
+                return {
+                    id: `${user.id}`,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    email: user.email,
+                }
             }
-          }
         })
     ],
     secret: process.env.NEXTAUTH_SECRET,
