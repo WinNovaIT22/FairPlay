@@ -6,6 +6,7 @@ import { compare } from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(db),
+    secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: 'jwt'
     },
@@ -14,26 +15,24 @@ export const authOptions: NextAuthOptions = {
     },
     providers: [
         CredentialsProvider({
-            id: 'credentials',
-            name: "Credentials",
+            id: "username-login",
             credentials: {
                 email: {},
                 password: {},
             },
             async authorize(credentials) {
-                console.log(credentials)
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
 
                 const user = await db.user.findUnique({
                     where: { email: credentials?.email }
-                })
+                });
                 if(!user) {
                     return null;
                 }
 
-                const passwordMatch = await compare(credentials.password, user.password)
+                const passwordMatch = await compare(credentials.password, user.password);
 
                 if(!passwordMatch) {
                     return null;
@@ -44,9 +43,8 @@ export const authOptions: NextAuthOptions = {
                     firstname: user.firstname,
                     lastname: user.lastname,
                     email: user.email,
-                }
+                };
             }
         })
     ],
-    secret: process.env.NEXTAUTH_SECRET,
-}
+};

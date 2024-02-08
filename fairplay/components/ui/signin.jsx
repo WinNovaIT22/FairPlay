@@ -1,37 +1,37 @@
 "use client"
 
-import { useRouter } from 'next/navigation';
 import React, { useState } from "react";
 import Link from 'next/link';
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { signIn } from 'next-auth/react';
 import "../../styles/globals.css"
 import { Input, Button } from '@nextui-org/react';
+import { useRouter } from "next/navigation";
 
 export default function Signin() {
   const router = useRouter()
-  const [isVisible, setIsVisible] = React.useState(false);
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [isVisible, setIsVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const signInData = await signIn('username-login', {
+      email: formData.email,
+      password: formData.password,
+      redirect: false,
+    });
   
-    try {
-      const res = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-  
-      if (res.error) {
-        console.error("Sign-in error:", res.error);
-        return
-      }
-    } catch (error) {
-      console.error("Unexpected error during sign-in:", error);
+    if (signInData?.error) {
+      console.log(signInData.error);
+    } else {
+      console.log(signInData)
+      router.push('/')
     }
   };
 
@@ -59,7 +59,7 @@ export default function Signin() {
             className="mb-3"
             placeholder="Syötä sähköposti"
             labelPlacement="outside"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleInputChange}
           />
           <Input
             label="Salasana"
@@ -69,7 +69,7 @@ export default function Signin() {
             placeholder="Syötä salasana"
             labelPlacement="outside"
             className="mb-5"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleInputChange}
             endContent={
               <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
                 {isVisible ? (
