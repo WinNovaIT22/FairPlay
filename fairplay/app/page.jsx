@@ -1,9 +1,14 @@
 import Navbar from "../components/ui/navbar"
+import { getServerSession } from "next-auth";
+import { authOptions } from "../utils/auth";
 
-export default function Home() {
+const Home = async () => {
+  const session = await getServerSession(authOptions)
   return (
-    <div>
+    <div>Tervetuloa {session?.user.firstname}
       <Navbar />
     </div>
   );
 }
+
+export default Home;
