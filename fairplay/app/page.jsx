@@ -4,9 +4,17 @@ import { authOptions } from "../utils/auth";
 
 const Home = async () => {
   const session = await getServerSession(authOptions)
+  const userRole = session?.user.role
+
   return (
-    <div>Tervetuloa {session?.user.firstname}
-      <Navbar />
+    <div className="">
+      <div>
+        Tervetuloa {session?.user.firstname}
+        <Navbar />
+        {userRole === 'admin' && (
+          <button onClick={() => router.push('/admin')}>Admin Page</button>
+        )}
+      </div>
     </div>
   );
 }

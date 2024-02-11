@@ -8,19 +8,20 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
   firstname String
   lastname  String
   vehicle   String
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
-  updateUt  DateTime @updatedAt
+  updateAt  DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  role      String
 }
 
 model kaksipyoraiset_data {
-  ajoneuvoluokka      String?
-  merkkiSelvakielinen String?
-  kaupallinenNimi     String?
-  id                  Int     @id @default(autoincrement())
+  ajoneuvoluokka      String
+  merkkiSelvakielinen String
+  kaupallinenNimi     String
+  id                  Int    @id @default(autoincrement())
 }

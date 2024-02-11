@@ -21,7 +21,8 @@ export async function POST(req) {
                 lastname,
                 vehicle,
                 email,
-                password: hashedPassword
+                password: hashedPassword,
+                role: "käyttäjä",
             }
         })
         const { password: newUserPassword, ...rest } = newUser
