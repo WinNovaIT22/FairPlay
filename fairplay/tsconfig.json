@@ -1,8 +1,5 @@
 {
   "compilerOptions": {
-    "paths": {
-      "@*": ["./*"]
-    },
     "lib": [
       "dom",
       "dom.iterable",
@@ -23,14 +20,18 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "app/api/auth/[...nextauth]/route.ts"  ],
+    "**/*.tsx",
+    "app/api/auth/[...nextauth]/route.ts" 
+  ],
   "exclude": [
     "node_modules"
   ]

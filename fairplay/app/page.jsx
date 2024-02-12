@@ -1,6 +1,6 @@
-import Navbar from "../components/ui/navbar";
+import Navbar from "@/components/ui/navbar";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../utils/auth";
+import { authOptions } from "@/utils/auth";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);

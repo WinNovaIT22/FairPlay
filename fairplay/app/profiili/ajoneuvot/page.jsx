@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../utils/auth";
+import { authOptions } from "@/utils/auth";
 import { FaMotorcycle } from "react-icons/fa6";
 
 const Navbar = async () => {

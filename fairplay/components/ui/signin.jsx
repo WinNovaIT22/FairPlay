@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from 'next/link';
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { signIn } from 'next-auth/react';
-import "../../styles/globals.css"
+import "@/styles/globals.css"
 import { Input, Button } from '@nextui-org/react';
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from 'react-toastify';
