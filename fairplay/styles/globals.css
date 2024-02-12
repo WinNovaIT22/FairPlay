@@ -13,16 +13,9 @@
 
 .app {
   background-color: #3b3b3b;
-}
-
-.main {
   width: 100vw;
   min-height: 100vh;
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  padding: 120px 24px 160px 24px;
-  pointer-events: none;
+  position: relative;
 }
 
 @media screen and (max-width: 640px) {
