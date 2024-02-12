@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
 import { FaMotorcycle } from "react-icons/fa6";
 
-const Navbar = async () => {
+const Vehicles = async () => {
     const session = await getServerSession(authOptions)
     const vehicle = session?.user.vehicle
 
@@ -18,4 +18,4 @@ const Navbar = async () => {
     );
   }
 
-export default Navbar;
+export default Vehicles;

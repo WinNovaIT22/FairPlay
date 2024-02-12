@@ -19,15 +19,12 @@ const Home = async () => {
 
   return (
     <div className="flex">
-      <div className="fixed">
-        <Navbar />
-      </div>
-
+      <Navbar />
       <div className="flex flex-grow justify-center items-center">
         {greeting}, {session?.user.firstname} {session?.user.lastname}
-        {userRole === 'admin' && (
+        {/* {userRole === 'admin' && (
           <button onClick={() => router.push('/admin')}>Admin Page</button>
-        )}
+        )} */}
       </div>
     </div>
   );
