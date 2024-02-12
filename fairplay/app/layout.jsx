@@ -8,7 +8,10 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-        <body>
+       <body>
+            <div className="main">
+            </div>
+
             <main className='app'>
                 {children}
             </main>

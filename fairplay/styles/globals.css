@@ -13,10 +13,9 @@
 
 .app {
   background-color: #3b3b3b;
-  width: 100vw;
   min-height: 100vh;
-  position: relative;
 }
+
 
 @media screen and (max-width: 640px) {
   .main {
