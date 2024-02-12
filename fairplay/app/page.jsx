@@ -9,7 +9,7 @@ const Home = async () => {
   return (
     <div className="">
       <div>
-        Tervetuloa {session?.user.firstname}
+        Tervetuloa {session?.user.firstname} {session?.user.lastname}
         <Navbar />
         {userRole === 'admin' && (
           <button onClick={() => router.push('/admin')}>Admin Page</button>
