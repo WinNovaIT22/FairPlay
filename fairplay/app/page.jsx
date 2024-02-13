@@ -18,7 +18,7 @@ const Home = async () => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex" style={{ backgroundImage: "url('/images/istockphoto-495417585-612x612.jpg')" }}>
       <Navbar />
       <div className="flex flex-grow justify-center items-center">
         {greeting}, {session?.user.firstname} {session?.user.lastname}
