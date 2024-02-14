@@ -1,10 +1,12 @@
 import Navbar from "@/components/ui/navbar";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
+import { Button } from "@nextui-org/react";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
-  const userRole = session?.user.role;
+  const isAdmin = session?.user.role === "admin";
 
   const currentHour = new Date().getHours();
   let greeting = "";
@@ -18,14 +20,10 @@ const Home = async () => {
   }
 
   return (
-    <div className="flex" style={{ backgroundImage: "url('/images/istockphoto-495417585-612x612.jpg')" }}>
-      <Navbar />
-      <div className="flex flex-grow justify-center items-center">
-        {greeting}, {session?.user.firstname} {session?.user.lastname}
-        {/* {userRole === 'admin' && (
-          <button onClick={() => router.push('/admin')}>Admin Page</button>
-        )} */}
-      </div>
+    <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
+      <div><Navbar /></div>
+      <div className="flex items-center text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
+      {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
     </div>
   );
 }
