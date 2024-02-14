@@ -30,6 +30,7 @@ const Vehicles = async () => {
               />
             </div> 
               <Input
+                isDisabled
                 type="text"
                 label="Sähköposti"
                 defaultValue={email}
