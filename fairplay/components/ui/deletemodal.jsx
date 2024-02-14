@@ -13,42 +13,42 @@ export default function DeleteModal() {
 
   return (
     <>
-        <Button onPress={onOpen} variant="solid" color="danger" className="font-bold mb-3">
-            <RiDeleteBin6Line size={18} />Poista käyttäjä
-        </Button>  
-        <Modal 
-            isOpen={isOpen} 
-            onOpenChange={onOpenChange}
-            placement="center"
+      <Button onPress={onOpen} variant="solid" color="danger" className="font-bold mb-3">
+        <RiDeleteBin6Line size={18} />Poista käyttäjä
+      </Button>  
+      <Modal 
+        isOpen={isOpen} 
+          onOpenChange={onOpenChange}
+          placement="center"
         >
         <ModalContent>
-            {(onClose) => (
+          {(onClose) => (
             <>
-                <ModalHeader className="flex flex-col gap-1">Poista käyttäjä</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">Poista käyttäjä</ModalHeader>
                 <ModalBody>
-                    <p className="text-sm">Vahvista käyttäjä poisto kirjoittamalla salasanasi</p>
-                    <Input
-                        autoFocus
-                        placeholder="Syötä salasana"
-                        endContent={
-                            <button className="focus:outline-none" type="button" onClick={toggleVisibilityPassword1}>
-                              {isVisiblePassword1 ? (
-                                <IoEyeOffOutline size={22} className="text-2xl text-slate-300 pointer-events-none" />
-                              ) : (
-                                <IoEyeOutline size={22} className="text-2xl text-slate-300 pointer-events-none" />
-                              )}
-                            </button>
-                          }
-                        type={isVisiblePassword1 ? "text" : "password"}
-                    />
+                  <p className="text-sm">Vahvista käyttäjä poisto kirjoittamalla salasanasi</p>
+                  <Input
+                    autoFocus
+                    placeholder="Syötä salasana"
+                    endContent={
+                      <button className="focus:outline-none" type="button" onClick={toggleVisibilityPassword1}>
+                      {isVisiblePassword1 ? (
+                        <IoEyeOffOutline size={22} className="text-2xl text-slate-300 pointer-events-none" />
+                      ) : (
+                        <IoEyeOutline size={22} className="text-2xl text-slate-300 pointer-events-none" />
+                      )}
+                      </button>
+                    }
+                    type={isVisiblePassword1 ? "text" : "password"}
+                  />
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant="light" onPress={onClose} className="font-bold">
-                        Peruuta
-                    </Button>
-                    <Button color="danger" variant="flat" onPress={onClose} className="font-bold">
-                        <RiDeleteBin6Line size={18} />Poista käyttäjä ikuisesti
-                    </Button>
+                  <Button variant="light" onPress={onClose} className="font-bold">
+                    Peruuta
+                  </Button>
+                  <Button color="danger" variant="flat" onPress={onClose} className="font-bold">
+                    <RiDeleteBin6Line size={18} />Poista käyttäjä ikuisesti
+                  </Button>
                 </ModalFooter>
             </>
           )}
