@@ -2,13 +2,29 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Chip, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
-import { columns } from "@/utils/data";
-import { capitalize } from "@/utils/utils";
+import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
 
-const statusColorMap = {
-    admin: "success",
-    käyttäjä: "default",
+const roleColorMap = {
+  admin: "success",
+  käyttäjä: "default",
 };  
+
+const columns = [
+  {name: "ETUNIMI", uid: "firstname"},
+  {name: "SUKUNIMI", uid: "lastname"},
+  {name: "SÄHKÖPOSTI", uid: "email"},
+  {name: "AJONEUVO", uid: "vehicle"},
+  {name: "ROOLI", uid: "role"},
+];
+
+const roleOptions = [
+  { uid: 'admin', name: 'admin' },
+  { uid: 'käyttäjä', name: 'käyttäjä' },
+];
+
+export function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 const INITIAL_VISIBLE_COLUMNS = ["firstname", "lastname", "email", "vehicle", "role"];
 
@@ -17,6 +33,7 @@ export default function App() {
     const [selectedKeys, setSelectedKeys] = useState(new Set([]));
     const [visibleColumns, setVisibleColumns] = useState(new Set(INITIAL_VISIBLE_COLUMNS));
     const [rowsPerPage, setRowsPerPage] = useState(50);
+    const [roleFilter, setRoleFilter] = React.useState("all");
     const [sortDescriptor, setSortDescriptor] = useState({
       column: "firstname",
       direction: "ascending",
@@ -59,15 +76,24 @@ export default function App() {
   
     const filteredItems = useMemo(() => {
       let filteredUsers = [...usersData];
-  
+    
       if (hasSearchFilter) {
         filteredUsers = filteredUsers.filter((user) =>
-          user.firstname.toLowerCase().includes(filterValue.toLowerCase()),
+          user.firstname.toLowerCase().includes(filterValue.toLowerCase()) ||
+          user.lastname.toLowerCase().includes(filterValue.toLowerCase()) ||
+          user.email.toLowerCase().includes(filterValue.toLowerCase()) ||
+          user.vehicle.toLowerCase().includes(filterValue.toLowerCase())
         );
       }
-  
+      
+      if (roleFilter !== "all") {
+        filteredUsers = filteredUsers.filter((user) =>
+          Array.from(roleFilter).includes(user.role)
+        );
+      }
+    
       return filteredUsers;
-    }, [usersData, filterValue]);
+    }, [usersData, filterValue, roleFilter, hasSearchFilter]);
   
     const pages = Math.ceil(filteredItems.length / rowsPerPage);
   
@@ -94,9 +120,9 @@ export default function App() {
         switch (columnKey) {
           case "role":
             return (
-                <Chip className="capitalize" color={statusColorMap[user.role]} size="sm" variant="flat">
-                    {cellValue}
-                </Chip>
+              <Chip color={roleColorMap[user.role]} size="sm" variant="flat">
+                {cellValue}
+              </Chip>
             );
           default:
             return cellValue;
@@ -136,28 +162,49 @@ export default function App() {
   
     const topContent = useMemo(() => {
       return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 mx-2">
+          <div className="flex flex-col items-center">          
+            <h1 className="mt-3 text-center text-2xl">Fairplay käyttäjät</h1>
+            <span className="text-default-500 text-small mt-2">Yhtensä {usersData.length} käyttäjää</span>
+          </div>
           <div className="flex justify-between gap-3 items-end">
             <Input
               isClearable
-              className="w-full sm:max-w-[44%]"
-              placeholder="Search by name..."
+              className="w-full sm:max-w-[36%]"
+              placeholder="Etsi nimellä, sähköpostilla tai ajoneuvolla"
               value={filterValue}
               onClear={() => onClear()}
               onValueChange={onSearchChange}
+              startContent={
+                <IoSearchOutline size={22} className="mr-1" />
+              }
             />
             <div className="flex gap-3">
               <Dropdown>
-                <DropdownTrigger className="hidden sm:flex">
-                  <Button variant="flat">
-                    Status
+                <DropdownTrigger className="sm:flex">
+                  <Button variant="ghost">
+                    Rooli
                   </Button>
                 </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label="Table Columns"
+                  closeOnSelect={false}
+                  selectedKeys={roleFilter}
+                  selectionMode="multiple"
+                  onSelectionChange={setRoleFilter}
+                >
+                {roleOptions.map((role) => (
+                  <DropdownItem key={role.uid}>
+                    {role.name}
+                  </DropdownItem>
+                ))}
+                </DropdownMenu>
               </Dropdown>
               <Dropdown>
-                <DropdownTrigger className="hidden sm:flex">
-                  <Button variant="flat">
-                    Columns
+                <DropdownTrigger className="sm:flex">
+                  <Button isIconOnly variant="ghost">
+                    <IoEyeOutline size={23}/>
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu
@@ -175,13 +222,7 @@ export default function App() {
                   ))}
                 </DropdownMenu>
               </Dropdown>
-              <Button color="primary">
-                Add New
-              </Button>
             </div>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-default-400 text-small">Yhtensä {usersData.length} käyttäjää</span>
           </div>
         </div>
       );
@@ -196,7 +237,7 @@ export default function App() {
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
+      <div className="py-2 px-2 flex justify-between items-center mx-2">
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "Kaikki käyttäjät valittu"
@@ -226,7 +267,6 @@ export default function App() {
   return (
     <Table
       aria-label="Userstable"
-      isHeaderSticky
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
