@@ -6,7 +6,7 @@ const Home = async () => {
 
   return (
     <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
-        tervetuloa
+      tervetuloa
     </div>
   );
 }
