@@ -21,3 +21,35 @@
   color: red;
   margin-top: 0.2rem;
 }
+
+/* LOADER */
+.loader {
+  display: flex; 
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.wheel {
+  fill: rgb(128, 128, 128);
+  font-size: 100px;
+  width: 100px;
+  height: 100px;
+  border-radius: 6em;
+  text-align: center;
+  animation: rolling 1s linear infinite;
+}
+
+#rim {
+  fill: rgb(126, 126, 126);
+}
+
+#tire {
+  fill: rgb(55, 55, 55);
+}
+
+@keyframes rolling {
+  to {
+    transform: rotate(360deg); 
+  }
+}
