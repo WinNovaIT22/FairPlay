@@ -8,15 +8,14 @@ datasource db {
 }
 
 model User {
-  firstname String
-  lastname  String
-  vehicle   String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  id        Int      @id @default(autoincrement())
-  role      String
+  firstname                                  String
+  lastname                                   String
+  email                                      String         @unique
+  password                                   String
+  createdAt                                  DateTime       @default(now())
+  updateAt                                   DateTime       @updatedAt
+  id                                         Int            @id @default(autoincrement())
+  role                                       String
 }
 
 model kaksipyoraiset_data {
@@ -24,4 +23,11 @@ model kaksipyoraiset_data {
   merkkiSelvakielinen String
   kaupallinenNimi     String
   id                  Int    @id @default(autoincrement())
+}
+
+model UserVehicles {
+  id                                 Int     @id @default(autoincrement())
+  user_id                            Int?
+  vehicle                            String
+  inspected                          Boolean @default(false)
 }
