@@ -281,9 +281,9 @@ return (
       aria-label="Userstable"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
-      classNames={{
-        wrapper: "max-h-[382px]",
-      }}
+      // classNames={{
+      //   wrapper: "max-h-[382px]",
+      // }}
       selectedKeys={selectedKeys}
       selectionMode="multiple"
       sortDescriptor={sortDescriptor}
