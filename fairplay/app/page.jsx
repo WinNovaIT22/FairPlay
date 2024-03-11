@@ -20,21 +20,14 @@ const Home = async () => {
   }
 
   return (
-<<<<<<< HEAD
     <div className="flex">
-      <Navbar />
-      <div className="flex flex-grow justify-center items-center">
-        {greeting}, {session?.user.firstname} {session?.user.lastname}
-        {/* {userRole === 'admin' && (
-          <button onClick={() => router.push('/admin')}>Admin Page</button>
-        )} */}
+      <div className="flex flex-grow justify-center">
+        <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
+          <div><Navbar /></div>
+          <div className="flex items-center text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
+          {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
+        </div>
       </div>
-=======
-    <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
-      <div><Navbar /></div>
-      <div className="flex items-center text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
-      {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
->>>>>>> f2a66615139fbc3c7ffd425f70c763d9bc7e82b0
     </div>
   );
 }

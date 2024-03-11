@@ -33,16 +33,16 @@ model UserVehicles {
 >>>>>>> 56a41f8b39fd7a0e9e0717d4fa5fd9faf2345bbc
 }
 
-model kaksipyoraiset_data {
-  ajoneuvoluokka      String
-  merkkiSelvakielinen String
-  kaupallinenNimi     String
-  id                  Int    @id @default(autoincrement())
-}
-
 model UserVehicles {
   id                                 Int     @id @default(autoincrement())
   user_id                            Int?
   vehicle                            String
   inspected                          Boolean @default(false)
+}
+
+model kaksipyoraiset_data {
+  ajoneuvoluokka      String
+  merkkiSelvakielinen String
+  kaupallinenNimi     String
+  id                  Int    @id @default(autoincrement())
 }
