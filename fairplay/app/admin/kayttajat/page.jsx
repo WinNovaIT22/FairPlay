@@ -20,8 +20,13 @@ const columns = [
 ];
 
 const roleOptions = [
+<<<<<<< Updated upstream
   { uid: 'ylläpitäjä', name: 'ylläpitäjä' },
   { uid: 'kilpailija', name: 'kilpailija' },
+=======
+  { uid: 'admin', name: 'ADMIN' },
+  { uid: 'käyttäjä', name: 'KÄYTTÄJÄ' },
+>>>>>>> Stashed changes
 ];
 
 export function capitalize(str) {
@@ -309,7 +314,11 @@ return (
         items={sortedItems}
       >
         {(item) => (
+<<<<<<< Updated upstream
           <TableRow key={item.id} className="cursor-pointer" onClick={() => handleRowAction(item)}>
+=======
+          <TableRow key={item.id} className="cursor-pointer">
+>>>>>>> Stashed changes
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
