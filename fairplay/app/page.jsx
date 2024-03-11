@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
 import { Button } from "@nextui-org/react";
 import { MdAdminPanelSettings } from "react-icons/md";
+import "@/styles/globals.css"
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
@@ -21,13 +22,14 @@ const Home = async () => {
 
   return (
     <div className="flex">
-      <Navbar />
-    <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
-      <div><Navbar /></div>
-      <div className="flex items-center text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
-      {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
-
-    </div>
+      <video autoPlay muted loop id="myVideo">
+        <source src="./moi.mp4" type="video/mp4"></source>
+      </video>
+      <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
+        <div><Navbar /></div>
+        <div className="flex items-center text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
+        {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
+      </div>
     </div>
   );
 }
