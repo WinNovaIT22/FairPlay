@@ -21,6 +21,7 @@ const Home = async () => {
 
   return (
     <div className="flex">
+<<<<<<< HEAD
       <div className="flex flex-grow justify-center">
         <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
           <div><Navbar /></div>
@@ -28,6 +29,15 @@ const Home = async () => {
           {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
         </div>
       </div>
+=======
+      <Navbar />
+    <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
+      <div><Navbar /></div>
+      <div className="flex items-center text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
+      {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
+
+    </div>
+>>>>>>> 29973abd6c657d2e8617c18b93a59ccbe0e3ff3b
     </div>
   );
 }
