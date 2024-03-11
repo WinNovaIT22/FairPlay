@@ -24,25 +24,24 @@ export const authOptions: NextAuthOptions = {
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
-
+            
                 const user = await db.user.findUnique({
                     where: { email: credentials?.email }
                 });
                 if(!user) {
                     return null;
                 }
-
+            
                 const passwordMatch = await compare(credentials.password, user.password);
-
+            
                 if(!passwordMatch) {
                     return null;
                 }
-
+            
                 return {
                     id: `${user.id}`,
                     firstname: user.firstname,
                     lastname: user.lastname,
-                    vehicle: user.vehicle,
                     role: user.role,
                     email: user.email,
                 };
@@ -56,7 +55,6 @@ export const authOptions: NextAuthOptions = {
                     ...token,
                     firstname: user.firstname,
                     lastname: user.lastname,
-                    vehicle: user.vehicle,
                     role: user.role,
                     email: user.email,
                 }
@@ -70,7 +68,6 @@ export const authOptions: NextAuthOptions = {
                     ...session.user,
                     firstname: token.firstname,
                     lastname: token.lastname,
-                    vehicle: token.vehicle,
                     role: token.role,
                     email: token.email,
                 }

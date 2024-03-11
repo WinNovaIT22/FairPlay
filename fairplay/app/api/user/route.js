@@ -4,8 +4,13 @@ import { hash } from "bcrypt";
 
 export async function POST(req) {
     try {
+<<<<<<< HEAD
         const body = await req.json();
         const { firstname, lastname, email, password, vehicle } = body;
+=======
+        const body = await req.json()
+        const { firstname, lastname, email, password } = body
+>>>>>>> 56a41f8b39fd7a0e9e0717d4fa5fd9faf2345bbc
 
         // Check if user with the given email already exists
         const existingUserByEmail = await db.user.findUnique({

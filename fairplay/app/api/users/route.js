@@ -9,7 +9,6 @@ export async function GET(req) {
                 firstname: true,
                 lastname: true,
                 email: true,
-                vehicle: true,
                 role: true,
             }
         });
