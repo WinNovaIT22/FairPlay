@@ -16,12 +16,6 @@
   min-height: 100vh;
 }
 
-#myVideo {
-  position: fixed;
-  width: 100%;
-  z-index: -1;
-}
-
 .error-message {
   font-size: 0.8rem;
   color: red;

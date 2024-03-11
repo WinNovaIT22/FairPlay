@@ -8,41 +8,26 @@ datasource db {
 }
 
 model User {
-  firstname                                  String
-  lastname                                   String
-  email                                      String         @unique
-  password                                   String
-  createdAt                                  DateTime       @default(now())
-  updateAt                                   DateTime       @updatedAt
-  id                                         Int            @id @default(autoincrement())
-  role                                       String
-<<<<<<< HEAD
-  vehicle_id                                 Int?
-  UserVehicles_User_vehicle_idToUserVehicles UserVehicles?  @relation("User_vehicle_idToUserVehicles", fields: [vehicle_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  vehicle                                    UserVehicles[]
+  firstname  String
+  lastname   String
+  email      String   @unique
+  password   String
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  role       String
 }
 
 model UserVehicles {
-  id                                 Int     @id @default(autoincrement())
-  user_id                            Int?
-  vehicle                            String
-  inspected                          Boolean @default(false)
-  User_User_vehicle_idToUserVehicles User[]  @relation("User_vehicle_idToUserVehicles")
-  user                               User?   @relation(fields: [user_id], references: [id])
-=======
->>>>>>> 56a41f8b39fd7a0e9e0717d4fa5fd9faf2345bbc
-}
-
-model UserVehicles {
-  id                                 Int     @id @default(autoincrement())
-  user_id                            Int?
-  vehicle                            String
-  inspected                          Boolean @default(false)
+  id         Int      @id @default(autoincrement())
+  user_id     Int?
+  vehicle    String
+  inspected  Boolean  @default(false)
 }
 
 model kaksipyoraiset_data {
   ajoneuvoluokka      String
   merkkiSelvakielinen String
   kaupallinenNimi     String
-  id                  Int    @id @default(autoincrement())
+  id                  Int      @id @default(autoincrement())
 }

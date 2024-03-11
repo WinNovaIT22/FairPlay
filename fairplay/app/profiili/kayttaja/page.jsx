@@ -4,7 +4,7 @@ import { Input } from '@nextui-org/react';
 import PasswordModal from '@/components/ui/passwordmodal'
 import DeleteModal from '@/components/ui/deletemodal'
 
-const Vehicles = async () => {
+const UserData = async () => {
     const session = await getServerSession(authOptions)
     const firstname = session?.user.firstname
     const lastname = session?.user.lastname
@@ -45,4 +45,4 @@ const Vehicles = async () => {
     );
   }
 
-export default Vehicles;
+export default UserData;

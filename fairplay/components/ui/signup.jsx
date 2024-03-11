@@ -7,6 +7,7 @@ import { IoSearchOutline, IoMailOutline, IoEyeOutline, IoEyeOffOutline } from "r
 import { Input, Autocomplete, AutocompleteItem, Button } from "@nextui-org/react";
 import { useAsyncList } from "@react-stately/data";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 import "@/styles/globals.css"
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
@@ -23,9 +24,7 @@ const Signup = () => {
   const [isVisiblePassword1, setIsVisiblePassword1] = useState(false);
   const [isVisiblePassword2, setIsVisiblePassword2] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [formData, setFormData] = useState({
-    vehicle: ""
-  });
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
 
   const toggleVisibilityPassword1 = () => setIsVisiblePassword1(!isVisiblePassword1);
   const toggleVisibilityPassword2 = () => setIsVisiblePassword2(!isVisiblePassword2);
@@ -56,24 +55,18 @@ const Signup = () => {
     }
   }, [searchQuery]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
   const onSubmit = async (values, { setSubmitting }) => {
     try {
+      const vehicleData = selectedVehicle ? `${selectedVehicle.merkkiSelvakielinen} ${selectedVehicle.kaupallinenNimi}` : "";
+  
       const response = await fetch("/api/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, vehicle: vehicleData }),
       });
-
+  
       if (response.ok) {
         setTimeout(() => {
           router.push("/kirjaudu");
@@ -91,7 +84,7 @@ const Signup = () => {
       setSubmitting(false);
     }
   };
-
+  
   const notifysuccess = () =>
     toast.success("Käyttäjä luotu onnistuneesti, kirjaudu nyt sisään!");
   const notifyerror = () =>
@@ -180,10 +173,9 @@ const Signup = () => {
                   name="vehicle"
                   placeholder="Hae oma ajoneuvosi"
                   labelPlacement="outside"
-                  scrollShadowProps={{ isEnabled: false }}
-                  onInputChange={(value) => {
+                   onInputChange={(value) => {
                     setSearchQuery(value);
-                    handleInputChange({ target: { name: "vehicle", value } });
+                    setSelectedVehicle({ target: { name: "vehicle", value } });
                   }}
                   startContent={<IoSearchOutline size={22} className="mr-1 text-2xl text-slate-300 pointer-events-none flex-shrink-0" />}
                 >

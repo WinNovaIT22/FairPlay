@@ -20,14 +20,10 @@ const Home = async () => {
   }
 
   return (
-    <div className="flex">
-      <div className="flex flex-grow justify-center">
-        <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
-          <div><Navbar /></div>
-          <div className="flex items-center text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
-          {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
-        </div>
-      </div>
+    <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
+      <div><Navbar /></div>
+      <div className="flex items-center text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
+      {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
     </div>
   );
 }

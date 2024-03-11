@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from "../../../utils/db"
+import { db } from "../../../utils/db";
 
 export async function GET(request) {
   try {
@@ -7,19 +7,24 @@ export async function GET(request) {
     const params = encodedParams ? decodeURIComponent(encodedParams) : null;
 
     if (params) {
-      const searchTerms = params.split(/\s+/).filter(Boolean);    
+      let searchTerms = params.split(/\s+/).filter(Boolean);
+      searchTerms.sort(); // Sort the search terms alphabetically
+
       const data = await db.kaksipyoraiset_data.findMany({
         where: {
           AND: searchTerms.map((term) => ({
             OR: [
               { merkkiSelvakielinen: { contains: term, mode: 'insensitive' } },
-              { kaupallinenNimi: { contains: term, mode: 'insensitive' } },
+              { kaupallinenNimi: { contains: term, mode: 'insensitive' } }
             ],
           })),
         },
         take: 50,
+        orderBy: {
+          merkkiSelvakielinen: 'asc'
+        }
       });
-        
+
       return NextResponse.json({ data }, { status: 200 });
     } else {
       const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
@@ -29,6 +34,9 @@ export async function GET(request) {
       const initialData = await db.kaksipyoraiset_data.findMany({
         take: pageSize,
         skip,
+        orderBy: {
+          merkkiSelvakielinen: 'asc'
+        }
       });
 
       return NextResponse.json({ data: initialData }, { status: 200 });

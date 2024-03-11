@@ -1,4 +1,3 @@
-
 import { FaMotorcycle } from "react-icons/fa6";
 
 const Vehicles = async () => {

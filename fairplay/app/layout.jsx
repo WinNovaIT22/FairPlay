@@ -1,6 +1,4 @@
 import "@/styles/globals.css"
-import { Suspense } from "react";
-import Loading from "@/app/loading"
 
 export const metadata = {
     title: "FairPlay",
@@ -12,7 +10,7 @@ const RootLayout = ({ children }) => {
     <html lang="en">
        <body>
           <main className='app'>
-              <Suspense fallback={<Loading />}>{children}</Suspense>
+            {children}
           </main>
         </body>
     </html>
