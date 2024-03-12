@@ -7,7 +7,6 @@ import { IoSearchOutline, IoMailOutline, IoEyeOutline, IoEyeOffOutline } from "r
 import { Input, Autocomplete, AutocompleteItem, Button } from "@nextui-org/react";
 import { useAsyncList } from "@react-stately/data";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 import "@/styles/globals.css"
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
