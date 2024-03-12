@@ -7,7 +7,6 @@ import { IoSearchOutline, IoMailOutline, IoEyeOutline, IoEyeOffOutline } from "r
 import { Input, Autocomplete, AutocompleteItem, Button } from "@nextui-org/react";
 import { useAsyncList } from "@react-stately/data";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 import "@/styles/globals.css"
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
@@ -54,6 +53,10 @@ const Signup = () => {
       setSearchQuery("");
     }
   }, [searchQuery]);
+
+  const onSelectVehicle = (item) => {
+    setSelectedVehicle(item);
+  };
 
   const onSubmit = async (values, { setSubmitting }) => {
     try {
@@ -173,10 +176,9 @@ const Signup = () => {
                   name="vehicle"
                   placeholder="Hae oma ajoneuvosi"
                   labelPlacement="outside"
-                   onInputChange={(value) => {
-                    setSearchQuery(value);
-                    setSelectedVehicle({ target: { name: "vehicle", value } });
-                  }}
+                  onInputChange={(value) => {setSearchQuery(value)}}
+                  onSelect={onSelectVehicle}
+                  onClick={(item) => onSelectVehicle(item)}
                   startContent={<IoSearchOutline size={22} className="mr-1 text-2xl text-slate-300 pointer-events-none flex-shrink-0" />}
                 >
                   {(item) => (

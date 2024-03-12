@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Chip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
-import { MdBlock, MdOutlineAdminPanelSettings, MdOutlineRemoveCircleOutline } from "react-icons/md";
+import { MdBlock, MdOutlineAdminPanelSettings, MdOutlineRemoveCircleOutline, MdLockOutline } from "react-icons/md";
 
 const roleColorMap = {
   ylläpitäjä: "success",
@@ -59,6 +59,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
               ) : (
                 <DropdownItem key="remove-admin" className="text-danger" color="danger" onClick={() => updateUserRole("kilpailija")} startContent={<MdOutlineRemoveCircleOutline />}>Poista ylläpito-oikeudet</DropdownItem>
               )}
+              <DropdownItem key="block" className="text-warning" color="warning" startContent={<MdLockOutline />}>Vaihda salasana</DropdownItem>
               <DropdownItem key="block" className="text-danger" color="danger" startContent={<MdBlock />}>Anna porttikielto</DropdownItem>
             </DropdownMenu>
           </Dropdown>

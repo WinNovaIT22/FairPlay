@@ -68,9 +68,9 @@ export default function App() {
           email: user.email,
           vehicle: user.vehicle || '',
           role: user.role,
-          }));
-          setUsersData(mappedUsers);
-          setIsLoading(false);
+        }));
+        setUsersData(mappedUsers);
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching users:', error);
         setIsLoading(false);
