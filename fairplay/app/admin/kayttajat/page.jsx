@@ -6,8 +6,9 @@ import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
 import ModalComponent from "@/components/ui/usermodal";
 import Loading from "@/app/loading";
 
-const roleColorMap = {
+export const roleColorMap = {
   ylläpitäjä: "success",
+  valvoja: "primary",
   kilpailija: "default",
 };  
 
@@ -16,15 +17,16 @@ const columns = [
   {name: "SUKUNIMI", uid: "lastname"},
   {name: "SÄHKÖPOSTI", uid: "email"},
   {name: "AJONEUVO", uid: "vehicle"},
-  {name: "ROOLI", uid: "role"},
+  {name: "ROOLI", uid: "role", sortable: true},
 ];
 
 const roleOptions = [
   { uid: 'ylläpitäjä', name: 'ylläpitäjä' },
+  { uid: 'valvoja', name: 'valvoja' },
   { uid: 'kilpailija', name: 'kilpailija' },
 ];
 
-export function capitalize(str) {
+function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -97,9 +99,9 @@ export default function App() {
       );
     }
     
-    if (roleFilter !== "all") {
+    if (roleFilter !== "all" && Array.from(roleFilter).length !== roleOptions.length) {
       filteredUsers = filteredUsers.filter((user) =>
-        Array.from(roleFilter).includes(user.role)
+        Array.from(roleFilter).includes(user.role),
       );
     }
   
@@ -193,28 +195,28 @@ export default function App() {
           <div className="flex gap-3">
             <Dropdown>
               <DropdownTrigger className="sm:flex">
-                <Button variant="flat">
+                <Button variant="solid">
                   Rooli
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
                 disallowEmptySelection
-                aria-label="Table Columns"
+                aria-label="Roles"
                 closeOnSelect={false}
                 selectedKeys={roleFilter}
                 selectionMode="multiple"
                 onSelectionChange={setRoleFilter}
               >
               {roleOptions.map((role) => (
-                <DropdownItem key={role.uid}>
-                  {role.name}
+                <DropdownItem key={role.uid} className="capitalize">
+                  {capitalize(role.name)}
                 </DropdownItem>
               ))}
               </DropdownMenu>
             </Dropdown>
             <Dropdown>
               <DropdownTrigger className="sm:flex">
-                <Button isIconOnly variant="flat">
+                <Button isIconOnly variant="solid">
                   <IoEyeOutline size={23}/>
                 </Button>
               </DropdownTrigger>
