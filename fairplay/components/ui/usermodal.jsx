@@ -51,10 +51,10 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
             <DropdownMenu aria-label="Actions">
               <DropdownSection title="Roolit" showDivider>  
                 {modalData.role !== "ylläpitäjä" && (
-                  <DropdownItem key="admin" className="text-success" color="success" onClick={() => updateUserRole("ylläpitäjä")} startContent={<MdOutlineAdminPanelSettings />}>Anna ylläpito-oikeudet</DropdownItem>
+                  <DropdownItem key="admin" className="text-success" description="Kaikki oikeudet" color="success" onClick={() => updateUserRole("ylläpitäjä")} startContent={<MdOutlineAdminPanelSettings />}>Anna ylläpito-oikeudet</DropdownItem>
                 )}
                 {modalData.role !== "valvoja" && (
-                  <DropdownItem key="supervisor" className="text-primary" color="primary" onClick={() => updateUserRole("valvoja")} startContent={<MdOutlineAdminPanelSettings />}>Anna valvoja-oikeudet</DropdownItem>
+                  <DropdownItem key="supervisor" className="text-primary" description="Näkee tehtävät ja tarkistaa niitä" color="primary" onClick={() => updateUserRole("valvoja")} startContent={<MdOutlineAdminPanelSettings />}>Anna valvoja-oikeudet</DropdownItem>
                 )}
                 {(modalData.role === "valvoja" || modalData.role === "ylläpitäjä") && (
                   <DropdownItem key="remove" className="text-danger" description="Antaa käyttäjälle kilpailija-roolin" color="danger" onClick={() => updateUserRole("kilpailija")} startContent={<MdOutlineRemoveCircleOutline />}>Nollaa oikeudet</DropdownItem>
