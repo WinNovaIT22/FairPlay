@@ -1,16 +1,11 @@
 "use client"
 
 import React from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Chip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
-import { MdBlock, MdOutlineAdminPanelSettings, MdOutlineRemoveCircleOutline } from "react-icons/md";
-
-const roleColorMap = {
-  ylläpitäjä: "success",
-  kilpailija: "default",
-};  
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Chip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DropdownSection } from "@nextui-org/react";
+import { MdBlock, MdOutlineAdminPanelSettings, MdOutlineRemoveCircleOutline, MdLockOutline } from "react-icons/md";
+import { roleColorMap } from "@/app/admin/kayttajat/page"; 
 
 const ModalComponent = ({ isOpen, onClose, modalData }) => {
-
   if (!modalData) {
     return null;
   }
@@ -51,18 +46,24 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
         <ModalFooter>
           <Dropdown>
             <DropdownTrigger>
-              <Button variant="flat">Hallitse</Button>
+              <Button variant="flat">Toiminnot</Button>
             </DropdownTrigger>
-            <DropdownMenu aria-label="Static Actions">
-              {modalData.role !== "ylläpitäjä" ? (
-                <DropdownItem key="admin" className="text-success" color="success" onClick={() => updateUserRole("ylläpitäjä")} startContent={<MdOutlineAdminPanelSettings />}>Anna ylläpito-oikeudet</DropdownItem>
-              ) : (
-                <DropdownItem key="remove-admin" className="text-danger" color="danger" onClick={() => updateUserRole("kilpailija")} startContent={<MdOutlineRemoveCircleOutline />}>Poista ylläpito-oikeudet</DropdownItem>
-              )}
+            <DropdownMenu aria-label="Actions">
+              <DropdownSection title="Roolit" showDivider>  
+                {modalData.role !== "ylläpitäjä" && (
+                  <DropdownItem key="admin" className="text-success" description="Kaikki oikeudet" color="success" onClick={() => updateUserRole("ylläpitäjä")} startContent={<MdOutlineAdminPanelSettings />}>Anna ylläpito-oikeudet</DropdownItem>
+                )}
+                {modalData.role !== "valvoja" && (
+                  <DropdownItem key="supervisor" className="text-primary" description="Näkee tehtävät ja tarkistaa niitä" color="primary" onClick={() => updateUserRole("valvoja")} startContent={<MdOutlineAdminPanelSettings />}>Anna valvoja-oikeudet</DropdownItem>
+                )}
+                {(modalData.role === "valvoja" || modalData.role === "ylläpitäjä") && (
+                  <DropdownItem key="remove" className="text-danger" description="Antaa käyttäjälle kilpailija-roolin" color="danger" onClick={() => updateUserRole("kilpailija")} startContent={<MdOutlineRemoveCircleOutline />}>Nollaa oikeudet</DropdownItem>
+                )}
+              </DropdownSection>
+              <DropdownItem key="block" className="text-warning" color="warning" startContent={<MdLockOutline />}>Vaihda salasana</DropdownItem>
               <DropdownItem key="block" className="text-danger" color="danger" startContent={<MdBlock />}>Anna porttikielto</DropdownItem>
             </DropdownMenu>
           </Dropdown>
-
         </ModalFooter>
       </ModalContent>
     </Modal>

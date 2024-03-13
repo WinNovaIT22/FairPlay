@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { db } from "../../../utils/db";
+import { NextResponse } from "next/server";
+import { db } from "@/utils/db";
 
 export async function GET(request) {
   try {
@@ -8,7 +8,7 @@ export async function GET(request) {
 
     if (params) {
       let searchTerms = params.split(/\s+/).filter(Boolean);
-      searchTerms.sort(); // Sort the search terms alphabetically
+      searchTerms.sort(); 
 
       const data = await db.kaksipyoraiset_data.findMany({
         where: {

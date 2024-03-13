@@ -14,7 +14,7 @@ export default function DeleteModal() {
   return (
     <>
       <Button onPress={onOpen} variant="solid" color="danger" className="font-bold mb-3">
-        <RiDeleteBin6Line size={18} />Poista käyttäjä
+        <RiDeleteBin6Line size={18} />Poista itsesi
       </Button>  
       <Modal 
         isOpen={isOpen} 
@@ -24,9 +24,9 @@ export default function DeleteModal() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Poista käyttäjä</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">Poista itsesi</ModalHeader>
                 <ModalBody>
-                  <p className="text-sm">Vahvista käyttäjä poisto kirjoittamalla salasanasi</p>
+                  <p className="text-sm">Vahvista käyttäjäsi poisto kirjoittamalla salasanasi</p>
                   <Input
                     autoFocus
                     placeholder="Syötä salasana"

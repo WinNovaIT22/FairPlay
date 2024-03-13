@@ -54,6 +54,10 @@ const Signup = () => {
     }
   }, [searchQuery]);
 
+  const onSelectVehicle = (item) => {
+    setSelectedVehicle(item);
+  };
+
   const onSubmit = async (values, { setSubmitting }) => {
     try {
       const vehicleData = selectedVehicle ? `${selectedVehicle.merkkiSelvakielinen} ${selectedVehicle.kaupallinenNimi}` : "";
@@ -172,10 +176,9 @@ const Signup = () => {
                   name="vehicle"
                   placeholder="Hae oma ajoneuvosi"
                   labelPlacement="outside"
-                   onInputChange={(value) => {
-                    setSearchQuery(value);
-                    setSelectedVehicle({ target: { name: "vehicle", value } });
-                  }}
+                  onInputChange={(value) => {setSearchQuery(value)}}
+                  onSelect={onSelectVehicle}
+                  onClick={(item) => onSelectVehicle(item)}
                   startContent={<IoSearchOutline size={22} className="mr-1 text-2xl text-slate-300 pointer-events-none flex-shrink-0" />}
                 >
                   {(item) => (
