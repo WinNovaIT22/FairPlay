@@ -58,7 +58,7 @@ export default function Users() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch(`/api/users`);
+        const response = await fetch(`/api/users/getUserTable`);
         if (!response.ok) {
           throw new Error('Failed to fetch users');
         }

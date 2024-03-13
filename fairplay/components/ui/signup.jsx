@@ -62,7 +62,7 @@ const Signup = () => {
     try {
       const vehicleData = selectedVehicle ? `${selectedVehicle.merkkiSelvakielinen} ${selectedVehicle.kaupallinenNimi}` : "";
   
-      const response = await fetch("/api/user", {
+      const response = await fetch("/api/user/createUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
