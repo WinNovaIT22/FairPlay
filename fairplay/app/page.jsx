@@ -26,10 +26,13 @@ const Home = async () => {
         backgroundImage: `url('https://bwhip62.files.wordpress.com/2023/10/dji_0759-1.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
+        opacity: '80%',
+        width: '100vw',
+        height: '100vh'
       }}
     >
       <div><Navbar /></div>
-      <div className="flex items-center text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
+      <div className="flex text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
       {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
     </div>
   );
