@@ -20,7 +20,14 @@ const Home = async () => {
   }
 
   return (
-    <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
+    <div
+      className="flex justify-around bg-zinc-700 p-4 rounded-lg"
+      style={{
+        backgroundImage: `url('https://bwhip62.files.wordpress.com/2023/10/dji_0759-1.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div><Navbar /></div>
       <div className="flex items-center text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
       {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
