@@ -32,7 +32,7 @@ function capitalize(str) {
 
 const INITIAL_VISIBLE_COLUMNS = ["firstname", "lastname", "email", "vehicle", "role"];
 
-export default function App() {
+export default function Users() {
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState(new Set(INITIAL_VISIBLE_COLUMNS));
