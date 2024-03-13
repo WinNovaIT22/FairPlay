@@ -58,7 +58,6 @@ export default function Signin() {
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
-        pauseOnHover
         theme="dark"
       />
       <div className="w-80 border-2 bg-zinc-700 border-red-950 rounded-md shadow-md overflow-hidden m-4">
@@ -75,6 +74,7 @@ export default function Signin() {
             className="mb-3"
             placeholder="Syötä sähköposti"
             labelPlacement="outside"
+            value={formData.email}
             onChange={handleInputChange}
           />
           <Input
@@ -84,6 +84,7 @@ export default function Signin() {
             variant="faded"
             placeholder="Syötä salasana"
             labelPlacement="outside"
+            value={formData.password}
             className="mb-5"
             onChange={handleInputChange}
             endContent={

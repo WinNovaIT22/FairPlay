@@ -5,6 +5,8 @@ import { Chip, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, 
 import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
 import ModalComponent from "@/components/modals/usersTable";
 import Loading from "@/app/loading";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const roleColorMap = {
   ylläpitäjä: "success",
@@ -13,11 +15,11 @@ export const roleColorMap = {
 };  
 
 const columns = [
-  {name: "ETUNIMI", uid: "firstname"},
-  {name: "SUKUNIMI", uid: "lastname"},
-  {name: "SÄHKÖPOSTI", uid: "email"},
-  {name: "AJONEUVO", uid: "vehicle"},
-  {name: "ROOLI", uid: "role", sortable: true},
+  { name: "ETUNIMI", uid: "firstname" },
+  { name: "SUKUNIMI", uid: "lastname" },
+  { name: "SÄHKÖPOSTI", uid: "email" },
+  { name: "AJONEUVO", uid: "vehicle" },
+  { name: "ROOLI", uid: "role", sortable: true },
 ];
 
 const roleOptions = [
@@ -58,7 +60,7 @@ export default function Users() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch(`/api/users/getUserTable`);
+        const response = await fetch(`/api/admin/getUserTable`);
         if (!response.ok) {
           throw new Error('Failed to fetch users');
         }
@@ -175,69 +177,81 @@ export default function Users() {
 
   const topContent = useMemo(() => {
     return (
-      <div className="flex flex-col gap-4 mx-2">
-        <div className="flex flex-col items-center">          
-          <h1 className="mt-3 text-center text-2xl">Fairplay käyttäjät</h1>
-          <span className="text-default-500 text-small mt-2">Yhtensä {usersData.length} käyttäjää</span>
-        </div>
-        <div className="flex justify-between gap-3 items-end">
-          <Input
-            isClearable
-            className="w-full sm:max-w-[36%]"
-            placeholder="Etsi nimellä, sähköpostilla tai ajoneuvolla"
-            value={filterValue}
-            onClear={() => onClear()}
-            onValueChange={onSearchChange}
-            startContent={
-              <IoSearchOutline size={22} className="mr-1" />
-            }
-          />
-          <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="sm:flex">
-                <Button variant="solid">
-                  Rooli
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Roles"
-                closeOnSelect={false}
-                selectedKeys={roleFilter}
-                selectionMode="multiple"
-                onSelectionChange={setRoleFilter}
-              >
-              {roleOptions.map((role) => (
-                <DropdownItem key={role.uid} className="capitalize">
-                  {capitalize(role.name)}
-                </DropdownItem>
-              ))}
-              </DropdownMenu>
-            </Dropdown>
-            <Dropdown>
-              <DropdownTrigger className="sm:flex">
-                <Button isIconOnly variant="solid">
-                  <IoEyeOutline size={23}/>
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
+      <>
+        <ToastContainer
+          position="top-center"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          theme="dark"
+        />
+        <div className="flex flex-col gap-4 mx-2">
+          <div className="flex flex-col items-center">          
+            <h1 className="mt-3 text-center text-2xl">Fairplay käyttäjät</h1>
+            <span className="text-default-500 text-small mt-2">Yhtensä {usersData.length} käyttäjää</span>
+          </div>
+          <div className="flex justify-between gap-3 items-end">
+            <Input
+              isClearable
+              className="w-full sm:max-w-[36%]"
+              placeholder="Etsi nimellä, sähköpostilla tai ajoneuvolla"
+              value={filterValue}
+              onClear={() => onClear()}
+              onValueChange={onSearchChange}
+              startContent={
+                <IoSearchOutline size={22} className="mr-1" />
+              }
+            />
+            <div className="flex gap-3">
+              <Dropdown>
+                <DropdownTrigger className="sm:flex">
+                  <Button variant="solid">
+                    Rooli
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label="Roles"
+                  closeOnSelect={false}
+                  selectedKeys={roleFilter}
+                  selectionMode="multiple"
+                  onSelectionChange={setRoleFilter}
+                >
+                {roleOptions.map((role) => (
+                  <DropdownItem key={role.uid} className="capitalize">
+                    {capitalize(role.name)}
                   </DropdownItem>
                 ))}
-              </DropdownMenu>
-            </Dropdown>
+                </DropdownMenu>
+              </Dropdown>
+              <Dropdown>
+                <DropdownTrigger className="sm:flex">
+                  <Button isIconOnly variant="solid">
+                    <IoEyeOutline size={23}/>
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label="Table Columns"
+                  closeOnSelect={false}
+                  selectedKeys={visibleColumns}
+                  selectionMode="multiple"
+                  onSelectionChange={setVisibleColumns}
+                >
+                  {columns.map((column) => (
+                    <DropdownItem key={column.uid} className="capitalize">
+                      {capitalize(column.name)}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }, [
     filterValue,

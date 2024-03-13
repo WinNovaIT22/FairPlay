@@ -114,7 +114,6 @@ const Signup = () => {
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
-        pauseOnHover
         theme="dark"
       />
       <div className="w-96 border bg-zinc-700 border-red-950 rounded-md shadow-md overflow-hidden m-4">

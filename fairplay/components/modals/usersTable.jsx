@@ -1,11 +1,15 @@
 "use client"
 
-import React from "react";
+import React, { useState } from 'react';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Chip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DropdownSection } from "@nextui-org/react";
 import { MdBlock, MdOutlineAdminPanelSettings, MdOutlineRemoveCircleOutline, MdLockOutline } from "react-icons/md";
 import { roleColorMap } from "@/app/admin/kayttajat/page"; 
+import PasswordModal from "@/components/modals/changeUserPasswordAdmin";
 
 const ModalComponent = ({ isOpen, onClose, modalData }) => {
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   if (!modalData) {
     return null;
   }
@@ -31,15 +35,21 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
     }
   };
 
+  const openPasswordModal = (userData) => {
+    setSelectedUser(userData);
+    setIsPasswordModalOpen(true);
+  };
+
   return (
     <Modal size={"lg"} placement={"center"} isOpen={isOpen} onClose={onClose}>
+      <PasswordModal isOpen={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)} user={selectedUser} />
       <ModalContent>
         <ModalHeader>Profiili</ModalHeader>
         <ModalBody>
           {modalData && (
             <>
-              <p>{modalData.firstname} {modalData.lastname} <Chip color={roleColorMap[modalData.role]} size="sm" variant="flat">{modalData.role}</Chip><br></br>{modalData.email}</p>
-              <p>Ajoneuvo(t): {modalData.vehicle}</p>
+              <div>{modalData.firstname} {modalData.lastname} <Chip color={roleColorMap[modalData.role]} size="sm" variant="flat">{modalData.role}</Chip><br></br>{modalData.email}</div>
+              <div>Ajoneuvo(t): {modalData.vehicle}</div>
             </>
           )}
         </ModalBody>
@@ -60,7 +70,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                   <DropdownItem key="remove" className="text-danger" description="Antaa käyttäjälle kilpailija-roolin" color="danger" onClick={() => updateUserRole("kilpailija")} startContent={<MdOutlineRemoveCircleOutline />}>Nollaa oikeudet</DropdownItem>
                 )}
               </DropdownSection>
-              <DropdownItem key="block" className="text-warning" color="warning" startContent={<MdLockOutline />}>Vaihda salasana</DropdownItem>
+              <DropdownItem key="change-password" className="text-warning" color="warning" onClick={() => openPasswordModal(modalData)} startContent={<MdLockOutline />}>Vaihda salasana</DropdownItem>
               <DropdownItem key="block" className="text-danger" color="danger" startContent={<MdBlock />}>Anna porttikielto</DropdownItem>
             </DropdownMenu>
           </Dropdown>
