@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
 import { Input } from '@nextui-org/react';
-import PasswordModal from '@/components/ui/passwordmodal'
-import DeleteModal from '@/components/ui/deletemodal'
+import PasswordModal from '@/components/modals/changeUserPassword'
+import DeleteModal from '@/components/modals/deleteUser'
 
 const UserData = async () => {
     const session = await getServerSession(authOptions)

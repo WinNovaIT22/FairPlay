@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Chip, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
 import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
-import ModalComponent from "@/components/ui/usermodal";
+import ModalComponent from "@/components/modals/usersTable";
 import Loading from "@/app/loading";
 
 export const roleColorMap = {
