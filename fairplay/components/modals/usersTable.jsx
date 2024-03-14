@@ -35,6 +35,28 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
     }
   };
 
+  const blockUser = async () => {
+    try {
+      const response = await fetch("/api/user/block/blockUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: modalData.id }),
+      });
+  
+      if (response.ok) {
+        console.log("User blocked successfully");
+        window.location.reload(true);
+      } else {
+        console.error("Failed to block user");
+      }
+    } catch (error) {
+      console.error("Error blocking user:", error);
+    }
+  };
+  
+
   const openPasswordModal = (userData) => {
     setSelectedUser(userData);
     setIsPasswordModalOpen(true);
@@ -71,7 +93,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                 )}
               </DropdownSection>
               <DropdownItem key="change-password" className="text-warning" color="warning" onClick={() => openPasswordModal(modalData)} startContent={<MdLockOutline />}>Vaihda salasana</DropdownItem>
-              <DropdownItem key="block" className="text-danger" color="danger" startContent={<MdBlock />}>Anna porttikielto</DropdownItem>
+              <DropdownItem key="block" className="text-danger" color="danger" onClick={blockUser} startContent={<MdBlock />}>Anna porttikielto</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </ModalFooter>

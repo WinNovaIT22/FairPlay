@@ -42,6 +42,21 @@ const Home = async () => {
             </CardFooter>
           </Card>
         </Link>
+        <Link href="/admin/estetyt"> 
+          <Card shadow="sm" isPressable className="ml-5 hover:scale-95">
+            <CardBody className="overflow-visible p-0">
+              <iframe
+                style={{ pointerEvents: "none", overflow: "hidden" }}
+                src="/admin/estetyt"
+                className="shadow-md opacity-65"
+                scrolling="no"
+              />
+            </CardBody>
+            <CardFooter className="text-lg">
+              <b className="mx-auto">Estetyt käyttäjät</b>
+            </CardFooter>
+          </Card>
+        </Link>
       </div>
       <div className="flex flex-row justify-center mt-6">
         Fairplay kisan aloitus ja lopetus

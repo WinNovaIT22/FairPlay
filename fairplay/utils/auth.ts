@@ -28,13 +28,17 @@ export const authOptions: NextAuthOptions = {
                 const user = await db.user.findUnique({
                     where: { email: credentials?.email }
                 });
-                if(!user) {
+                if (!user) {
                     return null;
+                }
+                
+                if (user.blocked) {
+                    return null; 
                 }
             
                 const passwordMatch = await compare(credentials.password, user.password);
             
-                if(!passwordMatch) {
+                if (!passwordMatch) {
                     return null;
                 }
             
@@ -50,7 +54,7 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         async jwt({ token, user }) {
-            if(user) {
+            if (user) {
                 return {
                     ...token,
                     firstname: user.firstname,

@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/utils/db';
-import { hash } from 'bcrypt';
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { id, newPassword } = body;
+    const { id } = body;
 
     const user = await db.user.findUnique({
       where: { id: id },
@@ -15,17 +14,16 @@ export async function POST(req) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    const hashedNewPassword = await hash(newPassword, 10);
     await db.user.update({
       where: { id: id },
       data: {
-        password: hashedNewPassword,
+        blocked: true,
       },
     });
 
-    return NextResponse.json({ message: 'Password changed successfully' }, { status: 200 });
+    return NextResponse.json({ message: 'User blocked successfully' }, { status: 200 });
   } catch (error) {
-    console.error('Error changing password:', error);
+    console.error('Error blocking user:', error);
     return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
   }
 }
