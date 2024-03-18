@@ -22,7 +22,7 @@ export async function POST(req) {
                 lastname,
                 email,
                 password: hashedPassword,
-                role: "käyttäjä",
+                role: "kilpailija",
             }
         });
 

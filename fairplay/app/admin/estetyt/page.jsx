@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Chip, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
 import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
-import ModalComponent from "@/components/modals/usersTable";
 import Loading from "@/app/loading";
+import { MdBlock } from "react-icons/md";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,7 +18,7 @@ const columns = [
   { name: "ETUNIMI", uid: "firstname" },
   { name: "SUKUNIMI", uid: "lastname" },
   { name: "SÄHKÖPOSTI", uid: "email" },
-  { name: "AJONEUVO", uid: "vehicle" },
+  { name: "TOIMINTO", uid: "action" },
   { name: "ROOLI", uid: "role", sortable: true },
 ];
 
@@ -32,7 +32,7 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const INITIAL_VISIBLE_COLUMNS = ["firstname", "lastname", "email", "role"];
+const INITIAL_VISIBLE_COLUMNS = ["firstname", "lastname", "email", "action"];
 
 export default function Users() {
   const [filterValue, setFilterValue] = useState("");
@@ -44,23 +44,16 @@ export default function Users() {
     column: "firstname",
     direction: "ascending",
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalData, setModalData] = useState(null);
   const [page, setPage] = useState(1);
   const [usersData, setUsersData] = useState([]);
   const [isLoading, setIsLoading] = useState(true); 
 
   const hasSearchFilter = Boolean(filterValue);
 
-  const handleRowAction = (user) => {
-    setModalData(user); 
-    setIsModalOpen(true);
-  };
-  
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch(`/api/admin/getUserTable`);
+        const response = await fetch(`/api/admin/getBannedUserTable`);
         if (!response.ok) {
           throw new Error('Failed to fetch users');
         }
@@ -70,7 +63,6 @@ export default function Users() {
           firstname: user.firstname,
           lastname: user.lastname,
           email: user.email,
-          vehicle: user.vehicle || '',
           role: user.role,
         }));
         setUsersData(mappedUsers);
@@ -82,6 +74,27 @@ export default function Users() {
     }
     fetchUsers();
   }, []);
+
+  const unblockUser = async (userId) => {
+    try {
+      const response = await fetch("/api/user/block/unblockUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: userId }),
+      });
+  
+      if (response.ok) {
+        console.log("User unblocked successfully");
+        window.location.reload(true);
+      } else {
+        console.error("Failed to unblock user");
+      }
+    } catch (error) {
+      console.error("Error unblocking user:", error);
+    }
+  };
     
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -133,12 +146,24 @@ export default function Users() {
       const cellValue = user[columnKey];
     
       switch (columnKey) {
+        case "action":
+        return (
+            <Button 
+                key="block" 
+                color="danger" 
+                variant="flat" 
+                size="sm"
+                onClick={() => unblockUser(user.id)}
+                startContent={<MdBlock />}
+                >
+                Poista porttikielto</Button>
+            );
         case "role":
-          return (
+        return (
             <Chip color={roleColorMap[user.role]} size="sm" variant="flat">
-              {cellValue}
+                {cellValue}
             </Chip>
-          );
+            );
         default:
           return cellValue;
       }
@@ -190,14 +215,14 @@ export default function Users() {
         />
         <div className="flex flex-col gap-4 mx-2">
           <div className="flex flex-col items-center">          
-            <h1 className="mt-3 text-center text-2xl">Fairplay käyttäjät</h1>
-            <span className="text-default-500 text-small mt-2">Yhtensä {usersData.length} käyttäjää</span>
+            <h1 className="mt-3 text-center text-2xl">Fairplay estetyt käyttäjät</h1>
+            <span className="text-default-500 text-small mt-2">Yhtensä {usersData.length} estettyä käyttäjää</span>
           </div>
           <div className="flex justify-between gap-3 items-end">
             <Input
               isClearable
               className="w-full sm:max-w-[36%]"
-              placeholder="Etsi nimellä, sähköpostilla tai ajoneuvolla"
+              placeholder="Etsi nimellä tai sähköpostilla"
               value={filterValue}
               onClear={() => onClear()}
               onValueChange={onSearchChange}
@@ -206,27 +231,6 @@ export default function Users() {
               }
             />
             <div className="flex gap-3">
-              <Dropdown>
-                <DropdownTrigger className="sm:flex">
-                  <Button variant="solid">
-                    Rooli
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  disallowEmptySelection
-                  aria-label="Roles"
-                  closeOnSelect={false}
-                  selectedKeys={roleFilter}
-                  selectionMode="multiple"
-                  onSelectionChange={setRoleFilter}
-                >
-                {roleOptions.map((role) => (
-                  <DropdownItem key={role.uid} className="capitalize">
-                    {capitalize(role.name)}
-                  </DropdownItem>
-                ))}
-                </DropdownMenu>
-              </Dropdown>
               <Dropdown>
                 <DropdownTrigger className="sm:flex">
                   <Button isIconOnly variant="solid">
@@ -304,7 +308,6 @@ return (
       topContentPlacement="outside"
       onSelectionChange={setSelectedKeys}
       onSortChange={setSortDescriptor}
-      onRowAction={handleRowAction}
       >
       <TableHeader columns={headerColumns}>
         {(column) => (
@@ -318,17 +321,16 @@ return (
         )}
       </TableHeader>
       <TableBody 
-        emptyContent={isLoading ? <Loading /> : "Ei käyttäjiä löytynyt"}
+        emptyContent={isLoading ? <Loading /> : "Ei estettyjä käyttäjiä"}
         items={sortedItems}
       >
         {(item) => (
-          <TableRow key={item.id} className="cursor-pointer" onClick={() => handleRowAction(item)}>
+          <TableRow key={item.id} className="cursor-pointer text-danger">
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
       </TableBody>
     </Table>
-    <ModalComponent isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} modalData={modalData} />
     </>
   );
 }

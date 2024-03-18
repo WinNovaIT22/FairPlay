@@ -15,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import localFont from "next/font/local";
 
 const myFont = localFont({
-  src: "./PatchedPersonalUseOnlyBlack-GOyOG.otf",
+  src: "../../fonts/PatchedPersonalUseOnlyBlack-GOyOG.otf",
 });
 
 const Signup = () => {
@@ -23,7 +23,7 @@ const Signup = () => {
   const [isVisiblePassword1, setIsVisiblePassword1] = useState(false);
   const [isVisiblePassword2, setIsVisiblePassword2] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [selectedVehicle, setSelectedVehicle] = useState("");
 
   const toggleVisibilityPassword1 = () => setIsVisiblePassword1(!isVisiblePassword1);
   const toggleVisibilityPassword2 = () => setIsVisiblePassword2(!isVisiblePassword2);
@@ -62,7 +62,7 @@ const Signup = () => {
     try {
       const vehicleData = selectedVehicle ? `${selectedVehicle.merkkiSelvakielinen} ${selectedVehicle.kaupallinenNimi}` : "";
   
-      const response = await fetch("/api/user", {
+      const response = await fetch("/api/user/createUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +114,6 @@ const Signup = () => {
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
-        pauseOnHover
         theme="dark"
       />
       <div className="w-96 border bg-zinc-700 border-red-950 rounded-md shadow-md overflow-hidden m-4">

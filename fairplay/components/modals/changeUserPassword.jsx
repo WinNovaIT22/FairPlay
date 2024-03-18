@@ -18,7 +18,7 @@ export default function PasswordModal() {
   return (
     <>
       <Button onPress={onOpen} variant="solid" color="warning" className="font-bold mb-3">
-        <MdLockOutline size={18} />Vaihda salasana
+        <MdLockOutline size={18} />Vaihda salasanasi
       </Button>  
       <Modal 
         isOpen={isOpen} 
@@ -79,7 +79,7 @@ export default function PasswordModal() {
                       Peruuta
                   </Button>
                   <Button color="success" variant="flat" onPress={onClose} className="font-bold">
-                      Vahvista salasanan vaihto
+                      Vahvista
                   </Button>
                 </ModalFooter>
             </>

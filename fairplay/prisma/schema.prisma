@@ -8,26 +8,35 @@ datasource db {
 }
 
 model User {
-  firstname  String
-  lastname   String
-  email      String   @unique
-  password   String
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @updatedAt
-  id         Int      @id @default(autoincrement())
-  role       String
+  firstname String
+  lastname  String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  role      String
+  blocked   Boolean  @default(false)
 }
 
 model UserVehicles {
-  id         Int      @id @default(autoincrement())
-  user_id     Int?
-  vehicle    String
-  inspected  Boolean  @default(false)
+  id        Int     @id @default(autoincrement())
+  vehicle   String
+  inspected Boolean @default(false)
+  user_id   Int?
+}
+
+model Tasks {
+  id     Int     @id @default(autoincrement())
+  task   String
+  photo  Boolean
+  text   Boolean
+  points Int
 }
 
 model kaksipyoraiset_data {
   ajoneuvoluokka      String
   merkkiSelvakielinen String
   kaupallinenNimi     String
-  id                  Int      @id @default(autoincrement())
+  id                  Int    @id @default(autoincrement())
 }
