@@ -7,7 +7,7 @@ export async function GET(req) {
 
     const userVehicles = await db.userVehicles.findMany({
       where: {
-        userId: parseInt(userId), 
+        userId: userId, 
       },
     });
   
