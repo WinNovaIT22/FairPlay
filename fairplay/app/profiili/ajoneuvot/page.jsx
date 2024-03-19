@@ -23,10 +23,30 @@ const Vehicles = () => {
 
     fetchUserVehicles();
   }, []); 
+  
 
   return (
     <div className="">
       <div>
+      <div className="flex flex-col h-screen">
+      {/* Navigointinappi yläkulmaan */}
+      <div className="navigation-card">
+        <a href="http://localhost:3000/" className="tab">
+          <svg
+            className="svgIcon"
+            viewBox="0 0 50 50"  // Pienennetty näkymälaajuus
+            fill="white"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ width: '40px', height: '40px' }}  // Lisätty tyylit pienentämiseksi
+          >
+            <path
+              d="M48 20.25V48H30V34V32H28H20H18V32V48H2V20.25L26 2.375L48 20.25Z"
+              stroke="grey"
+              strokeWidth="5"  // Pienennetty viivan paksuutta
+            ></path>
+          </svg>
+        </a>
+      </div>
         <h1>Omat ajoneuvot</h1>
         <div className="w-80 border-2 border-red-950 rounded-md shadow-md overflow-hidden mt-4">
           {/* Check if userVehicles is an array before mapping */}
@@ -44,6 +64,7 @@ const Vehicles = () => {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 };
