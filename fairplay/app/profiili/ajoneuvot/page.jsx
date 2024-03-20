@@ -6,6 +6,7 @@ import { HiOutlinePlus } from "react-icons/hi2";
 import InspectVehicle from "@/components/modals/inspectVehicle";
 import AddVehicle from "@/components/modals/addNewVehicle";
 import Loading from "@/app/loading";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const Vehicles = () => {
   const [userVehicles, setUserVehicles] = useState([]);
@@ -66,39 +67,42 @@ const Vehicles = () => {
                   userVehicles.map((vehicle) => (
                     <div
                       key={vehicle.id}
-                      className="border-3 border-red-950 rounded-md shadow-md mb-4"
+                      className="border-3 border-red-950 bg-zinc-700 rounded-md shadow-lg mb-4 flex items-center p-4"
                     >
-                      <div className="flex justify-center py-4">
-                        <div className="flex items-center">
-                          <FaMotorcycle size={22} />
+                      <FaMotorcycle size={35} />
+                      <div className="flex flex-col text-center items-center justify-center flex-grow">
+                        <div className="font-black text-xl tracking-wider">
                           <p className="ml-2">{vehicle.vehicle}</p>
                         </div>
+                        <div>
+                          {vehicle.inspected ? (
+                            <p className="text-green-600 text-sm text-end">
+                              Katsastettu kaudelle {currentYear}
+                            </p>
+                          ) : (
+                            <p
+                              className="text-red-600 text-sm text-end cursor-pointer underline hover:text-red-600/70"
+                              onClick={() => openInspect(vehicle.vehicle)}
+                            >
+                              Ei katsastettu - katsasta
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div className="mr-2">
-                        {vehicle.inspected ? (
-                          <p className="text-green-600 text-sm text-end">
-                            Katsastettu kaudelle {currentYear}
-                          </p>
-                        ) : (
-                          <p
-                            className="text-red-600 text-sm text-end cursor-pointer underline hover:text-red-600/70"
-                            onClick={() => openInspect(vehicle.vehicle)}
-                          >
-                            Katsasta tästä
-                          </p>
-                        )}
+                      <div className="cursor-pointer">
+                        <RiDeleteBinLine color="red" size={20} />
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p>Et omista yhtäkään ajoneuvoa</p>
+                  <p className="text-center">Et omista vielä yhtäkään ajoneuvoa</p>
                 )}
               </>
             )}
           </div>
         </div>
         <div className="flex justify-center mt-7">
-          <button onClick={() => openNewVehicle()} className="flex items-center justify-center w-2/6 py-2 bg-red-950 rounded-md shadow-md font-semibold">
+          <button onClick={() => openNewVehicle()} className="flex items-center justify-center w-2/6 py-2 bg-red-950 rounded-md shadow-lg font-semibold">
             <HiOutlinePlus size={23} className="mr-2" />
             Lisää uusi ajoneuvo
           </button>

@@ -54,20 +54,14 @@ const Signup = () => {
     }
   }, [searchQuery]);
 
-  const onSelectVehicle = (item) => {
-    setSelectedVehicle(item);
-  };
-
   const onSubmit = async (values, { setSubmitting }) => {
-    try {
-      const vehicleData = selectedVehicle ? `${selectedVehicle.merkkiSelvakielinen} ${selectedVehicle.kaupallinenNimi}` : "";
-  
+    try {  
       const response = await fetch("/api/user/createUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...values, vehicle: vehicleData }),
+        body: JSON.stringify({ ...values, vehicle: selectedVehicle }),
       });
   
       if (response.ok) {
@@ -124,7 +118,6 @@ const Signup = () => {
           initialValues={{
             firstname: "",
             lastname: "",
-            vehicle: "",
             email: "",
             password: "",
             passwordConfirm: "",
@@ -175,13 +168,11 @@ const Signup = () => {
                   name="vehicle"
                   placeholder="Hae oma ajoneuvosi"
                   labelPlacement="outside"
-                  onInputChange={(value) => {setSearchQuery(value)}}
-                  onSelect={onSelectVehicle}
-                  onClick={(item) => onSelectVehicle(item)}
+                  onInputChange={(value) => {setSearchQuery(value), setSelectedVehicle(value)}}
                   startContent={<IoSearchOutline size={22} className="mr-1 text-2xl text-slate-300 pointer-events-none flex-shrink-0" />}
                 >
                   {(item) => (
-                    <AutocompleteItem key={item.id} value={item.merkkiSelvakielinen} textValue={`${item.merkkiSelvakielinen} ${item.kaupallinenNimi}`} className="py-2">
+                    <AutocompleteItem key={item.id} value={`${item.merkkiSelvakielinen} ${item.kaupallinenNimi}`} textValue={`${item.merkkiSelvakielinen} ${item.kaupallinenNimi}`} className="py-2">
                       {item.merkkiSelvakielinen} {item.kaupallinenNimi}
                     </AutocompleteItem>
                   )}
