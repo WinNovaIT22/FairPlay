@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Chip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DropdownSection } from "@nextui-org/react";
 import { MdBlock, MdOutlineAdminPanelSettings, MdOutlineRemoveCircleOutline, MdLockOutline } from "react-icons/md";
 import { roleColorMap } from "@/app/admin/kayttajat/page"; 
@@ -9,6 +9,8 @@ import PasswordModal from "@/components/modals/changeUserPasswordAdmin";
 const ModalComponent = ({ isOpen, onClose, modalData }) => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [userVehicles, setUserVehicles] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!modalData) {
     return null;
@@ -35,6 +37,35 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
     }
   };
 
+  const fetchUserVehicles = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/admin/getVehicles", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: modalData.id }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setUserVehicles(data);
+      } else {
+        console.error("Failed to fetch user vehicles:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching user vehicles:", error);
+    }
+    setIsLoading(false); 
+  };
+
+  useEffect(() => {
+    if (isOpen && modalData) {
+      fetchUserVehicles();
+    }
+  }, [isOpen, modalData]);
+
   const blockUser = async () => {
     try {
       const response = await fetch("/api/user/block/blockUser", {
@@ -56,7 +87,6 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
     }
   };
   
-
   const openPasswordModal = (userData) => {
     setSelectedUser(userData);
     setIsPasswordModalOpen(true);
@@ -69,10 +99,42 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
         <ModalHeader>Profiili</ModalHeader>
         <ModalBody>
           {modalData && (
-            <>
-              <div>{modalData.firstname} {modalData.lastname} <Chip color={roleColorMap[modalData.role]} size="sm" variant="flat">{modalData.role}</Chip><br></br>{modalData.email}</div>
-              <div>Ajoneuvo(t): {modalData.vehicle}</div>
-            </>
+                <>
+                  <div>{modalData.firstname} {modalData.lastname} <Chip color={roleColorMap[modalData.role]} size="sm" variant="flat">{modalData.role}</Chip><br></br>{modalData.email}</div>
+                  <div>Ajoneuvo(t): 
+                  {Array.isArray(userVehicles) && userVehicles.length > 0 ? (
+                  userVehicles.map((vehicle) => (
+                    <div
+                      key={vehicle.id}
+                      className="border-3 border-red-950 rounded-md shadow-md mb-4"
+                    >
+                      <div className="flex justify-center py-4">
+                        <div className="flex items-center">
+                          <FaMotorcycle size={22} />
+                          <p className="ml-2">{vehicle.vehicle}</p>
+                        </div>
+                      </div>
+                      <div className="mr-2">
+                        {vehicle.inspected ? (
+                          <p className="text-green-600 text-sm text-end">
+                            Katsastettu kaudelle {currentYear}
+                          </p>
+                        ) : (
+                          <p
+                            className="text-red-600 text-sm text-end cursor-pointer underline hover:text-red-600/70"
+                            onClick={() => openModal(vehicle.vehicle)}
+                          >
+                            Katsasta tästä
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>Käyttäjällä ei ole yhtäkään ajoneuvoa</p>
+                )}
+                  </div>
+              </>
           )}
         </ModalBody>
         <ModalFooter>

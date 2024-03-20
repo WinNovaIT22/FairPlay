@@ -2,9 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import { FaMotorcycle } from "react-icons/fa6";
+import { HiOutlinePlus } from "react-icons/hi2";
+import InspectVehicle from "@/components/modals/inspectVehicle";
+import AddVehicle from "@/components/modals/addNewVehicle";
+import Loading from "@/app/loading";
 
 const Vehicles = () => {
   const [userVehicles, setUserVehicles] = useState([]);
+  const [islInspectOpen, setIslInspectOpen] = useState(false);
+  const [isNewVehicleOpen, setIsNewVehicleOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
 
   useEffect(() => {
     const fetchUserVehicles = async () => {
@@ -13,59 +21,104 @@ const Vehicles = () => {
         if (response.ok) {
           const data = await response.json();
           setUserVehicles(data);
+          setIsLoading(false);
         } else {
-          console.error("Failed to fetch user vehicles");
+          setIsLoading(false);
+          console.error("Failed to fetch user vehicles:", response.statusText);
         }
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching user vehicles:", error);
       }
     };
 
     fetchUserVehicles();
-  }, []); 
-  
+  }, []);
+
+  const openInspect = (vehicleName) => {
+    setSelectedVehicle(vehicleName);
+    setIslInspectOpen(true);
+  };
+  const closeInspect = () => {
+    setIslInspectOpen(false);
+  };
+  const openNewVehicle = () => {
+    setIsNewVehicleOpen(true);
+  };
+  const closeNewVehicle = () => {
+    setIsNewVehicleOpen(false);
+  };
+
+
+  const currentYear = new Date().getFullYear();
 
   return (
-    <div className="">
-      <div>
-      <div className="flex flex-col h-screen">
-      {/* Navigointinappi yläkulmaan */}
-      <div className="navigation-card">
-        <a href="http://localhost:3000/" className="tab">
-          <svg
-            className="svgIcon"
-            viewBox="0 0 50 50"  // Pienennetty näkymälaajuus
-            fill="white"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{ width: '40px', height: '40px' }}  // Lisätty tyylit pienentämiseksi
-          >
-            <path
-              d="M48 20.25V48H30V34V32H28H20H18V32V48H2V20.25L26 2.375L48 20.25Z"
-              stroke="grey"
-              strokeWidth="5"  // Pienennetty viivan paksuutta
-            ></path>
-          </svg>
-        </a>
-      </div>
-        <h1>Omat ajoneuvot</h1>
-        <div className="w-80 border-2 border-red-950 rounded-md shadow-md overflow-hidden mt-4">
-          {/* Check if userVehicles is an array before mapping */}
-          {Array.isArray(userVehicles) && userVehicles.length > 0 ? (
-            userVehicles.map((vehicle) => (
-              <div key={vehicle.id}>
-                {/* Render vehicle details, adjust as per your data structure */}
-                <FaMotorcycle />
-                <span>{vehicle.merkkiSelvakielinen}</span>
-                <span>{vehicle.kaupallinenNimi}</span>
-              </div>
-            ))
-          ) : (
-            <p>No vehicles found</p>
-          )}
+    <>
+      <div className="flex flex-col">
+        <h1 className="text-center text-xl mt-5">Omat ajoneuvot</h1>
+        <div className="flex justify-center items-center">
+          <div className="w-2/6 mt-8">
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <>
+                {Array.isArray(userVehicles) && userVehicles.length > 0 ? (
+                  userVehicles.map((vehicle) => (
+                    <div
+                      key={vehicle.id}
+                      className="border-3 border-red-950 rounded-md shadow-md mb-4"
+                    >
+                      <div className="flex justify-center py-4">
+                        <div className="flex items-center">
+                          <FaMotorcycle size={22} />
+                          <p className="ml-2">{vehicle.vehicle}</p>
+                        </div>
+                      </div>
+                      <div className="mr-2">
+                        {vehicle.inspected ? (
+                          <p className="text-green-600 text-sm text-end">
+                            Katsastettu kaudelle {currentYear}
+                          </p>
+                        ) : (
+                          <p
+                            className="text-red-600 text-sm text-end cursor-pointer underline hover:text-red-600/70"
+                            onClick={() => openInspect(vehicle.vehicle)}
+                          >
+                            Katsasta tästä
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>Et omista yhtäkään ajoneuvoa</p>
+                )}
+              </>
+            )}
+          </div>
         </div>
+        <div className="flex justify-center mt-7">
+          <button onClick={() => openNewVehicle()} className="flex items-center justify-center w-2/6 py-2 bg-red-950 rounded-md shadow-md font-semibold">
+            <HiOutlinePlus size={23} className="mr-2" />
+            Lisää uusi ajoneuvo
+          </button>
+        </div>
+        {islInspectOpen && (
+          <InspectVehicle
+            isOpen={islInspectOpen}
+            onClose={closeInspect}
+            vehicleName={selectedVehicle}
+          />
+        )}
+         {isNewVehicleOpen && (
+          <AddVehicle
+            isOpen={isNewVehicleOpen}
+            onClose={closeNewVehicle}
+            vehicleName={selectedVehicle}
+          />
+        )}
       </div>
-    </div>
-    </div>
+    </>
   );
 };
 

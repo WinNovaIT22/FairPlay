@@ -18,9 +18,9 @@ export default function DeleteModal() {
       </Button>  
       <Modal 
         isOpen={isOpen} 
-          onOpenChange={onOpenChange}
-          placement="center"
-        >
+        onOpenChange={onOpenChange}
+        placement="center"
+      >
         <ModalContent>
           {(onClose) => (
             <>

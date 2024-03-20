@@ -20,10 +20,11 @@ model User {
 }
 
 model UserVehicles {
-  id        Int     @id @default(autoincrement())
-  vehicle   String
-  inspected Boolean @default(false)
-  user_id   Int?
+  id              Int     @id @default(autoincrement())
+  vehicle         String
+  inspected       Boolean @default(false)
+  user_id         Int?
+  inspectedImage  String?
 }
 
 model Tasks {
