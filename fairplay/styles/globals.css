@@ -48,6 +48,35 @@
   fill: rgb(55, 55, 55);
 }
 
+/* IMAGE UPLOAD */
+.file-upload-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.file-upload-label input {
+  display: none;
+}
+.file-upload-label svg {
+  height: 60px;
+  fill: #450a0a;
+  margin-bottom: 10px;
+}
+.file-upload-label {
+  cursor: pointer;
+  background-color: #3f3f46;
+  padding: 30px 70px;
+  border-radius: 40px;
+  border: 3px dashed rgb(34, 33, 33);
+}
+.file-upload-design {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
 @keyframes rolling {
   to {
     transform: rotate(360deg); 

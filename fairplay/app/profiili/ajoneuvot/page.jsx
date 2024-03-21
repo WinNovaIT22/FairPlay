@@ -14,6 +14,7 @@ const Vehicles = () => {
   const [isNewVehicleOpen, setIsNewVehicleOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [selectedVehicleId, setSelectedVehicleId] = useState(null);
 
   useEffect(() => {
     const fetchUserVehicles = async () => {
@@ -36,8 +37,9 @@ const Vehicles = () => {
     fetchUserVehicles();
   }, []);
 
-  const openInspect = (vehicleName) => {
+  const openInspect = (vehicleName, vehicleId) => {
     setSelectedVehicle(vehicleName);
+    setSelectedVehicleId(vehicleId)
     setIslInspectOpen(true);
   };
   const closeInspect = () => {
@@ -112,13 +114,13 @@ const Vehicles = () => {
             isOpen={islInspectOpen}
             onClose={closeInspect}
             vehicleName={selectedVehicle}
+            vehicleId={selectedVehicleId}
           />
         )}
          {isNewVehicleOpen && (
           <AddVehicle
             isOpen={isNewVehicleOpen}
             onClose={closeNewVehicle}
-            vehicleName={selectedVehicle}
           />
         )}
       </div>
