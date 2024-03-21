@@ -10,13 +10,13 @@ export default function Home() {
           <div className="text-center mt-4">
             <MdLiveHelp size={30} className="text-black mb-2" />
             <p className="text-xl font-bold text-black font-sans mb-4">
-              Ohjeetdqwd fairplay kilpailuun saat esille nappia painamalla
+              Ohjeet fairplay kilpailuun saat esille nappia painamalla
             </p>
             <a
               href="https://www.konepyoraklubi.fi/wp-content/uploads/2023/04/Konepyoraklubi-FairPlay-pistejako-ja-perusteet_2023.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+             
             >
               <button className="custom-button">Tutustu sääntöihin täältä</button>
             </a>
