@@ -22,18 +22,21 @@ const Home = async () => {
 
   return (
     <>
-      <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
-        <div><Navbar /></div>
-        <div className="flex text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
-        {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
-      </div>
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="absolute top-4 left-4">
-          <Image src="/kuva.jpg" alt="Kuva" width={50} height={50} />
+    
+      <div className="background-image">
+        <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
+          <div><Navbar /></div>
+          <div className="flex text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
+          {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
         </div>
-        <div className="flex flex-col items-center" >
-          <h1 className="text-4xl font-bold">Fairplay</h1>
-          <p className="text-lg">2024</p>
+        <div className="flex justify-center items-center">
+          <div className="absolute top-4 left-4">
+            <Image src="/kuva.jpg" alt="Kuva" width={50} height={50} />
+          </div>
+          <div className="flex flex-col items-center">
+            <h1 className="text-4xl font-bold">Fairplay</h1>
+            <p className="text-lg">2024</p>
+          </div>
         </div>
       </div>
     </>
