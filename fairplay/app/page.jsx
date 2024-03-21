@@ -1,13 +1,17 @@
-import Navbar from "@/components/ui/navbar";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
-import { Button } from "@nextui-org/react";
-import { MdAdminPanelSettings } from "react-icons/md";
+import { Card, CardBody, CardFooter, Chip, Button } from "@nextui-org/react";
+import { FaLongArrowAltRight } from "react-icons/fa";
+import Link from 'next/link'; 
 import Image from "next/image";
+import { TbLogout } from "react-icons/tb";
+import MotorBike from "@/public/motorbike.jpg"
+import User from "@/public/user.png"
+import Tasks from "@/public/task.svg"
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
-  const isAdmin = session?.user.role === "admin";
+  const isAdmin = session?.user.role === "ylläpitäjä";
 
   const currentHour = new Date().getHours();
   let greeting = "";
@@ -22,21 +26,88 @@ const Home = async () => {
 
   return (
     <>
-    
       <div className="background-image">
-        <div className="flex justify-around bg-zinc-700 p-4 rounded-lg">
-          <div><Navbar /></div>
-          <div className="flex text-center text-xl">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
-          {isAdmin && <div><Button variant="bordered" size="lg"><MdAdminPanelSettings size={25}/>Admin</Button></div>}
+        <div className="bg-zinc-700 p-4 rounded-lg">
+          <div className="text-center text-xl font-black">{greeting}, {session?.user.firstname} {session?.user.lastname}</div>
         </div>
-        <div className="flex justify-center items-center">
-          <div className="absolute top-4 left-4">
-            <Image src="/kuva.jpg" alt="Kuva" width={50} height={50} />
-          </div>
-          <div className="flex flex-col items-center">
-            <h1 className="text-4xl font-bold">Fairplay</h1>
-            <p className="text-lg">2024</p>
-          </div>
+        <div className="flex justify-center items-center w-6/6">
+          {isAdmin && 
+            <Link href="/admin/"> 
+              <Card shadow="sm" isPressable className="hover:scale-95 mt-4">
+                <CardBody className="overflow-visible p-4 bg-zinc-700 flex flex-row font-semibold justify-center items-center">
+                  Olet<Chip className="mx-1" color="success" size="md" variant="flat">Ylläpitäjä</Chip>, siirry hallintasivulle<FaLongArrowAltRight className="ml-5" size={25} />
+                </CardBody>
+              </Card>
+            </Link>
+          }
+        </div>
+        <div className="flex justify-center mt-10">
+          <Link href=""> 
+            <Card shadow="sm" isPressable className="hover:scale-95">
+              <CardBody className="overflow-visible p-0 bg-yellow-100">
+                <Image
+                  alt="Users"
+                  className="h-[200px] w-[500px]"
+                  src={Tasks}
+                />
+              </CardBody>
+              <CardFooter className="text-lg">
+                <b className="mx-auto">Suorituksesi
+                </b>
+              </CardFooter>
+            </Card>
+          </Link>
+        </div>
+        <div className="flex flex-row gap-8 justify-center mt-10">
+          <Link href="/ajoneuvot"> 
+            <Card shadow="sm" isPressable className="hover:scale-95">
+              <CardBody className="overflow-visible p-0 bg-blue-100">
+                <Image
+                  alt="Users"
+                  className="h-[140px] w-[240px] object-cover"
+                  src={MotorBike}
+                />
+              </CardBody>
+              <CardFooter className="text-lg">
+                <b className="mx-auto">Ajoneuvosi</b>
+              </CardFooter>
+            </Card>
+          </Link>
+          <Link href="/kayttaja"> 
+            <Card shadow="sm" isPressable className="hover:scale-95">
+              <CardBody className="overflow-visible p-0 bg-green-200">
+                <Image
+                  alt="Users"
+                  className="h-[140px] w-[240px] object-cover"
+                  src={User}
+                />
+              </CardBody>
+              <CardFooter className="text-lg">
+                <b className="mx-auto">Käyttäjätietosi
+                </b>
+              </CardFooter>
+            </Card>
+          </Link>
+          <Link href="/ohjeet"> 
+            <Card shadow="sm" isPressable className="hover:scale-95">
+              <CardBody className="overflow-visible p-0 bg-green-200">
+                <Image
+                  alt="Users"
+                  className="h-[140px] w-[240px] object-cover"
+                  src={User}
+                />
+              </CardBody>
+              <CardFooter className="text-lg">
+                <b className="mx-auto">Ohjeita käyttöön
+                </b>
+              </CardFooter>
+            </Card>
+          </Link>
+        </div>
+        <div className="flex justify-center mt-10">
+          <Button variant="flat" color="danger" className="font-bold text-md mb-3">
+            <TbLogout size={20}/>Kirjaudu ulos
+          </Button>  
         </div>
       </div>
     </>

@@ -13,7 +13,7 @@ export default function DeleteModal() {
 
   return (
     <>
-      <Button onPress={onOpen} variant="solid" color="danger" className="font-bold mb-3">
+      <Button onPress={onOpen} variant="flat" color="danger" className="font-bold mb-3">
         <RiDeleteBin6Line size={18} />Poista itsesi
       </Button>  
       <Modal 

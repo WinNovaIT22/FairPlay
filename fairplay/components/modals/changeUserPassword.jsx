@@ -17,7 +17,7 @@ export default function PasswordModal() {
 
   return (
     <>
-      <Button onPress={onOpen} variant="solid" color="warning" className="font-bold mb-3">
+      <Button onPress={onOpen} variant="flat" color="warning" className="font-bold mb-3">
         <MdLockOutline size={18} />Vaihda salasanasi
       </Button>  
       <Modal 
