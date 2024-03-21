@@ -9,12 +9,8 @@ function UploadImage({ setImage }) {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        setSelectedImage(e.target.result);
-        setImage(e.target.result); 
-      };
-      reader.readAsDataURL(file);
+      setSelectedImage(URL.createObjectURL(file)); // Set selectedImage to the URL of the file
+      setImage({ file: file, name: file.name }); // Pass the file directly
     }
   };
 

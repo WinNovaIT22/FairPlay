@@ -1,11 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db } from "@/utils/db";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/auth";
 import { NextResponse } from "next/server";
 
-// Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyAkTGGUknV1cQLr1z6VIksQrxvgxnX1Mmo",
     authDomain: "fairplay-3092c.firebaseapp.com",
@@ -20,20 +17,13 @@ const storage = getStorage(app);
 
 export async function POST(req) {
     try {
-        const session = await getServerSession(authOptions);
-        const body = await req.json();
-        
-        const { vehicle, image } = body;
+        const form = await req.formData();
+        const id = parseInt(form.get('id'), 10);
+        const imageFile = form.get('image');
 
-        if (!session) {
-            return NextResponse.error(new Error("Unauthorized"), { status: 401 });
-        }
-      
-        const userId = parseInt(session.user.id);
-        
         // Upload image to Firebase Storage
-        const imageRef = ref(storage, `inspected/${userId}/${Date.now()}_${image.name}`);
-        await uploadBytes(imageRef, image);
+        const imageRef = ref(storage, `inspected/${id}`);
+        await uploadBytes(imageRef, imageFile);
 
         // Get the download URL of the uploaded image
         const imageUrl = await getDownloadURL(imageRef);
@@ -41,8 +31,7 @@ export async function POST(req) {
         // Find the existing vehicle record
         const existingVehicle = await db.userVehicles.findFirst({
             where: {
-                user_id: userId,
-                vehicle: vehicle
+                id: id,
             }
         });
 
@@ -50,7 +39,7 @@ export async function POST(req) {
         if (existingVehicle) {
             const updatedVehicle = await db.userVehicles.update({
                 where: { id: existingVehicle.id },
-                data: { inspectedImage: imageUrl }
+                data: { inspectedImage: imageUrl, inspected: true }
             });
             return NextResponse.json({ user: updatedVehicle, message: "User vehicle updated with image URL" }, { status: 200 });
         } else {

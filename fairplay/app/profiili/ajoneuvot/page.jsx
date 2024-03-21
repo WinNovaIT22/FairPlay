@@ -84,7 +84,7 @@ const Vehicles = () => {
                           ) : (
                             <p
                               className="text-red-600 text-sm text-end cursor-pointer underline hover:text-red-600/70"
-                              onClick={() => openInspect(vehicle.vehicle)}
+                              onClick={() => openInspect(vehicle.vehicle, vehicle.id)}
                             >
                               Ei katsastettu - katsasta
                             </p>

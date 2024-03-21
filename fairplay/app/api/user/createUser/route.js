@@ -36,9 +36,8 @@ export async function POST(req) {
 
         const { password: newUserPassword, ...rest } = newUser;
 
-        return NextResponse.json({ user: rest, newUserVehicle, message: "Käyttäjä luotu onnistuneesti" }, { status: 201 });
+        return NextResponse.json({ user: rest, newUserVehicle, message: "User created successfully" }, { status: 201 });
     } catch (error) {
-        console.error("Error creating user:", error);
-        return NextResponse.json({ message: "Jotain meni mönkään" }, { status: 500 });
+        return NextResponse.json({ message: "Error creating user" }, { status: 500 });
     }
 }
