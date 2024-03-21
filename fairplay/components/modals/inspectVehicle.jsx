@@ -21,11 +21,11 @@ const InspectVehicle = ({ isOpen, onClose, vehicleName }) => {
               <p className="font-semibold">Lähetä kuva matkamittarista</p>
             </ModalBody>
             <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                    Close
+                <Button variant="light" onPress={onClose}>
+                    Peruuta
                 </Button>
-                <Button color="primary" onPress={onClose}>
-                    Action
+                <Button color="success" variant="flat" onPress={onClose}>
+                    Lähetä
                 </Button>
             </ModalFooter>
           </ModalContent>
