@@ -1,16 +1,46 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Chip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DropdownSection } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Chip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DropdownSection, Accordion, AccordionItem } from "@nextui-org/react";
 import { MdBlock, MdOutlineAdminPanelSettings, MdOutlineRemoveCircleOutline, MdLockOutline } from "react-icons/md";
 import { roleColorMap } from "@/app/admin/kayttajat/page"; 
+import { FaMotorcycle } from "react-icons/fa6";
 import PasswordModal from "@/components/modals/changeUserPasswordAdmin";
+import Image from 'next/image';
 
 const ModalComponent = ({ isOpen, onClose, modalData }) => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [userVehicles, setUserVehicles] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [userVehicles, setUserVehicles] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserVehicles = async () => {
+      try {
+        const response = await fetch("/api/admin/getVehicles", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user_id: modalData.id }),
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setUserVehicles(data);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+          console.error("Failed to fetch user vehicles:", response.statusText);
+        }
+      } catch (error) {
+        setIsLoading(false);
+        console.error("Error fetching user vehicles:", error);
+      }
+    };
+
+    fetchUserVehicles();
+  }, [isOpen, modalData]);
 
   if (!modalData) {
     return null;
@@ -36,35 +66,6 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
       console.error("Error updating user role:", error);
     }
   };
-
-  const fetchUserVehicles = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/admin/getVehicles", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: modalData.id }),
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        setUserVehicles(data);
-      } else {
-        console.error("Failed to fetch user vehicles:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching user vehicles:", error);
-    }
-    setIsLoading(false); 
-  };
-
-  useEffect(() => {
-    if (isOpen && modalData) {
-      fetchUserVehicles();
-    }
-  }, [isOpen, modalData]);
 
   const blockUser = async () => {
     try {
@@ -92,51 +93,44 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
     setIsPasswordModalOpen(true);
   };
 
+  const currentYear = new Date().getFullYear();
+
   return (
-    <Modal size={"lg"} placement={"center"} isOpen={isOpen} onClose={onClose}>
-      <PasswordModal isOpen={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)} user={selectedUser} />
-      <ModalContent>
-        <ModalHeader>Profiili</ModalHeader>
-        <ModalBody>
-          {modalData && (
-                <>
-                  <div>{modalData.firstname} {modalData.lastname} <Chip color={roleColorMap[modalData.role]} size="sm" variant="flat">{modalData.role}</Chip><br></br>{modalData.email}</div>
-                  <div>Ajoneuvo(t): 
-                  {Array.isArray(userVehicles) && userVehicles.length > 0 ? (
-                  userVehicles.map((vehicle) => (
-                    <div
-                      key={vehicle.id}
-                      className="border-3 border-red-950 rounded-md shadow-md mb-4"
-                    >
-                      <div className="flex justify-center py-4">
-                        <div className="flex items-center">
-                          <FaMotorcycle size={22} />
-                          <p className="ml-2">{vehicle.vehicle}</p>
-                        </div>
-                      </div>
-                      <div className="mr-2">
-                        {vehicle.inspected ? (
-                          <p className="text-green-600 text-sm text-end">
-                            Katsastettu kaudelle {currentYear}
-                          </p>
-                        ) : (
-                          <p
-                            className="text-red-600 text-sm text-end cursor-pointer underline hover:text-red-600/70"
-                            onClick={() => openModal(vehicle.vehicle)}
-                          >
-                            Katsasta tästä
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>Käyttäjällä ei ole yhtäkään ajoneuvoa</p>
-                )}
+    <Modal size={"3xl"} placement={"center"} isOpen={isOpen} onClose={onClose}>
+     <PasswordModal isOpen={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)} user={selectedUser} />
+     <ModalContent>
+       <ModalHeader>Profiili</ModalHeader>
+       <ModalBody>
+         {isLoading ? ( 
+           <p>Loading...</p>
+         ) : (
+           <>
+             <div>{modalData.firstname} {modalData.lastname} <Chip color={roleColorMap[modalData.role]} size="sm" variant="flat">{modalData.role}</Chip><br></br>{modalData.email}</div>
+             <div>Ajoneuvo(t): 
+             {Array.isArray(userVehicles) && userVehicles.length > 0 ? (
+               <Accordion>
+                 {userVehicles.map((vehicle, index) => (
+                  <AccordionItem key={index} title={<div className="flex items-center text-sm">{<FaMotorcycle size={18} className='mr-3'/>} {vehicle.vehicle} - {vehicle.inspected ? `Katsastettu kaudelle ${currentYear}` : 'Ei katsastettu'}</div>}>
+                  <div>
+                    asd
+                    {!vehicle.inspected && vehicle.inspectedImage && (
+                      <Image
+                        alt="Users"
+                        className="h-[140px] w-[240px] object-cover"
+                        src={vehicle.inspectedImage}
+                      />
+                    )}
                   </div>
-              </>
-          )}
-        </ModalBody>
+                  </AccordionItem>
+                 ))}
+               </Accordion>
+             ) : (
+               <p>Käyttäjällä ei ole yhtäkään ajoneuvoa</p>
+             )}
+             </div>
+           </>
+         )}
+       </ModalBody>
         <ModalFooter>
           <Dropdown>
             <DropdownTrigger>
