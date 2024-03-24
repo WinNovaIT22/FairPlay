@@ -96,7 +96,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Modal size={"3xl"} placement={"center"} isOpen={isOpen} onClose={onClose}>
+    <Modal size={"full"} placement={"center"} isOpen={isOpen} onClose={onClose}>
      <PasswordModal isOpen={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)} user={selectedUser} />
      <ModalContent>
        <ModalHeader>Profiili</ModalHeader>
@@ -106,7 +106,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
          ) : (
            <>
              <div>{modalData.firstname} {modalData.lastname} <Chip color={roleColorMap[modalData.role]} size="sm" variant="flat">{modalData.role}</Chip><br></br>{modalData.email}</div>
-             <div>Ajoneuvo(t): 
+             <div className='text-center text-xl'>Ajoneuvot: 
              {Array.isArray(userVehicles) && userVehicles.length > 0 ? (
                <Accordion>
                  {userVehicles.map((vehicle, index) => (
@@ -130,6 +130,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
              </div>
            </>
          )}
+        <div className='mt-5 text-center text-xl'>Suoritukset</div>
        </ModalBody>
         <ModalFooter>
           <Dropdown>

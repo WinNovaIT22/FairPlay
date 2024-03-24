@@ -28,11 +28,13 @@ model UserVehicles {
 }
 
 model Tasks {
-  id     Int     @id @default(autoincrement())
-  task   String
-  photo  Boolean
-  text   Boolean
-  points Int
+  id        Int     @id @default(autoincrement())
+  task      String
+  taskdesc  String?
+  photo     Boolean
+  text      Boolean
+  points    Int
+  year      Int
 }
 
 model kaksipyoraiset_data {
