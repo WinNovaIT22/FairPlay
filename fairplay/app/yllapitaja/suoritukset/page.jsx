@@ -9,6 +9,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import { CiCircleInfo } from "react-icons/ci";
+import TasksTable from "@/components/ui/taskTable"
 
 export default function Tasks() {
   const currentYear = new Date().getFullYear();
@@ -51,6 +52,7 @@ export default function Tasks() {
           </PopoverContent>
         </Popover>
       </div>
+      <TasksTable />
     </div>
   );
 }

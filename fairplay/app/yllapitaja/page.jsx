@@ -5,6 +5,7 @@ import Link from "next/link";
 import Users from "@/public/users.png";
 import BannedUsers from "@/public/bannedusers.png";
 import Tasks from "@/public/task.svg";
+import Calendar from "@/public/calendar.png";
 import AdminCover from "@/public/admincover.png";
 import Image from "next/image";
 
@@ -31,37 +32,58 @@ const Home = async () => {
         </Chip>
       </div>
       <div className="flex flex-row justify-center mt-6">
-        <Link href="/admin/kayttajat">
+        <Link href="/yllapitaja/kayttajat">
           <Card shadow="sm" isPressable className="hover:scale-95">
             <CardBody className="overflow-visible p-0 bg-blue-100">
-              <Image alt="Users" className="h-[140px] w-[240px]" src={Users} />
+              <Image 
+                alt="Users"
+                className="h-[140px] w-[240px]"
+                src={Users} />
             </CardBody>
             <CardFooter className="text-lg">
               <b className="mx-auto">Käyttäjälista</b>
             </CardFooter>
           </Card>
         </Link>
-        <Link href="/admin/suoritukset">
+        <Link href="/yllapitaja/suoritukset">
           <Card shadow="sm" isPressable className="ml-5 hover:scale-95">
             <CardBody className="overflow-visible p-0 bg-yellow-100">
-              <Image alt="Users" className=" h-[140px] w-[240px]" src={Tasks} />
+              <Image
+                alt="Control Tasks"
+                className=" h-[140px] w-[240px]"
+                src={Tasks}
+              />
             </CardBody>
             <CardFooter className="text-lg">
-              <b className="mx-auto">Suoritukset</b>
+              <b className="mx-auto">Hallitse suorituksia</b>
             </CardFooter>
           </Card>
         </Link>
-        <Link href="/admin/estetyt">
+        <Link href="/yllapitaja/estetyt">
           <Card shadow="sm" isPressable className="ml-5 hover:scale-95">
             <CardBody className="overflow-visible p-0 bg-red-100">
               <Image
-                alt="Users"
+                alt="Blocked Users"
                 className="h-[140px] w-[240px]"
                 src={BannedUsers}
               />
             </CardBody>
             <CardFooter className="text-lg">
               <b className="mx-auto">Estetyt käyttäjät</b>
+            </CardFooter>
+          </Card>
+        </Link>
+        <Link href="/yllapitaja/vuosikoosteet">
+          <Card shadow="sm" isPressable className="ml-5 hover:scale-95">
+            <CardBody className="overflow-visible p-0 bg-green-100">
+              <Image
+                alt="Year Replays"
+                className="h-[140px] w-[240px] object-cover"
+                src={Calendar}
+              />
+            </CardBody>
+            <CardFooter className="text-lg">
+              <b className="mx-auto">Vuosikoosteet</b>
             </CardFooter>
           </Card>
         </Link>

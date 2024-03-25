@@ -12,6 +12,7 @@ import Tasks from "@/public/task.svg";
 const Home = async () => {
   const session = await getServerSession(authOptions);
   const isAdmin = session?.user.role === "ylläpitäjä";
+  const isSupervisor = session?.user.role === "valvoja";
 
   const currentHour = new Date().getHours();
   let greeting = "";
@@ -34,7 +35,7 @@ const Home = async () => {
         </div>
         <div className="flex justify-center items-center w-6/6">
           {isAdmin && (
-            <Link href="/admin/">
+            <Link href="/yllapitaja/">
               <Card shadow="sm" isPressable className="hover:scale-95 mt-4">
                 <CardBody className="overflow-visible p-4 bg-zinc-700 flex flex-row font-semibold justify-center items-center">
                   Olet
@@ -47,6 +48,25 @@ const Home = async () => {
                     Ylläpitäjä
                   </Chip>
                   , siirry hallintasivulle
+                  <FaLongArrowAltRight className="ml-5" size={25} />
+                </CardBody>
+              </Card>
+            </Link>
+          )}
+          {isSupervisor && (
+            <Link href="/valvoja/">
+              <Card shadow="sm" isPressable className="hover:scale-95 mt-4">
+                <CardBody className="overflow-visible p-4 bg-zinc-700 flex flex-row font-semibold justify-center items-center">
+                  Olet
+                  <Chip
+                    className="mx-1"
+                    color="primary"
+                    size="md"
+                    variant="flat"
+                  >
+                    Valvoja
+                  </Chip>
+                  , siirry valvontasivulle
                   <FaLongArrowAltRight className="ml-5" size={25} />
                 </CardBody>
               </Card>
