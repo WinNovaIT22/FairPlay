@@ -1,7 +1,16 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Autocomplete,
+  AutocompleteItem,
+} from "@nextui-org/react";
 import { useAsyncList } from "@react-stately/data";
 import { HiOutlinePlus } from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
@@ -11,19 +20,19 @@ const AddVehicle = ({ isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const addVehicle = async () => {
-    try {  
+    try {
       const response = await fetch("/api/user/updateVehicles", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ vehicle: selectedVehicle }), 
+        body: JSON.stringify({ vehicle: selectedVehicle }),
       });
-  
+
       if (response.ok) {
         console.log("Vehicle added successfully");
         window.location.reload(true);
-        onClose(); 
+        onClose();
       } else {
         console.error("Failed to add vehicle:", response.statusText);
       }
@@ -62,7 +71,9 @@ const AddVehicle = ({ isOpen, onClose }) => {
     <>
       <Modal size={"lg"} placement={"center"} isOpen={isOpen} onClose={onClose}>
         <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">Lisää uusi ajoneuvo</ModalHeader>
+          <ModalHeader className="flex flex-col gap-1">
+            Lisää uusi ajoneuvo
+          </ModalHeader>
           <ModalBody>
             <Autocomplete
               variant="faded"
@@ -74,11 +85,23 @@ const AddVehicle = ({ isOpen, onClose }) => {
               name="vehicle"
               placeholder="Hae oma ajoneuvosi"
               labelPlacement="outside"
-              onInputChange={(value) => {setSearchQuery(value), setSelectedVehicle(value)}}
-              startContent={<IoSearchOutline size={22} className="mr-1 text-2xl text-slate-300 pointer-events-none flex-shrink-0" />}
+              onInputChange={(value) => {
+                setSearchQuery(value), setSelectedVehicle(value);
+              }}
+              startContent={
+                <IoSearchOutline
+                  size={22}
+                  className="mr-1 text-2xl text-slate-300 pointer-events-none flex-shrink-0"
+                />
+              }
             >
               {(item) => (
-                <AutocompleteItem key={item.id} value={`${item.merkkiSelvakielinen} ${item.kaupallinenNimi}`} textValue={`${item.merkkiSelvakielinen} ${item.kaupallinenNimi}`} className="py-2">
+                <AutocompleteItem
+                  key={item.id}
+                  value={`${item.merkkiSelvakielinen} ${item.kaupallinenNimi}`}
+                  textValue={`${item.merkkiSelvakielinen} ${item.kaupallinenNimi}`}
+                  className="py-2"
+                >
                   {item.merkkiSelvakielinen} {item.kaupallinenNimi}
                 </AutocompleteItem>
               )}
@@ -88,7 +111,13 @@ const AddVehicle = ({ isOpen, onClose }) => {
             <Button variant="light" onPress={onClose}>
               Peruuta
             </Button>
-            <Button color="success" variant="flat" onPress={addVehicle} isDisabled={!selectedVehicle} startContent={<HiOutlinePlus size={18}/>}>
+            <Button
+              color="success"
+              variant="flat"
+              onPress={addVehicle}
+              isDisabled={!selectedVehicle}
+              startContent={<HiOutlinePlus size={18} />}
+            >
               Lisää
             </Button>
           </ModalFooter>
@@ -96,6 +125,6 @@ const AddVehicle = ({ isOpen, onClose }) => {
       </Modal>
     </>
   );
-}
+};
 
 export default AddVehicle;

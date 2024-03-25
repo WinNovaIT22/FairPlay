@@ -31,8 +31,9 @@ model Tasks {
   id        Int     @id @default(autoincrement())
   task      String
   taskdesc  String?
-  photo     Boolean
+  image     Boolean
   text      Boolean
+  again     Boolean
   points    Int
   year      Int
 }

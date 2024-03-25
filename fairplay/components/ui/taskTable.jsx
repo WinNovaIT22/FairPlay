@@ -15,7 +15,9 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import Loading from "@/app/loading";
+import { HiOutlinePlus } from "react-icons/hi2";
 import { HiOutlineDotsVertical } from "react-icons/hi";
+import AddTask from "@/components/modals/addNewTask";
 
 
 const columns = [
@@ -37,6 +39,7 @@ export default function TasksTable() {
   });
   const [usersData, setUsersData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -63,25 +66,11 @@ export default function TasksTable() {
     fetchUsers();
   }, []);
 
-  const unblockUser = async (userId) => {
-    try {
-      const response = await fetch("/api/user/block/unblockUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: userId }),
-      });
-
-      if (response.ok) {
-        console.log("User unblocked successfully");
-        window.location.reload(true);
-      } else {
-        console.error("Failed to unblock user");
-      }
-    } catch (error) {
-      console.error("Error unblocking user:", error);
-    }
+  const openNewTask= () => {
+    setIsNewTaskOpen(true);
+  };
+  const closeNewTask = () => {
+    setIsNewTaskOpen(false);
   };
 
   const headerColumns = useMemo(() => {
@@ -129,6 +118,14 @@ export default function TasksTable() {
     );
   }, [visibleColumns, usersData.length]);
 
+  const bottomContent = useMemo(() => {
+    return (
+      <div className="flex justify-center mt-4">
+        <Button variant="bordered" onClick={() => openNewTask()} startContent={<HiOutlinePlus size={23} />}>Lisää uusi suoritus</Button>
+      </div>
+    );
+  }, []);
+
   return (
     <div className="flex items-center justify-center">
       <Table
@@ -137,6 +134,8 @@ export default function TasksTable() {
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
+        bottomContent={bottomContent}
+        bottomContentPlacement="inside"
         onSelectionChange={setSelectedKeys}
         onSortChange={setSortDescriptor}
         className="md:w-3/6 w-full"
@@ -167,6 +166,12 @@ export default function TasksTable() {
           )}
         </TableBody>
       </Table>
+      {isNewTaskOpen && (
+          <AddTask
+            isOpen={isNewTaskOpen}
+            onClose={closeNewTask}
+          />
+        )}
     </div>
   );
 }
