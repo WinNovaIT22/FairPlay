@@ -7,6 +7,7 @@ import InspectVehicle from "@/components/modals/inspectVehicle";
 import AddVehicle from "@/components/modals/addNewVehicle";
 import Loading from "@/app/loading";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { FaHome } from "react-icons/fa";
 
 const Vehicles = () => {
   const [userVehicles, setUserVehicles] = useState([]);
@@ -57,6 +58,11 @@ const Vehicles = () => {
 
   return (
     <>
+          <div className="absolute top-0 left-0 m-4">
+        <a href="http://localhost:3000/" className="navigation-card">
+          <FaHome size={24} color="black" /> {/* Lisää FaHome-kuvake */}
+        </a>
+      </div>
       <div className="flex flex-col">
         <h1 className="text-center text-xl mt-5">Omat ajoneuvot</h1>
         <div className="flex justify-center items-center">
@@ -77,6 +83,7 @@ const Vehicles = () => {
                           <p className="ml-2">{vehicle.vehicle}</p>
                         </div>
                         <div>
+                          
                           {vehicle.inspected ? (
                             <p className="text-green-600 text-sm text-end">
                               Katsastettu kaudelle {currentYear}
