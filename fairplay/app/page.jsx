@@ -4,10 +4,10 @@ import { Card, CardBody, CardFooter, Chip, Button } from "@nextui-org/react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
-import { TbLogout } from "react-icons/tb";
 import MotorBike from "@/public/motorbike.jpg";
 import User from "@/public/user.png";
 import Tasks from "@/public/task.svg";
+import Logout from "@/components/ui/logout";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
@@ -134,14 +134,7 @@ const Home = async () => {
           </Link>
         </div>
         <div className="flex justify-center mt-10">
-          <Button
-            variant="flat"
-            color="danger"
-            className="font-bold text-md mb-3"
-          >
-            <TbLogout size={20} />
-            Kirjaudu ulos
-          </Button>
+          <Logout />
         </div>
       </div>
     </>
