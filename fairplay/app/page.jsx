@@ -4,8 +4,9 @@ import { Card, CardBody, CardFooter, Chip, Button } from "@nextui-org/react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
-import MotorBike from "@/public/motorbike.jpg";
+import MotorBike from "@/public/moottoripyörä.png";
 import User from "@/public/user.png";
+import question from "@/public/kysymyss.png"
 import Tasks from "@/public/task.svg";
 import Logout from "@/components/ui/logout";
 
@@ -92,7 +93,7 @@ const Home = async () => {
         <div className="flex flex-row gap-8 justify-center mt-10">
           <Link href="/ajoneuvot">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-blue-100">
+              <CardBody className="overflow-visible p-0 bg-gradient-to-b from-stone-900 to-red-900">
                 <Image
                   alt="Users"
                   className="h-[140px] w-[240px] object-cover"
@@ -106,7 +107,7 @@ const Home = async () => {
           </Link>
           <Link href="/kayttaja">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-green-200">
+              <CardBody className="overflow-visible p-0 bg-gradient-to-b from-stone-900 to-red-900">
                 <Image
                   alt="Users"
                   className="h-[140px] w-[240px] object-cover"
@@ -120,15 +121,15 @@ const Home = async () => {
           </Link>
           <Link href="/ohjeet">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-green-200">
+              <CardBody className="overflow-visible p-0 bg-gradient-to-b from-stone-900 to-red-900">
                 <Image
                   alt="Users"
-                  className="h-[140px] w-[240px] object-cover"
-                  src={User}
+                  className="h-[140px] w-[240px]"
+                  src={question}
                 />
               </CardBody>
               <CardFooter className="text-lg">
-                <b className="mx-auto">Ohjeita käyttöön</b>
+                <b className="mx-auto">Ohjeita</b>
               </CardFooter>
             </Card>
           </Link>
