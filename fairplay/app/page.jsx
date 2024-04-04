@@ -19,11 +19,11 @@ const Home = async () => {
   let greeting = "";
 
   if (currentHour >= 0 && currentHour < 12) {
-    greeting = "Hyvää huomenta";
+    greeting = "Hyvää huomenta🌝";
   } else if (currentHour >= 12 && currentHour < 18) {
-    greeting = "Hyvää päivää";
+    greeting = "Hyvää päivää🌞    ";
   } else {
-    greeting = "Hyvää iltaa";
+    greeting = "Hyvää iltaa🌚    ";
   }
 
   return (
