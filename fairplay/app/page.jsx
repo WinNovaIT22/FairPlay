@@ -19,11 +19,11 @@ const Home = async () => {
   let greeting = "";
 
   if (currentHour >= 0 && currentHour < 12) {
-    greeting = "Hyvää huomenta";
+    greeting = "Hyvää huomenta🌝";
   } else if (currentHour >= 12 && currentHour < 18) {
-    greeting = "Hyvää päivää";
+    greeting = "Hyvää päivää🌞    ";
   } else {
-    greeting = "Hyvää iltaa";
+    greeting = "Hyvää iltaa🌚    ";
   }
 
   return (
@@ -77,7 +77,7 @@ const Home = async () => {
         <div className="flex justify-center mt-10">
           <Link href="">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-yellow-100">
+              <CardBody className="overflow-visible p-0 bg-gradient-to-b from-green-600 to-emerald-900">
                 <Image
                   alt="Users"
                   className="h-[200px] w-[500px]"
