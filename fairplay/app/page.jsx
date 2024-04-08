@@ -101,7 +101,7 @@ const Home = async () => {
                 />
               </CardBody>
               <CardFooter className="text-lg">
-                <b className="mx-auto">Ajoneuvosi</b>
+                <b className="mx-auto font-bold">Ajoneuvosi</b>
               </CardFooter>
             </Card>
           </Link>
