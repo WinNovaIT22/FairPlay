@@ -21,14 +21,20 @@ const Home = async () => {
   if (currentHour >= 0 && currentHour < 12) {
     greeting = "Hyvää huomenta🌝";
   } else if (currentHour >= 12 && currentHour < 18) {
-    greeting = "Hyvää päivää🌞    ";
+    greeting = "Hyvää päivää🌞";
   } else {
-    greeting = "Hyvää iltaa🌚    ";
+    greeting = "Hyvää iltaa🌚";
   }
 
   return (
     <>
-      <div className="background-image">
+      <div
+      className="flex flex-col h-screen"
+      style={{
+        backgroundImage: 'url(/kuvatausta.png)',
+        backgroundSize: 'cover', // Tämä varmistaa, että kuva peittää koko alueen
+        backgroundPosition: 'center', // Tämä keskittää kuvan
+      }}>
         <div className="bg-zinc-700 p-4 rounded-lg">
           <div className="text-center text-xl font-black">
             {greeting}, {session?.user.firstname} {session?.user.lastname}
