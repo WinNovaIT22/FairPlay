@@ -72,12 +72,12 @@ const AddTask = ({ isOpen, onClose }) => {
               }
             />
             <CheckboxGroup
-              label="Mitä vaaditaan kilpailijalta palauttaessa?"
+              label="Mitä kilpailijalta vaaditaan palauttaessa?"
               orientation="horizontal"
               className="mt-2"
             >
-              <Checkbox value="buenos-aires">Teksti</Checkbox>
-              <Checkbox value="sydney">Kuva</Checkbox>
+              <Checkbox value="buenos-aires">teksti</Checkbox>
+              <Checkbox value="sydney">kuva</Checkbox>
             </CheckboxGroup>
             <Divider orientation="horizontal" />
             <Checkbox>Suorituksen voi palauttaa useamman kerran</Checkbox>

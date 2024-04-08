@@ -11,6 +11,7 @@ model User {
   firstname String
   lastname  String
   email     String   @unique
+  city      String   @default("Pori")
   password  String
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt

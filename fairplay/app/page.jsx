@@ -1,14 +1,17 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
-import { Card, CardBody, CardFooter, Chip, Button } from "@nextui-org/react";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Chip,
+  Progress,
+  Image,
+} from "@nextui-org/react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import Link from "next/link";
-import Image from "next/image";
-import MotorBike from "@/public/moottoripyörä.png";
-import User from "@/public/user.png";
-import question from "@/public/kysymyss.png"
-import Tasks from "@/public/task.svg";
 import Logout from "@/components/ui/logout";
+import Temperature from "@/components/ui/temperature";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
@@ -19,32 +22,36 @@ const Home = async () => {
   let greeting = "";
 
   if (currentHour >= 0 && currentHour < 12) {
-    greeting = "Hyvää huomenta🌝";
+    greeting = "🌝 Hyvää huomenta";
   } else if (currentHour >= 12 && currentHour < 18) {
-    greeting = "Hyvää päivää🌞";
+    greeting = "🌞 Hyvää päivää";
   } else {
-    greeting = "Hyvää iltaa🌚";
+    greeting = "🌚 Hyvää iltaa";
   }
 
-  return (  
+  return (
     <>
       <div
-      className="flex flex-col h-screen"
-      style={{
-        backgroundImage: 'url(/kuvatausta.png)',
-        backgroundSize: 'cover', // Tämä varmistaa, että kuva peittää koko alueen
-        backgroundPosition: 'center', // Tämä keskittää kuvan
-      }}>
-        <div className="bg-zinc-700 p-4 rounded-lg">
-          <div className="text-center text-xl font-black">
+        className="flex flex-col h-screen"
+        style={{
+          backgroundImage: "url(/kuvatausta.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="shadow-lg backdrop-blur-sm p-4 rounded-lg flex justify-between">
+          <div className="text-center flex-grow text-xl font-black">
             {greeting}, {session?.user.firstname} {session?.user.lastname}
           </div>
+          <div className="font-black text-lg">
+            <Temperature />
+          </div>
         </div>
-        <div className="flex justify-center items-center w-6/6">
+        <div className="flex justify-center items-center">
           {isAdmin && (
             <Link href="/yllapitaja/">
-              <Card shadow="sm" isPressable className="hover:scale-95 mt-4">
-                <CardBody className="overflow-visible p-4 bg-zinc-700 flex flex-row font-semibold justify-center items-center">
+              <Card shadow="sm" isPressable className="hover:scale-95 mt-1">
+                <CardBody className="overflow-visible p-3 bg-gradient-to-l from-green-950 to-stone-900 flex flex-row font-semibold justify-center items-center">
                   Olet
                   <Chip
                     className="mx-1"
@@ -62,8 +69,8 @@ const Home = async () => {
           )}
           {isSupervisor && (
             <Link href="/valvoja/">
-              <Card shadow="sm" isPressable className="hover:scale-95 mt-4">
-                <CardBody className="overflow-visible p-4 bg-zinc-700 flex flex-row font-semibold justify-center items-center">
+              <Card shadow="sm" isPressable className="hover:scale-95 mt-1">
+                <CardBody className="overflow-visible p-3 bg-gradient-to-l from-blue-950 to-stone-900 flex flex-row font-semibold justify-center items-center">
                   Olet
                   <Chip
                     className="mx-1"
@@ -83,11 +90,16 @@ const Home = async () => {
         <div className="flex justify-center mt-10">
           <Link href="">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-gradient-to-b from-green-600 to-emerald-900">
-                <Image
-                  alt="Users"
-                  className="h-[200px] w-[500px]"
-                  src={Tasks}
+              <CardBody className="h-[200px] w-[500px] overflow-visible p-0 bg-gradient-to-b from-green-700 to-neutral-900 flex items-center justify-center">
+                <Image alt="Tasks" width={120} src="/task.png" />
+                <Progress
+                  isStriped
+                  label="Suoritettu"
+                  size="md"
+                  value="50"
+                  color="success"
+                  showValueLabel={true}
+                  className="max-w-md"
                 />
               </CardBody>
               <CardFooter className="text-lg">
@@ -99,12 +111,8 @@ const Home = async () => {
         <div className="flex flex-row gap-8 justify-center mt-10">
           <Link href="/ajoneuvot">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-gradient-to-t from-red-900 to-neutral-900">
-                <Image
-                  alt="Users"
-                  className="h-[140px] w-[240px] object-cover"
-                  src={MotorBike}
-                />
+              <CardBody className="h-[140px] w-[240px] overflow-visible p-0 bg-gradient-to-b from-red-900 to-neutral-900 flex items-center justify-center">
+                <Image alt="Users" width={150} src="/moottoripyörä.png" />
               </CardBody>
               <CardFooter className="text-lg">
                 <b className="mx-auto font-bold">Ajoneuvosi</b>
@@ -113,12 +121,8 @@ const Home = async () => {
           </Link>
           <Link href="/kayttaja">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-gradient-to-t from-red-900 to-neutral-900">
-                <Image
-                  alt="Users"
-                  className="h-[140px] w-[240px] object-cover"
-                  src={User}
-                />
+              <CardBody className="h-[140px] w-[240px] overflow-visible p-0 bg-gradient-to-b from-red-900 to-neutral-900 flex items-center justify-center">
+                <Image alt="Users" width={130} src="/user.png" />
               </CardBody>
               <CardFooter className="text-lg">
                 <b className="mx-auto">Käyttäjätietosi</b>
@@ -127,12 +131,8 @@ const Home = async () => {
           </Link>
           <Link href="/ohjeet">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-gradient-to-t from-red-900 to-neutral-900">
-                <Image
-                  alt="Users"
-                  className="h-[140px] w-[240px]"
-                  src={question}
-                />
+              <CardBody className="h-[140px] w-[240px] overflow-visible p-0 bg-gradient-to-b from-red-900 to-neutral-900 flex items-center justify-center">
+                <Image alt="Help" width={100} src="/kysymys.png" />
               </CardBody>
               <CardFooter className="text-lg">
                 <b className="mx-auto">Ohjeita</b>

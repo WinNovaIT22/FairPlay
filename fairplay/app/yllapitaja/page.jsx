@@ -4,7 +4,6 @@ import { Card, CardBody, CardFooter, Chip } from "@nextui-org/react";
 import Link from "next/link";
 import Users from "@/public/users.png";
 import BannedUsers from "@/public/bannedusers.png";
-import Tasks from "@/public/task.svg";
 import Calendar from "@/public/calendar.png";
 import AdminCover from "@/public/admincover.png";
 import Image from "next/image";
@@ -35,10 +34,7 @@ const Home = async () => {
         <Link href="/yllapitaja/kayttajat">
           <Card shadow="sm" isPressable className="hover:scale-95">
             <CardBody className="overflow-visible p-0 bg-blue-100">
-              <Image 
-                alt="Users"
-                className="h-[140px] w-[240px]"
-                src={Users} />
+              <Image alt="Users" className="h-[140px] w-[240px]" src={Users} />
             </CardBody>
             <CardFooter className="text-lg">
               <b className="mx-auto">Käyttäjälista</b>
@@ -48,11 +44,7 @@ const Home = async () => {
         <Link href="/yllapitaja/suoritukset">
           <Card shadow="sm" isPressable className="ml-5 hover:scale-95">
             <CardBody className="overflow-visible p-0 bg-yellow-100">
-              <Image
-                alt="Control Tasks"
-                className=" h-[140px] w-[240px]"
-                src={Tasks}
-              />
+              <Image alt="Control Tasks" className=" h-[140px] w-[240px]" />
             </CardBody>
             <CardFooter className="text-lg">
               <b className="mx-auto">Hallitse suorituksia</b>
