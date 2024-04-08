@@ -96,7 +96,7 @@ export default function TasksTable() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem>Muokkaa</DropdownItem>
-                <DropdownItem>Poista</DropdownItem>
+                <DropdownItem color="danger" className="text-danger">Poista</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>

@@ -8,7 +8,7 @@ export default function Logout() {
   return (
     <>
       <Button
-        variant="flat"
+        variant="solid"
         color="danger"
         className="font-bold text-md mb-3"
         onClick={() => signOut()}

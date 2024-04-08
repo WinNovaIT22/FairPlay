@@ -26,7 +26,7 @@ const Home = async () => {
     greeting = "Hyvää iltaa🌚";
   }
 
-  return (
+  return (  
     <>
       <div
       className="flex flex-col h-screen"
@@ -99,7 +99,7 @@ const Home = async () => {
         <div className="flex flex-row gap-8 justify-center mt-10">
           <Link href="/ajoneuvot">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-gradient-to-b from-stone-900 to-red-900">
+              <CardBody className="overflow-visible p-0 bg-gradient-to-t from-red-900 to-neutral-900">
                 <Image
                   alt="Users"
                   className="h-[140px] w-[240px] object-cover"
@@ -113,7 +113,7 @@ const Home = async () => {
           </Link>
           <Link href="/kayttaja">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-gradient-to-b from-stone-900 to-red-900">
+              <CardBody className="overflow-visible p-0 bg-gradient-to-t from-red-900 to-neutral-900">
                 <Image
                   alt="Users"
                   className="h-[140px] w-[240px] object-cover"
@@ -127,7 +127,7 @@ const Home = async () => {
           </Link>
           <Link href="/ohjeet">
             <Card shadow="sm" isPressable className="hover:scale-95">
-              <CardBody className="overflow-visible p-0 bg-gradient-to-b from-stone-900 to-red-900">
+              <CardBody className="overflow-visible p-0 bg-gradient-to-t from-red-900 to-neutral-900">
                 <Image
                   alt="Users"
                   className="h-[140px] w-[240px]"
