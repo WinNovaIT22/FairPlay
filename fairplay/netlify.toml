@@ -3,4 +3,4 @@
   publish = "/build"
   base = "/"
 
-[[plugins]] package = "@netlify/plugin-nextjs"
+[plugins] package = "@netlify/plugin-nextjs"
