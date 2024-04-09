@@ -14,7 +14,6 @@ export async function POST(req) {
       
         const userId = parseInt(session.user.id);
         
-        // Check the number of vehicles associated with the user
         const userVehiclesCount = await db.userVehicles.count({
             where: {
                 user_id: userId

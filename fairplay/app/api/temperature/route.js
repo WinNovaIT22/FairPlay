@@ -9,7 +9,7 @@ export async function GET() {
     const data = await response.json();
     const temperature = Math.round(data.main.temp);
 
-    return NextResponse.json({ temperature: `${temperature}°C` });
+    return NextResponse.json({ temperature: `${temperature}°C, Pori` });
 } catch (error) {
     return NextResponse.error(new Error('Failed to fetch temperature'), { status: 500 });
   }

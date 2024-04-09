@@ -39,7 +39,7 @@ const Home = async () => {
           backgroundPosition: "center",
         }}
       >
-        <div className="shadow-lg backdrop-blur-sm p-4 rounded-lg flex justify-between">
+        <div className="shadow-lg backdrop-blur-2xl p-4 rounded-lg flex justify-between">
           <div className="text-center flex-grow text-xl font-black">
             {greeting}, {session?.user.firstname} {session?.user.lastname}
           </div>
