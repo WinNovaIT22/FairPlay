@@ -1,6 +1,3 @@
 [build]
-  command = [
-    "npm run build",
-    "npx prisma generate"
-  ]
+  command = "npm run build && npx prisma generate"
   publish = "public"
