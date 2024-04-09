@@ -21,13 +21,8 @@ import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
 import ModalComponent from "@/components/modals/usersTable";
 import Loading from "@/app/loading";
 import { ToastContainer } from "react-toastify";
+import { roleColorMap } from "@/utils/rolecolormap.js"; 
 import "react-toastify/dist/ReactToastify.css";
-
-export const roleColorMap = {
-  ylläpitäjä: "success",
-  valvoja: "primary",
-  kilpailija: "default",
-};
 
 const columns = [
   { name: "ETUNIMI", uid: "firstname" },

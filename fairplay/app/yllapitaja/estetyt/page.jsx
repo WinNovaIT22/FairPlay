@@ -3,16 +3,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Chip, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
 import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
+import { roleColorMap } from "@/utils/rolecolormap.js"; 
 import Loading from "@/app/loading";
 import { MdBlock } from "react-icons/md";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-export const roleColorMap = {
-  ylläpitäjä: "success",
-  valvoja: "primary",
-  kilpailija: "default",
-};  
 
 const columns = [
   { name: "ETUNIMI", uid: "firstname" },

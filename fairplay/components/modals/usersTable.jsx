@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Chip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DropdownSection, Accordion, AccordionItem } from "@nextui-org/react";
 import { MdBlock, MdOutlineAdminPanelSettings, MdOutlineRemoveCircleOutline, MdLockOutline } from "react-icons/md";
-import { roleColorMap } from "@/app/yllapitaja/kayttajat/page"; 
+import { roleColorMap } from "@/utils/rolecolormap.js"; 
 import { FaMotorcycle } from "react-icons/fa6";
 import PasswordModal from "@/components/modals/changeUserPasswordAdmin";
 import Image from 'next/image';
