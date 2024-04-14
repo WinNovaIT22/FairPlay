@@ -17,7 +17,6 @@ const Temperature = () => {
         setCity(data.city);
         setLoading(false);
 
-        // Set weather icon based on weather condition
         const weatherCondition = data.weatherCondition.toLowerCase();
         let icon;
         switch (weatherCondition) {
@@ -30,7 +29,6 @@ const Temperature = () => {
           case 'rainy':
             icon = 'rain.png';
             break;
-          // Add more cases for other weather conditions as needed
           default:
             icon = 'default.png';
             break;

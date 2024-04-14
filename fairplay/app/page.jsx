@@ -21,12 +21,14 @@ const Home = async () => {
   const currentHour = new Date().getHours();
   let greeting = "";
 
-  if (currentHour >= 0 && currentHour < 12) {
+  if (currentHour >= 6 && currentHour < 10) {
     greeting = "🌝 Hyvää huomenta";
-  } else if (currentHour >= 12 && currentHour < 18) {
+  } else if (currentHour >= 10 && currentHour < 17) {
     greeting = "🌞 Hyvää päivää";
-  } else {
+  } else if (currentHour >= 17 && currentHour < 23) {
     greeting = "🌚 Hyvää iltaa";
+  } else {
+    greeting = "🌚 Hyvää yötä";
   }
 
   return (
@@ -34,22 +36,22 @@ const Home = async () => {
       <div
         className="flex flex-col h-screen"
         style={{
-          backgroundImage: "url(/kuvatausta.png)",
+          backgroundImage: "url(/backgrounds/userbg.webp)",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-      <div className="shadow-lg backdrop-blur-2xl p-2 rounded-lg flex justify-between items-center">
-        <div className="hidden md:block">
-          <Image alt="Logo" width={120} src="/konepyoraklubi.png" />
+        <div className="shadow-lg backdrop-blur-2xl p-2 rounded-lg flex justify-between items-center">
+          <div className="hidden md:block">
+            <Image alt="Logo" width={120} src="/konepyoraklubi.png" />
+          </div>
+          <div className="text-center flex-grow text-2xl font-black">
+            {greeting}, {session?.user.firstname} {session?.user.lastname}
+          </div>
+          <div className="font-black text-lg mr-3">
+            <Temperature />
+          </div>
         </div>
-        <div className="text-center flex-grow text-xl font-black">
-          {greeting}, {session?.user.firstname} {session?.user.lastname}
-        </div>
-        <div className="font-black text-lg mr-3">
-          <Temperature />
-        </div>
-      </div>
         <div className="flex justify-center items-center">
           {isAdmin && (
             <Link href="/yllapitaja/">
@@ -138,7 +140,7 @@ const Home = async () => {
                 <Image alt="Help" width={100} src="/kysymys.png" />
               </CardBody>
               <CardFooter className="text-lg">
-                <b className="mx-auto">Ohjeita</b>
+                <b className="mx-auto">Käyttöohjeet</b>
               </CardFooter>
             </Card>
           </Link>

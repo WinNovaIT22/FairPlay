@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { FaMotorcycle } from "react-icons/fa6";
@@ -8,6 +8,7 @@ import AddVehicle from "@/components/modals/addNewVehicle";
 import Loading from "@/app/loading";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FaHome } from "react-icons/fa";
+import { PiGarage } from "react-icons/pi";
 
 const Vehicles = () => {
   const [userVehicles, setUserVehicles] = useState([]);
@@ -40,7 +41,7 @@ const Vehicles = () => {
 
   const openInspect = (vehicleName, vehicleId) => {
     setSelectedVehicle(vehicleName);
-    setSelectedVehicleId(vehicleId)
+    setSelectedVehicleId(vehicleId);
     setIslInspectOpen(true);
   };
   const closeInspect = () => {
@@ -53,18 +54,27 @@ const Vehicles = () => {
     setIsNewVehicleOpen(false);
   };
 
-
   const currentYear = new Date().getFullYear();
 
   return (
     <>
-          <div className="absolute top-0 left-0 m-4">
-        <a href="http://localhost:3000/" className="navigation-card">
-          <FaHome size={24} color="black" /> {/* Lisää FaHome-kuvake */}
-        </a>
-      </div>
-      <div className="flex flex-col">
-        <h1 className="text-center text-xl mt-5">Omat ajoneuvot</h1>
+      <div
+        className="flex flex-col h-screen"
+        style={{
+          backgroundImage: "url(/backgrounds/vehiclesbg.webp)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="shadow-lg backdrop-blur-2xl text-2xl p-4 font-black rounded-lg flex justify-center items-center">
+          <div className="absolute left-2">
+            <a href="/" className="navigation-card">
+              <FaHome size={24} color="black" />
+            </a>
+          </div>
+          <PiGarage size={35} className="mr-2" />
+          Moottoripyörätalli
+        </div>
         <div className="flex justify-center items-center">
           <div className="w-2/6 mt-8">
             {isLoading ? (
@@ -83,7 +93,6 @@ const Vehicles = () => {
                           <p className="ml-2">{vehicle.vehicle}</p>
                         </div>
                         <div>
-                          
                           {vehicle.inspected ? (
                             <p className="text-green-600 text-sm text-end">
                               Katsastettu kaudelle {currentYear}
@@ -91,7 +100,9 @@ const Vehicles = () => {
                           ) : (
                             <p
                               className="text-red-600 text-sm text-end cursor-pointer underline hover:text-red-600/70"
-                              onClick={() => openInspect(vehicle.vehicle, vehicle.id)}
+                              onClick={() =>
+                                openInspect(vehicle.vehicle, vehicle.id)
+                              }
                             >
                               Ei katsastettu - katsasta
                             </p>
@@ -104,14 +115,19 @@ const Vehicles = () => {
                     </div>
                   ))
                 ) : (
-                  <p className="text-center">Et omista vielä yhtäkään ajoneuvoa</p>
+                  <p className="text-center">
+                    Et omista vielä yhtäkään ajoneuvoa
+                  </p>
                 )}
               </>
             )}
           </div>
         </div>
         <div className="flex justify-center mt-7">
-          <button onClick={() => openNewVehicle()} className="flex items-center justify-center w-2/6 py-2 bg-red-950 rounded-md shadow-lg font-semibold">
+          <button
+            onClick={() => openNewVehicle()}
+            className="flex items-center justify-center w-2/6 py-2 bg-red-950 rounded-md shadow-lg font-semibold"
+          >
             <HiOutlinePlus size={23} className="mr-2" />
             Lisää uusi ajoneuvo
           </button>
@@ -124,11 +140,8 @@ const Vehicles = () => {
             vehicleId={selectedVehicleId}
           />
         )}
-         {isNewVehicleOpen && (
-          <AddVehicle
-            isOpen={isNewVehicleOpen}
-            onClose={closeNewVehicle}
-          />
+        {isNewVehicleOpen && (
+          <AddVehicle isOpen={isNewVehicleOpen} onClose={closeNewVehicle} />
         )}
       </div>
     </>
