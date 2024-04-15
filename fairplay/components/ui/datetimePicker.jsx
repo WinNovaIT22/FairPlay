@@ -33,7 +33,7 @@ export default function DateTime() {
             format="dd-MM-yyyy HH:mm"
           />
         </div>
-        <Button color="secondary" startContent={<FiSave size={20}/>} className="mt-5 font-bold">Tallenna muutokset</Button>
+        <Button color="secondary" startContent={<FiSave size={20} />} className="mt-5 font-bold">Tallenna muutokset</Button>
       </div>
     </>
   );
