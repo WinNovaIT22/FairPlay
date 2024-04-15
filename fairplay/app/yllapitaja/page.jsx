@@ -2,6 +2,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
 import { Card, CardBody, CardFooter, Chip, Image } from "@nextui-org/react";
 import Link from "next/link";
+import { FaLongArrowAltLeft } from "react-icons/fa";
+import DateTime from "@/components/ui/datetimePicker";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
@@ -22,7 +24,17 @@ const Home = async () => {
             Ylläpitäjä
           </Chip>
         </div>
-        <div className="flex flex-row justify-center mt-6">
+        <div className="flex justify-center items-center">
+          <Link href="/">
+            <Card shadow="sm" isPressable className="hover:scale-95 mt-1">
+              <CardBody className="overflow-visible p-3 bg-gradient-to-l from-stone-900 to-green-900 flex flex-row font-semibold justify-center items-center">
+                <FaLongArrowAltLeft className="mr-5" size={25} />
+                Siirry takaisin etusivulle
+              </CardBody>
+            </Card>
+          </Link>
+        </div>
+        <div className="flex flex-row justify-center mt-10">
           <Link href="/yllapitaja/kayttajat">
             <Card shadow="sm" isPressable className="hover:scale-95">
               <CardBody className="h-[140px] w-[240px] overflow-visible p-0 bg-gradient-to-b from-blue-400 to-stone-900 flex items-center justify-center">
@@ -36,7 +48,7 @@ const Home = async () => {
           <Link href="/yllapitaja/suoritukset">
             <Card shadow="sm" isPressable className="ml-5 hover:scale-95">
               <CardBody className="h-[140px] w-[240px] overflow-visible p-0 bg-gradient-to-b from-yellow-400 to-stone-900 flex items-center justify-center">
-                <Image alt="Tasks" width={140} src="/task.png" />
+                <Image alt="Tasks" width={130} src="/task.png" />
               </CardBody>
               <CardFooter className="text-lg">
                 <b className="mx-auto">Hallitse suorituksia</b>
@@ -56,7 +68,7 @@ const Home = async () => {
           <Link href="/yllapitaja/vuosikoosteet">
             <Card shadow="sm" isPressable className="ml-5 hover:scale-95">
               <CardBody className="h-[140px] w-[240px] overflow-visible p-0 bg-gradient-to-b from-green-400 to-stone-900 flex items-center justify-center">
-                <Image alt="Year Replays" width={200} src="/users.png" />
+                <Image alt="Year Replays" width={120} src="/calendar.png" />
               </CardBody>
               <CardFooter className="text-lg">
                 <b className="mx-auto">Vuosikoosteet</b>
@@ -64,8 +76,8 @@ const Home = async () => {
             </Card>
           </Link>
         </div>
-        <div className="flex flex-row justify-center mt-6 text-lg font-bold">
-          Aseta FairPlay kisan aloitus ja lopetus
+        <div className="flex flex-col items-center mt-10 text-lg font-bold p-4">
+          <DateTime />
         </div>
       </div>
     </>

@@ -56,7 +56,7 @@ const Home = async () => {
           {isAdmin && (
             <Link href="/yllapitaja/">
               <Card shadow="sm" isPressable className="hover:scale-95 mt-1">
-                <CardBody className="overflow-visible p-3 bg-gradient-to-l from-green-950 to-stone-900 flex flex-row font-semibold justify-center items-center">
+                <CardBody className="overflow-visible p-3 bg-gradient-to-l from-green-900 to-stone-900 flex flex-row font-semibold justify-center items-center">
                   Olet
                   <Chip
                     className="mx-1"
@@ -75,7 +75,7 @@ const Home = async () => {
           {isSupervisor && (
             <Link href="/valvoja/">
               <Card shadow="sm" isPressable className="hover:scale-95 mt-1">
-                <CardBody className="overflow-visible p-3 bg-gradient-to-l from-blue-950 to-stone-900 flex flex-row font-semibold justify-center items-center">
+                <CardBody className="overflow-visible p-3 bg-gradient-to-l from-blue-900 to-stone-900 flex flex-row font-semibold justify-center items-center">
                   Olet
                   <Chip
                     className="mx-1"

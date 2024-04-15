@@ -9,7 +9,8 @@ import {
   Button,
 } from "@nextui-org/react";
 import { CiCircleInfo } from "react-icons/ci";
-import TasksTable from "@/components/ui/taskTable"
+import TasksTable from "@/components/ui/taskTable";
+import { FaHome } from "react-icons/fa";
 
 export default function Tasks() {
   const currentYear = new Date().getFullYear();
@@ -21,8 +22,15 @@ export default function Tasks() {
   );
 
   return (
-    <div>
-      <div className="text-center text-xl font-bold">Fairplay suoritukset</div>
+    <div className="bg-gradient-to-b from-yellow-800 to-stone-900 min-h-screen w-full">
+      <div className="shadow-lg backdrop-blur-2xl text-2xl p-4 font-black rounded-lg flex justify-center items-center">
+        <div className="absolute left-2">
+          <a href="/yllapitaja" className="navigation-card">
+            <FaHome size={24} color="black" />
+          </a>
+        </div>
+        FairPlay suoritukset
+      </div>
       <div className="flex justify-center items-center flex-row">
         <Select
           label="Vuosi"
