@@ -21,21 +21,17 @@ export async function POST(req) {
         const id = parseInt(form.get('id'), 10);
         const imageFile = form.get('image');
 
-        // Upload image to Firebase Storage
         const imageRef = ref(storage, `inspected/${id}`);
         await uploadBytes(imageRef, imageFile);
 
-        // Get the download URL of the uploaded image
         const imageUrl = await getDownloadURL(imageRef);
 
-        // Find the existing vehicle record
         const existingVehicle = await db.userVehicles.findFirst({
             where: {
                 id: id,
             }
         });
 
-        // If the vehicle record exists, update the inspectedImage field
         if (existingVehicle) {
             const updatedVehicle = await db.userVehicles.update({
                 where: { id: existingVehicle.id },
@@ -46,7 +42,7 @@ export async function POST(req) {
             return NextResponse.error(new Error("Vehicle not found"), { status: 404 });
         }
     } catch(error) {
-        console.error("Error processing request:", error); // Log error for debugging
+        console.error("Error processing request:", error);
         return NextResponse.error(new Error("Failed to update user vehicles"), { status: 500 });
     }
 }

@@ -44,7 +44,7 @@ export default function TasksTable() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch(`/api/admin/getBannedUserTable`);
+        const response = await fetch(`/api/admin/getTasks`);
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }

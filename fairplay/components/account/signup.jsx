@@ -68,9 +68,7 @@ const Signup = () => {
         setTimeout(() => {
           router.push("/kirjaudu");
         }, 3000);
-        const data = await response.json();
         notifysuccess();
-        console.log(data);
       } else {
         console.error("Error creating user:", response.status);
         notifyerror();

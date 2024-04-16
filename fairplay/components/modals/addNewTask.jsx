@@ -17,27 +17,39 @@ import {
 import { HiOutlinePlus } from "react-icons/hi2";
 
 const AddTask = ({ isOpen, onClose }) => {
-  const [selectedVehicle, setSelectedVehicle] = useState("");
+  const [task, setTask] = useState("");
+  const [taskdesc, setTaskdesc] = useState("");
+  const [image, setImage] = useState(false);
+  const [text, setText] = useState(false);
+  const [again, setAgain] = useState(false);
+  const [points, setPoints] = useState("");
 
   const addVehicle = async () => {
     try {
-      const response = await fetch("/api/user/updateVehicles", {
+      const formData = new FormData();
+      formData.append("task", task);
+      formData.append("taskdesc", taskdesc);
+      formData.append("image", image);
+      formData.append("text", text);
+      formData.append("again", again);
+      formData.append("points", points);
+
+      const response = await fetch("/api/admin/createTasks", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ vehicle: selectedVehicle }),
+        body: formData,
       });
 
+      console.log(formData)
+
       if (response.ok) {
-        console.log("Vehicle added successfully");
+        console.log("Task created successfully.");
         window.location.reload(true);
         onClose();
       } else {
-        console.error("Failed to add vehicle:", response.statusText);
+        console.error("Failed to create task:", response.statusText);
       }
     } catch (error) {
-      console.error("Error adding vehicle:", error);
+      console.error("Error creating task:", error);
     }
   };
 
@@ -53,17 +65,20 @@ const AddTask = ({ isOpen, onClose }) => {
               label="Suoritus"
               labelPlacement="outside"
               placeholder="Mitä pitää tehdä, suorituksen nimi, yms.."
+              onChange={(e) => setTask(e.target.value)}
             />
             <Textarea
               label="Kuvaus (valinnainen)"
               placeholder="Kerro tarvittaessa lisätietoa tempusta"
               labelPlacement="outside"
+              onChange={(e) => setTaskdesc(e.target.value)}
             />
             <Input
               type="number"
               label="Pistemäärä"
               placeholder="0"
               labelPlacement="outside"
+              onChange={(e) => setPoints(e.target.value)}
               className="w-24"
               endContent={
                 <div className="pointer-events-none flex items-center">
@@ -76,11 +91,23 @@ const AddTask = ({ isOpen, onClose }) => {
               orientation="horizontal"
               className="mt-2"
             >
-              <Checkbox value="buenos-aires">teksti</Checkbox>
-              <Checkbox value="sydney">kuva</Checkbox>
+              <Checkbox
+                value="text"
+                onChange={(e) => setText(e.target.checked)}
+              >
+                teksti
+              </Checkbox>
+              <Checkbox
+                value="image"
+                onChange={(e) => setImage(e.target.checked)}
+              >
+                kuva
+              </Checkbox>
             </CheckboxGroup>
             <Divider orientation="horizontal" />
-            <Checkbox>Suorituksen voi palauttaa useamman kerran</Checkbox>
+            <Checkbox onChange={(e) => setAgain(e.target.checked)}>
+              Suorituksen voi palauttaa useamman kerran
+            </Checkbox>
           </ModalBody>
           <ModalFooter>
             <Button variant="light" onPress={onClose}>
@@ -90,7 +117,6 @@ const AddTask = ({ isOpen, onClose }) => {
               color="success"
               variant="flat"
               onPress={addVehicle}
-              isDisabled={!selectedVehicle}
               startContent={<HiOutlinePlus size={18} />}
             >
               Lisää
