@@ -61,7 +61,7 @@ const Home = async () => {
                 <Image alt="Blocked Users" width={200} src="/bannedusers.png" />
               </CardBody>
               <CardFooter className="text-lg">
-                <b className="mx-auto">Estetyt käyttäjät</b>
+                <b className="mx-auto">Kisasta pois suljetut</b>
               </CardFooter>
             </Card>
           </Link>

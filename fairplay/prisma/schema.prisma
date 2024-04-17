@@ -21,11 +21,12 @@ model User {
 }
 
 model UserVehicles {
-  id              Int     @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   vehicle         String
-  inspected       Boolean @default(false)
+  inspected       Boolean   @default(false)
   user_id         Int?
   inspectedImage  String?
+  createdAt       DateTime  @default(now())
 }
 
 model Tasks {
