@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import {
   Select,
   SelectItem,
@@ -14,6 +15,7 @@ import { FaHome } from "react-icons/fa";
 
 export default function Tasks() {
   const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState("");
   const startYear = 2024;
   const numberOfYears = 5;
   const years = Array.from(
@@ -37,6 +39,7 @@ export default function Tasks() {
           className="w-32 mt-5"
           defaultSelectedKeys={[currentYear.toString()]}
           labelPlacement="outside-left"
+          onChange={(e) => setPoints(e.target.value)}
         >
           {years.map((year) => (
             <SelectItem key={year} value={year} textValue={year}>
@@ -60,7 +63,7 @@ export default function Tasks() {
           </PopoverContent>
         </Popover>
       </div>
-      <TasksTable />
+      <TasksTable year={year} />
     </div>
   );
 }

@@ -19,7 +19,6 @@ import { HiOutlinePlus } from "react-icons/hi2";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import AddTask from "@/components/modals/addNewTask";
 
-
 const columns = [
   { name: "TEHTÄVÄ", uid: "task" },
   { name: "PISTEET", uid: "points" },
@@ -34,7 +33,7 @@ export default function TasksTable() {
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [sortDescriptor, setSortDescriptor] = useState({
-    column: "firstname",
+    column: "task",
     direction: "ascending",
   });
   const [usersData, setUsersData] = useState([]);
@@ -48,13 +47,11 @@ export default function TasksTable() {
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
-        const userData = await response.json();
-        const mappedUsers = userData.user.map((user) => ({
-          id: user.id,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.email,
-          role: user.role,
+        const taskData = await response.json();
+        const mappedUsers = taskData.task.map((task) => ({
+          id: task.id,
+          task: task.task,
+          points: task.points,
         }));
         setUsersData(mappedUsers);
         setIsLoading(false);
@@ -144,7 +141,7 @@ export default function TasksTable() {
           {(column) => (
             <TableColumn
               key={column.uid}
-              align={column.uid === "action" ? "center" : "start"}
+              align="center"
             >
               {column.name}
             </TableColumn>

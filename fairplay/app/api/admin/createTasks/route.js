@@ -2,13 +2,32 @@ import { NextResponse } from "next/server";
 import { db } from "@/utils/db";
 
 export async function POST(req) {
-  try {    
-    const task = form.get('task');
-    const taskdesc = form.get('taskdesc');
-    const image = form.get('image');
-    const text = form.get('text');
-    const again = form.get('again');
-    const points = form.get('points');
+  try {
+    const body = await req.json();
+    const { task, taskdesc, image, text, again, points, year } = body;
+
+    const newTaskData = await db.tasks.create({
+      data: {
+        task: task,
+        taskdesc: taskdesc,
+        image: image,
+        text: text,
+        again: again,
+        points: points,  
+        year: year,
+      },
+    });
+
+    return NextResponse.json({ tasks: newTaskData, message: "Task created successfully" }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: "Error creating task" }, { status: 500 });
+  }
+}
+
+export async function POST_delete(req) {
+  try {
+    const body = await req.json();
+    const { task, taskdesc, image, text, again, points } = body;
 
     const currentYear = new Date().getFullYear();
 
@@ -24,14 +43,8 @@ export async function POST(req) {
       },
     });
 
-    return NextResponse.json(
-      { task: newTaskData, message: "Task created successfully" },
-      { status: 200 }
-    );
+    return NextResponse.json({ tasks: newTaskData, message: "Task created successfully" }, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Error creating task" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Error creating task" }, { status: 500 });
   }
 }

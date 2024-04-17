@@ -3,8 +3,9 @@ import { db } from "@/utils/db"
 
 export async function GET(req) {
     try {
-        const users = await db.tasks.findMany({
+        const tasks = await db.tasks.findMany({
             select: {
+                id: true,
                 task: true,
                 taskdesc: true,
                 image: true,
@@ -13,7 +14,7 @@ export async function GET(req) {
                 points: true
             }
         });
-        return NextResponse.json({ user: users, message: "Tasks loaded succesfully"}, { status: 201 })
+        return NextResponse.json({ task: tasks, message: "Tasks loaded succesfully"}, { status: 201 })
     } catch(error) {
         return NextResponse.json({ message: "Something went wrong"}, { status: 500 })
     }
