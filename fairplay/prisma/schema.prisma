@@ -37,7 +37,7 @@ model Tasks {
   text      Boolean?
   again     Boolean?
   points    Int?
-  year      Int?
+  year      String
 }
 
 model kaksipyoraiset_data {

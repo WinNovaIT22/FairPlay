@@ -43,14 +43,7 @@ export default function TasksTable({ year }) {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch(`/api/admin/getTasks`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ year: year }),
-        })
-        
+        const response = await fetch(`/api/admin/getTasks`);
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
@@ -68,7 +61,7 @@ export default function TasksTable({ year }) {
       }
     }
     fetchUsers();
-  }, [year]);
+  }, []);
 
   const openNewTask= () => {
     setIsNewTaskOpen(true);

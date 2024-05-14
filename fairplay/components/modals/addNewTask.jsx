@@ -16,7 +16,7 @@ import {
 } from "@nextui-org/react";
 import { HiOutlinePlus } from "react-icons/hi2";
 
-const AddTask = ({ isOpen, onClose }) => {
+const AddTask = ({ isOpen, onClose, year }) => {
   const [task, setTask] = useState("");
   const [taskdesc, setTaskdesc] = useState("");
   const [image, setImage] = useState(false);
@@ -31,9 +31,9 @@ const AddTask = ({ isOpen, onClose }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ task: task, taskdesc: taskdesc, image: image, text: text, again: again, points: points }),
+        body: JSON.stringify({ task: task, taskdesc: taskdesc, image: image, text: text, again: again, points: points, year }),
       });
-
+      
       if (response.ok) {
         console.log("Task created successfully.");
         window.location.reload(true);
@@ -51,7 +51,7 @@ const AddTask = ({ isOpen, onClose }) => {
       <Modal size={"xl"} placement={"center"} isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
-            Lisää uusi suoritus
+            Lisää uusi suoritus {year}
           </ModalHeader>
           <ModalBody>
             <Input

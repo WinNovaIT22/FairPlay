@@ -27,9 +27,7 @@ export async function POST(req) {
 export async function POST_delete(req) {
   try {
     const body = await req.json();
-    const { task, taskdesc, image, text, again, points } = body;
-
-    const currentYear = new Date().getFullYear();
+    const { task, taskdesc, image, text, again, points, year } = body;
 
     const newTaskData = await db.tasks.create({
       data: {
@@ -38,8 +36,8 @@ export async function POST_delete(req) {
         image: image,
         text: text,
         again: again,
-        points: points,  
-        year: currentYear,
+        points: points,
+        year: year,
       },
     });
 

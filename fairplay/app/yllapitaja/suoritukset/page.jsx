@@ -15,7 +15,7 @@ import { FaHome } from "react-icons/fa";
 
 export default function Tasks() {
   const currentYear = new Date().getFullYear();
-  const [year, setYear] = useState("");
+  const [year, setYear] = useState(new Date().getFullYear().toString());
   const startYear = 2024;
   const numberOfYears = 5;
   const years = Array.from(
@@ -31,7 +31,7 @@ export default function Tasks() {
             <FaHome size={24} color="black" />
           </a>
         </div>
-        FairPlay suoritukset
+        FairPlay suoritukset {year}
       </div>
       <div className="flex justify-center items-center flex-row">
         <Select
@@ -39,7 +39,8 @@ export default function Tasks() {
           className="w-32 mt-5"
           defaultSelectedKeys={[currentYear.toString()]}
           labelPlacement="outside-left"
-          onChange={(e) => setPoints(e.target.value)}
+          value={year}
+          onChange={(e) => setYear(e.target.value)}
         >
           {years.map((year) => (
             <SelectItem key={year} value={year} textValue={year}>
