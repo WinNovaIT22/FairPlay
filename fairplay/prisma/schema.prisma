@@ -40,6 +40,15 @@ model Tasks {
   year      String
 }
 
+model UserTasks {
+  id        Int     @id @default(autoincrement())
+  taskid    Int
+  image     String?
+  text      String?
+  points    Int?
+  admintext String?
+}
+
 model kaksipyoraiset_data {
   ajoneuvoluokka      String
   merkkiSelvakielinen String

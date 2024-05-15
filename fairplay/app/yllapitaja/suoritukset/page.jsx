@@ -31,7 +31,7 @@ export default function Tasks() {
             <FaHome size={24} color="black" />
           </a>
         </div>
-        FairPlay suoritukset {year}
+        FairPlay suoritukset
       </div>
       <div className="flex justify-center items-center flex-row">
         <Select
