@@ -41,33 +41,27 @@ export default function TasksTable({ year }) {
   const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
 
   useEffect(() => {
-    async function fetchUsers() {
+    async function fetchTasks() {
       try {
-        const response = await fetch(`/api/admin/getTasks`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ year: year }),
-        })
+        const response = await fetch(`/api/admin/getTasks?year=${year}`);
         
         if (!response.ok) {
-          throw new Error("Failed to fetch users");
+          throw new Error("Failed to fetch tasks");
         }
         const taskData = await response.json();
-        const mappedUsers = taskData.task.map((task) => ({
+        const mappedTasks = taskData.task.map((task) => ({
           id: task.id,
           task: task.task,
           points: task.points,
         }));
-        setUsersData(mappedUsers);
+        setUsersData(mappedTasks);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching tasks:", error);
         setIsLoading(false);
       }
     }
-    fetchUsers();
+    fetchTasks();
   }, [year]);
 
   const openNewTask= () => {

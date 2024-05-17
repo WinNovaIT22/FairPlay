@@ -104,6 +104,33 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
     }
   };
 
+  
+  const updateUserVehicleInspection = async (vehicleId, inspected) => {
+    try {
+      const response = await fetch("/api/user/updateVehicleInspection", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ vehicleId, inspected }),
+      });
+
+      if (response.ok) {
+        console.log("Vehicle inspection status updated successfully");
+        // Update local state to reflect the change
+        setUserVehicles(prevVehicles =>
+          prevVehicles.map(vehicle =>
+            vehicle.id === vehicleId ? { ...vehicle, inspected } : vehicle
+          )
+        );
+      } else {
+        console.error("Failed to update vehicle inspection status");
+      }
+    } catch (error) {
+      console.error("Error updating vehicle inspection status:", error);
+    }
+  };
+
   const blockUser = async () => {
     try {
       const response = await fetch("/api/user/block/blockUser", {
@@ -151,6 +178,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                   color={roleColorMap[userRole]}
                   size="sm"
                   variant="flat"
+                  className="ml-2"
                 >
                   {modalData.role}
                 </Chip>
@@ -167,7 +195,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                         title={
                           <div className="flex items-center text-sm">
                             <FaMotorcycle size={18} className="mr-3" />
-                            {vehicle.vehicle} -{" "}
+                            {vehicle.vehicle} -
                             {vehicle.inspected ? (
                               <span className="text-green-500">
                                 Katsastettu kaudelle {currentYear}
@@ -181,17 +209,21 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                         }
                       >
                         {vehicle.inspected && vehicle.inspectedImage ? (
-                          <div className="flex justify-center flex-col">
+                          <div className="flex justify-center items-center flex-col">
                             <p className="text-sm">
                               Käyttäjän lähettämä kuva, {formatDateHelsinki(vehicle.createdAt)}:
                             </p>
                             <Image
                               alt="InspectedTrue"
-                              width={200}
+                              width={300}
                               src={vehicle.inspectedImage}
                               className="my-3"
                             />
-                            <Button variant="flat" color="danger">
+                             <Button
+                              variant="flat"
+                              color="danger"
+                              onClick={() => updateUserVehicleInspection(vehicle.id, false)}
+                            >
                               Hylkää katsastus
                             </Button>
                           </div>
@@ -200,6 +232,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                             variant="flat"
                             color="success"
                             className="w-full"
+                            onClick={() => updateUserVehicleInspection(vehicle.id, true)}
                           >
                             Merkitse katsastetuksi
                           </Button>

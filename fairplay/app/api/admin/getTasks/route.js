@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
-import { db } from "@/utils/db"
+import { db } from "@/utils/db";
 
 export async function GET(req) {
-    const { year } = body;
-    if (!year) throw new Error("Something went wrong");
+    console.log("Request query parameters:", req.query); // Log query parameters
+    const { year } = req.query; // Extract year from query parameters
+    if (!year) throw new Error("Year parameter is missing");
 
     try {
         const tasks = await db.tasks.findMany({
             where: {
-                year: year, 
+                year: parseInt(year), // Ensure year is parsed as integer
             },
             select: {
                 id: true,
@@ -21,8 +22,9 @@ export async function GET(req) {
                 year: true
             }
         });
-        return NextResponse.json({ task: tasks, message: "Tasks loaded succesfully"}, { status: 201 })
+        return NextResponse.json({ task: tasks, message: "Tasks loaded successfully"}, { status: 200 });
     } catch(error) {
-        return NextResponse.json({ message: "Something went wrong"}, { status: 500 })
+        console.error("Error fetching tasks:", error);
+        return NextResponse.json({ message: "Something went wrong"}, { status: 500 });
     }
 }

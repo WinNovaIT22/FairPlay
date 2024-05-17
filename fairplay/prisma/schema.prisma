@@ -46,6 +46,7 @@ model UserTasks {
   image     String?
   text      String?
   points    Int?
+  completed Boolean
   admintext String?
 }
 
