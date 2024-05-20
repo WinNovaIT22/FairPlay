@@ -98,7 +98,6 @@ const Home = async () => {
               <CardBody className="h-[200px] w-[500px] overflow-visible p-0 bg-gradient-to-b from-green-700 to-neutral-900 flex items-center justify-center">
                 <Image alt="Tasks" width={120} src="/task.png" />
                 <Progress
-                  isStriped
                   label="Suoritettu"
                   size="md"
                   value="50"

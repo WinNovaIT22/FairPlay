@@ -40,6 +40,14 @@ model Tasks {
   year      String
 }
 
+model DateRange {
+  id        Int      @id @default(autoincrement())
+  start     DateTime
+  end       DateTime
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
+
 model UserTasks {
   id        Int     @id @default(autoincrement())
   taskid    Int
