@@ -43,7 +43,7 @@ export default function TasksTable({ year }) {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch(`/api/admin/getTasks`);
+        const response = await fetch(`/api/user/getTasks`);
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
@@ -107,7 +107,7 @@ export default function TasksTable({ year }) {
     return (
       <>
         <div className="flex flex-col items-center">
-          <span className="text-default-500 text-small mt-6">
+          <span className="text-black text-small mt-6">
             {usersData.length} tehtävää
           </span>
         </div>

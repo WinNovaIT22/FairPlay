@@ -18,6 +18,7 @@ model User {
   id        Int      @id @default(autoincrement())
   role      String
   blocked   Boolean  @default(false)
+  tasks     UserTasks[]
 }
 
 model UserVehicles {
@@ -38,6 +39,7 @@ model Tasks {
   again     Boolean?
   points    Int?
   year      String
+  userTasks UserTasks[]
 }
 
 model DateRange {
@@ -49,13 +51,16 @@ model DateRange {
 }
 
 model UserTasks {
-  id        Int     @id @default(autoincrement())
-  taskid    Int
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  taskId    Int
   image     String?
   text      String?
   points    Int?
   completed Boolean
   admintext String?
+  user      User      @relation(fields: [userId], references: [id])
+  task      Tasks     @relation(fields: [taskId], references: [id])
 }
 
 model kaksipyoraiset_data {

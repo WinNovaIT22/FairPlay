@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
 import { db } from "@/utils/db"
 
+const currentYear = new Date().getFullYear();
+
 export async function GET(req) {
     try {
         const tasks = await db.tasks.findMany({
+            where: {
+                year: currentYear,
+            },
             select: {
                 task: true,
                 taskdesc: true,

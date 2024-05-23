@@ -1,5 +1,6 @@
 import { FaHome } from "react-icons/fa";
 import { GrTask } from "react-icons/gr";
+import TasksTable from "@/components/ui/userTaskTable";
 
 export default function Tasks() {
   return (
@@ -22,7 +23,7 @@ export default function Tasks() {
             Suoritukset
         </div>
         <div>
-          moi
+          <TasksTable />
         </div>
       </div>
     </>
