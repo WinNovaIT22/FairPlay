@@ -79,7 +79,7 @@ const Home = async () => {
         <div className="flex flex-col items-center mt-12 text-lg font-bold text-black">
           <p>Määritä FairPlay -kilpailun kesto</p>
           <DateTime />
-        </div>
+         </div>
       </div>
     </>
   );

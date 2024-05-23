@@ -1,23 +1,49 @@
-import { PrismaClient } from '@prisma/client';
+import { db } from "@/utils/db";
+import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+export async function POST(req) {
+  const { start, end } = await req.json();
 
-export default async function POST(req, res) {
-    const { start, end } = req.body;
+  try {
+    const existingDateRange = await db.dateRange.findFirst();
+    const startDate = new Date(start);
+    const endDate = new Date(end);
 
-    try {
-      const dateRange = await prisma.dateRange.create({
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      throw new Error("Invalid date format");
+    }
+
+    let dateRange;
+    if (existingDateRange) {
+      dateRange = await db.dateRange.update({
+        where: { id: existingDateRange.id },
         data: {
-          start: new Date(start),
-          end: new Date(end),
+          start: startDate,
+          end: endDate,
         },
       });
-      res.status(200).json(dateRange);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to save date range' });
+      return NextResponse.json({ event: dateRange, message: "Event Updated" }, { status: 200 });
+    } else {
+      dateRange = await db.dateRange.create({
+        data: {
+          start: startDate,
+          end: endDate,
+        },
+      });
+      return NextResponse.json({ event: dateRange, message: "Event Created" }, { status: 200 });
     }
-  } else {
-    res.status(405).json({ error: 'Method not allowed' });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ message: "Error Saving Event" }, { status: 500 });
   }
+}
 
+export async function GET() {
+  try {
+    const dateRange = await db.dateRange.findFirst();
+    return NextResponse.json({ event: dateRange }, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ message: "Error Fetching Event" }, { status: 500 });
+  }
+}
