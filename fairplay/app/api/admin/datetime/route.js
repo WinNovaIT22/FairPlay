@@ -2,10 +2,10 @@ import { db } from "@/utils/db";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  const { start, end } = await req.json();
-
   try {
-    const existingDateRange = await db.dateRange.findFirst();
+    const { start, end } = await req.json();
+
+    // Convert ISO 8601 strings to Date objects
     const startDate = new Date(start);
     const endDate = new Date(end);
 
@@ -13,7 +13,9 @@ export async function POST(req) {
       throw new Error("Invalid date format");
     }
 
+    const existingDateRange = await db.dateRange.findFirst();
     let dateRange;
+
     if (existingDateRange) {
       dateRange = await db.dateRange.update({
         where: { id: existingDateRange.id },
@@ -33,7 +35,7 @@ export async function POST(req) {
       return NextResponse.json({ event: dateRange, message: "Event Created" }, { status: 200 });
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error in POST handler:", error);
     return NextResponse.json({ message: "Error Saving Event" }, { status: 500 });
   }
 }
@@ -43,7 +45,7 @@ export async function GET() {
     const dateRange = await db.dateRange.findFirst();
     return NextResponse.json({ event: dateRange }, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("Error in GET handler:", error);
     return NextResponse.json({ message: "Error Fetching Event" }, { status: 500 });
   }
 }

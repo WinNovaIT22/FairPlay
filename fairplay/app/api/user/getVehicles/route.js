@@ -6,12 +6,11 @@ import { authOptions } from "@/utils/auth";
 export async function GET(req) {  
   try {
     const session = await getServerSession(authOptions);
+    const userId = parseInt(session.user.id);
 
     if (!session) {
       return NextResponse.error(new Error("Unauthorized"), { status: 401 });
     }
-
-    const userId = parseInt(session.user.id);
 
     const userVehicles = await db.userVehicles.findMany({
       where: {

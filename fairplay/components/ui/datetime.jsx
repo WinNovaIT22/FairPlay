@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
 import { DateRangePicker, Button } from "@nextui-org/react";
-import { parseZonedDateTime, toZonedDateTime } from "@internationalized/date";
+import { parseZonedDateTime } from "@internationalized/date";
 
 export default function DateTime() {
   const [defaultValue, setDefaultValue] = useState({
-    start: parseZonedDateTime("2024-04-01T00:45[Europe/Helsinki]"),
-    end: parseZonedDateTime("2024-04-08T11:15[Europe/Helsinki]"),
+    start: new Date("2024-04-01T00:45:00.000Z"),
+    end: new Date("2024-04-08T11:15:00.000Z"),
   });
 
   useEffect(() => {
     async function fetchDateRange() {
       try {
-        const res = await fetch('/api/date-range');
+        const res = await fetch('/api/admin/datetime');
         const data = await res.json();
         if (data.event) {
           setDefaultValue({
-            start: parseZonedDateTime(data.event.start),
-            end: parseZonedDateTime(data.event.end),
+            start: new Date(data.event.start),
+            end: new Date(data.event.end),
           });
         }
       } catch (error) {
@@ -31,14 +31,14 @@ export default function DateTime() {
 
   const handleSave = async () => {
     try {
-      const res = await fetch('/api/date-range', {
+      const res = await fetch('/api/admin/datetime', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          start: defaultValue.start.toString(),
-          end: defaultValue.end.toString(),
+          start: defaultValue.start.toISOString(), // Convert to ISO string
+          end: defaultValue.end.toISOString(),     // Convert to ISO string
         }),
       });
 
@@ -55,7 +55,12 @@ export default function DateTime() {
         hideTimeZone
         visibleMonths={2}
         value={defaultValue}
-        onChange={(value) => setDefaultValue(value)}
+        onChange={(value) => {
+          setDefaultValue({
+            start: new Date(value.start),
+            end: new Date(value.end),
+          });
+        }}
       />
       <Button onPress={handleSave}>Tallenna</Button>
     </div>

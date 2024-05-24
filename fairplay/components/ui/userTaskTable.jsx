@@ -8,67 +8,53 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Button,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
+  Chip,
+  Progress,
 } from "@nextui-org/react";
 import Loading from "@/app/loading";
-import { HiOutlinePlus } from "react-icons/hi2";
-import { HiOutlineDotsVertical } from "react-icons/hi";
-import AddTask from "@/components/modals/addNewTask";
 
 const columns = [
-  { name: "TEHTÄVÄ", uid: "task" },
+  { name: "TEHTÄVÄ", uid: "tasktitle" },
   { name: "PISTEET", uid: "points" },
-  { name: "HALLITSE", uid: "action" },
+  { name: "TILA", uid: "status" },
 ];
 
-const INITIAL_VISIBLE_COLUMNS = ["task", "points", "action"];
+const INITIAL_VISIBLE_COLUMNS = ["tasktitle", "points", "status"];
 
-export default function TasksTable({ year }) {
+export default function TasksTable() {
   const [selectedKeys, setSelectedKeys] = useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [sortDescriptor, setSortDescriptor] = useState({
-    column: "task",
+    column: "tasktitle",
     direction: "ascending",
   });
-  const [usersData, setUsersData] = useState([]);
+  const [tasksData, setTasksData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
 
   useEffect(() => {
-    async function fetchUsers() {
+    async function fetchTasks() {
       try {
         const response = await fetch(`/api/user/getTasks`);
         if (!response.ok) {
-          throw new Error("Failed to fetch users");
+          throw new Error("Failed to fetch tasks");
         }
         const taskData = await response.json();
-        const mappedUsers = taskData.task.map((task) => ({
-          id: task.id,
-          task: task.task,
-          points: task.points,
+        // Map the tasks to include a status field based on the completed boolean
+        const mappedTasks = taskData.task.map((task) => ({
+          ...task,
+          status: task.completed ? "Suoritettu" : "Suorittamatta",
         }));
-        setUsersData(mappedUsers);
+        setTasksData(mappedTasks);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching tasks:", error);
         setIsLoading(false);
       }
     }
-    fetchUsers();
+    fetchTasks();
   }, []);
-
-  const openNewTask= () => {
-    setIsNewTaskOpen(true);
-  };
-  const closeNewTask = () => {
-    setIsNewTaskOpen(false);
-  };
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -78,50 +64,55 @@ export default function TasksTable({ year }) {
     );
   }, [visibleColumns]);
 
-  const renderCell = useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = useCallback((task, columnKey) => {
+    const cellValue = task[columnKey];
 
     switch (columnKey) {
-      case "action":
+      case "status":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly variant="light">
-                  <HiOutlineDotsVertical size={22} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>Muokkaa</DropdownItem>
-                <DropdownItem color="danger" className="text-danger">Poista</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
+          <Chip
+            color={task.completed ? "success" : "danger"}
+            size="sm"
+            variant="flat"
+          >
+            {cellValue}
+          </Chip>
         );
       default:
         return cellValue;
     }
   }, []);
 
+  const completedTasks = tasksData.filter((task) => task.completed).length;
+  const progressValue =
+    tasksData.length > 0 ? (completedTasks / tasksData.length) * 100 : 0;
+
   const topContent = useMemo(() => {
     return (
       <>
         <div className="flex flex-col items-center">
           <span className="text-black text-small mt-6">
-            {usersData.length} tehtävää
+            {tasksData.length} tehtävää
           </span>
         </div>
       </>
     );
-  }, [visibleColumns, usersData.length]);
+  }, [tasksData.length]);
 
   const bottomContent = useMemo(() => {
     return (
       <div className="flex justify-center mt-4">
-        <Button variant="bordered" onClick={() => openNewTask()} startContent={<HiOutlinePlus size={23} />}>Lisää uusi suoritus</Button>
+        <Progress
+          aria-label="Task completion progress"
+          size="md"
+          value={progressValue}
+          color="success"
+          showValueLabel={true}
+          className="max-w-md mt-2"
+        />
       </div>
     );
-  }, []);
+  }, [progressValue]);
 
   return (
     <div className="flex items-center justify-center">
@@ -136,13 +127,10 @@ export default function TasksTable({ year }) {
         onSelectionChange={setSelectedKeys}
         onSortChange={setSortDescriptor}
         className="md:w-3/6 w-full"
-        >
+      >
         <TableHeader columns={headerColumns}>
           {(column) => (
-            <TableColumn
-              key={column.uid}
-              align="center"
-            >
+            <TableColumn key={column.uid} align="center">
               {column.name}
             </TableColumn>
           )}
@@ -152,7 +140,7 @@ export default function TasksTable({ year }) {
           emptyContent={
             isLoading ? <Loading /> : "Ei suorituksia valitulle vuodelle"
           }
-          items={usersData}
+          items={tasksData}
         >
           {(item) => (
             <TableRow key={item.id} className="cursor-pointer">
@@ -163,13 +151,6 @@ export default function TasksTable({ year }) {
           )}
         </TableBody>
       </Table>
-      {isNewTaskOpen && (
-          <AddTask
-            isOpen={isNewTaskOpen}
-            onClose={closeNewTask}
-            year={year}
-          />
-        )}
     </div>
   );
 }

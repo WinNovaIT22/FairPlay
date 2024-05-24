@@ -54,10 +54,15 @@ model UserTasks {
   id        Int       @id @default(autoincrement())
   userId    Int
   taskId    Int
-  image     String?
-  text      String?
+  tasktitle String?
+  taskdesc  String?
+  image     Boolean?
+  text      Boolean?
   points    Int?
+  again     Boolean?
+  year      String?
   completed Boolean
+  checked   Boolean?
   admintext String?
   user      User      @relation(fields: [userId], references: [id])
   task      Tasks     @relation(fields: [taskId], references: [id])

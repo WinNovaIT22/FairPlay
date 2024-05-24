@@ -27,11 +27,13 @@ import {
 import { roleColorMap } from "@/utils/rolecolormap.js";
 import { FaMotorcycle } from "react-icons/fa6";
 import PasswordModal from "@/components/modals/changeUserPasswordAdmin";
+import { MdOutlineTask } from "react-icons/md";
 
 const ModalComponent = ({ isOpen, onClose, modalData }) => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [userVehicles, setUserVehicles] = useState(null);
+  const [userTasks, setUserTasks] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userRole, setUserRole] = useState(modalData ? modalData.role : "");
 
@@ -79,6 +81,39 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
     fetchUserVehicles();
   }, [isOpen, modalData]);
 
+  useEffect(() => {
+    if (!isOpen || !modalData || !modalData.id) {
+      setUserTasks([]);
+      return;
+    }
+
+    const fetchUserTasks = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/api/admin/getUserTasks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user_id: modalData.id }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserTasks(data);
+        } else {
+          console.error("Failed to fetch user tasks:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user vehicles:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserTasks();
+  }, [isOpen, modalData]);
+
   if (!modalData) {
     return null;
   }
@@ -103,7 +138,6 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
       console.error("Error updating user role:", error);
     }
   };
-
   
   const updateUserVehicleInspection = async (vehicleId, inspected) => {
     try {
@@ -195,8 +229,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                         title={
                           <div className="flex items-center text-sm">
                             <FaMotorcycle size={18} className="mr-3" />
-                            {vehicle.vehicle} -
-                            {vehicle.inspected ? (
+                            <div>{vehicle.vehicle} - {vehicle.inspected ? (
                               <span className="text-green-500">
                                 Katsastettu kaudelle {currentYear}
                               </span>
@@ -205,6 +238,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                                 Ei katsastettu
                               </span>
                             )}
+                            </div>
                           </div>
                         }
                       >
@@ -237,6 +271,27 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                             Merkitse katsastetuksi
                           </Button>
                         )}
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                ) : (
+                  <p>Käyttäjällä ei ole yhtäkään ajoneuvoa</p>
+                )}
+              </div>
+              <div className="text-center text-xl">
+                Suoritetut suoritukset
+                {Array.isArray(userTasks) && userTasks.length > 0 ? (
+                  <Accordion className="mx-auto max-w-lg">
+                    {userTasks.map((task, index) => (
+                      <AccordionItem
+                        key={index}
+                        title={
+                          <div className="flex items-center text-sm">
+                            <MdOutlineTask size={18} className="mr-3" />
+                            <div>{task.tasktitle} - <span className="text-green-500">Suoritettu</span></div>
+                          </div>
+                        }
+                      >
                       </AccordionItem>
                     ))}
                   </Accordion>
