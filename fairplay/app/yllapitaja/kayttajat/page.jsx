@@ -16,6 +16,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Pagination,
+  Progress
 } from "@nextui-org/react";
 import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
 import ModalComponent from "@/components/ui/usersTable";
@@ -30,6 +31,7 @@ const columns = [
   { name: "SUKUNIMI", uid: "lastname" },
   { name: "SÄHKÖPOSTI", uid: "email" },
   { name: "AJONEUVO", uid: "vehicle" },
+  { name: "EDISTYMINEN", uid: "progress", sortable: true },
   { name: "ROOLI", uid: "role", sortable: true },
 ];
 
@@ -43,7 +45,7 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const INITIAL_VISIBLE_COLUMNS = ["firstname", "lastname", "email", "role"];
+const INITIAL_VISIBLE_COLUMNS = ["firstname", "lastname", "email", "role", "progress"];
 
 export default function Users() {
   const [filterValue, setFilterValue] = useState("");
@@ -70,31 +72,58 @@ export default function Users() {
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const response = await fetch(`/api/admin/getUserTable`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch users");
-        }
-        const userData = await response.json();
-        const mappedUsers = userData.user.map((user) => ({
-          id: user.id,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.email,
-          vehicle: user.vehicle || "",
-          role: user.role,
-        }));
-        setUsersData(mappedUsers);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-        setIsLoading(false);
+useEffect(() => {
+  async function fetchData() {
+    try {
+      const [userResponse, tasksResponse] = await Promise.all([
+        fetch(`/api/admin/getUserTable`),
+        fetch(`/api/admin/getUserTasks`),
+      ]);
+
+      if (!userResponse.ok) {
+        throw new Error("Failed to fetch users");
       }
+
+      if (!tasksResponse.ok) {
+        throw new Error("Failed to fetch user tasks");
+      }
+
+      const userData = await userResponse.json();
+      const tasksData = await tasksResponse.json();
+
+      // Map tasks to users for progress calculation
+      const userTaskMap = tasksData.tasks.reduce((acc, task) => {
+        if (!acc[task.userId]) {
+          acc[task.userId] = { tasksCompleted: 0, totalTasks: 0 };
+        }
+        acc[task.userId].totalTasks += 1;
+        if (task.completed) {
+          acc[task.userId].tasksCompleted += 1;
+        }
+        return acc;
+      }, {});
+
+      const mappedUsers = userData.user.map((user) => ({
+        id: user.id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        vehicle: user.vehicle || "",
+        role: user.role,
+        tasksCompleted: userTaskMap[user.id]?.tasksCompleted || 0,
+        totalTasks: userTaskMap[user.id]?.totalTasks || 0,
+      }));
+
+      setUsersData(mappedUsers);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setIsLoading(false);
     }
-    fetchUsers();
-  }, []);
+  }
+
+  fetchData();
+}, []);
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -109,11 +138,11 @@ export default function Users() {
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter(
-        (user) =>
-          user.firstname.toLowerCase().includes(filterValue.toLowerCase()) ||
-          user.lastname.toLowerCase().includes(filterValue.toLowerCase()) ||
-          user.email.toLowerCase().includes(filterValue.toLowerCase()) ||
-          user.vehicle.toLowerCase().includes(filterValue.toLowerCase())
+      (user) =>
+        user.firstname.toLowerCase().includes(filterValue.toLowerCase()) ||
+        user.lastname.toLowerCase().includes(filterValue.toLowerCase()) ||
+        user.email.toLowerCase().includes(filterValue.toLowerCase()) ||
+        user.vehicle.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -157,6 +186,15 @@ export default function Users() {
           <Chip color={roleColorMap[user.role]} size="sm" variant="flat">
             {cellValue}
           </Chip>
+        );
+      case "progress":
+        return (
+          <Progress 
+            aria-label="User progress" 
+            size="sm" 
+            value={cellValue} 
+            color="primary"
+          />
         );
       default:
         return cellValue;

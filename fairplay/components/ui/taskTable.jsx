@@ -44,10 +44,11 @@ export default function TasksTable({ year }) {
     async function fetchTasks() {
       try {
         const response = await fetch(`/api/admin/getTasks?year=${year}`);
-        
+
         if (!response.ok) {
           throw new Error("Failed to fetch tasks");
         }
+
         const taskData = await response.json();
         const mappedTasks = taskData.task.map((task) => ({
           id: task.id,
@@ -64,7 +65,7 @@ export default function TasksTable({ year }) {
     fetchTasks();
   }, [year]);
 
-  const openNewTask= () => {
+  const openNewTask = () => {
     setIsNewTaskOpen(true);
   };
   const closeNewTask = () => {
@@ -119,7 +120,7 @@ export default function TasksTable({ year }) {
   const bottomContent = useMemo(() => {
     return (
       <div className="flex justify-center mt-4">
-        <Button variant="bordered" onClick={() => openNewTask()} startContent={<HiOutlinePlus size={23} />}>Lisää uusi suoritus</Button>
+        <Button variant="bordered" onClick={openNewTask} startContent={<HiOutlinePlus size={23} />}>Lisää uusi suoritus</Button>
       </div>
     );
   }, []);
@@ -137,7 +138,7 @@ export default function TasksTable({ year }) {
         onSelectionChange={setSelectedKeys}
         onSortChange={setSortDescriptor}
         className="md:w-3/6 w-full"
-        >
+      >
         <TableHeader columns={headerColumns}>
           {(column) => (
             <TableColumn
@@ -165,12 +166,12 @@ export default function TasksTable({ year }) {
         </TableBody>
       </Table>
       {isNewTaskOpen && (
-          <AddTask
-            isOpen={isNewTaskOpen}
-            onClose={closeNewTask}
-            year={year}
-          />
-        )}
+        <AddTask
+          isOpen={isNewTaskOpen}
+          onClose={closeNewTask}
+          year={year}
+        />
+      )}
     </div>
   );
 }

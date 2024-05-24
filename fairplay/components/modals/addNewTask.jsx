@@ -31,9 +31,17 @@ const AddTask = ({ isOpen, onClose, year }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ task: task, taskdesc: taskdesc, image: image, text: text, again: again, points: points, year }),
+        body: JSON.stringify({
+          task: task,
+          taskdesc: taskdesc,
+          image: image,
+          text: text,
+          again: again,
+          points: points,
+          year: year,
+        }),
       });
-      
+
       if (response.ok) {
         console.log("Task created successfully.");
         window.location.reload(true);
@@ -47,80 +55,81 @@ const AddTask = ({ isOpen, onClose, year }) => {
   };
 
   return (
-    <>
-      <Modal size={"xl"} placement={"center"} isOpen={isOpen} onClose={onClose}>
-        <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">
-            Lisää uusi suoritus {year}
-          </ModalHeader>
-          <ModalBody>
-            <Input
-              label="Suoritus"
-              labelPlacement="outside"
-              placeholder="Mitä pitää tehdä, suorituksen nimi, yms.."
-              onChange={(e) => setTask(e.target.value)}
-              value={task}
-            />
-            <Textarea
-              label="Kuvaus (valinnainen)"
-              placeholder="Kerro tarvittaessa lisätietoa tempusta"
-              labelPlacement="outside"
-              onChange={(e) => setTaskdesc(e.target.value)}
-              value={taskdesc}
-            />
-            <Input
-              type="number"
-              label="Pistemäärä"
-              placeholder="0"
-              labelPlacement="outside"
-              onChange={(e) => setPoints(e.target.value)}
-              value={points}
-              className="w-24"
-              endContent={
-                <div className="pointer-events-none flex items-center">
-                  <span className="text-default-400 text-small">p</span>
-                </div>
-              }
-            />
-            <CheckboxGroup
-              label="Mitä kilpailijalta vaaditaan palauttaessa?"
-              orientation="horizontal"
-              className="mt-2"
+    <Modal size={"xl"} placement={"center"} isOpen={isOpen} onClose={onClose}>
+      <ModalContent>
+        <ModalHeader className="flex flex-col gap-1">
+          Lisää uusi suoritus {year}
+        </ModalHeader>
+        <ModalBody>
+          <Input
+            label="Suoritus"
+            labelPlacement="outside"
+            placeholder="Mitä pitää tehdä, suorituksen nimi, yms.."
+            onChange={(e) => setTask(e.target.value)}
+            value={task}
+          />
+          <Textarea
+            label="Kuvaus (valinnainen)"
+            placeholder="Kerro tarvittaessa lisätietoa tempusta"
+            labelPlacement="outside"
+            onChange={(e) => setTaskdesc(e.target.value)}
+            value={taskdesc}
+          />
+          <Input
+            type="number"
+            label="Pistemäärä"
+            placeholder="0"
+            labelPlacement="outside"
+            onChange={(e) => setPoints(Number(e.target.value))}
+            value={points}
+            className="w-24"
+            endContent={
+              <div className="pointer-events-none flex items-center">
+                <span className="text-default-400 text-small">p</span>
+              </div>
+            }
+          />
+          <CheckboxGroup
+            label="Mitä kilpailijalta vaaditaan palauttaessa?"
+            orientation="horizontal"
+            className="mt-2"
+          >
+            <Checkbox
+              isSelected={text}
+              onChange={(e) => setText(e)}
             >
-              <Checkbox
-                value={text}
-                onChange={(e) => setText(e.target.checked)}
-              >
-                teksti
-              </Checkbox>
-              <Checkbox
-                value={image}
-                onChange={(e) => setImage(e.target.checked)}
-              >
-                kuva
-              </Checkbox>
-            </CheckboxGroup>
-            <Divider orientation="horizontal" />
-            <Checkbox onChange={(e) => setAgain(e.target.checked)} value={again}>
-              Suorituksen voi palauttaa useamman kerran
+              teksti
             </Checkbox>
-          </ModalBody>
-          <ModalFooter>
-            <Button variant="light" onPress={onClose}>
-              Peruuta
-            </Button>
-            <Button
-              color="success"
-              variant="flat"
-              onPress={addTask}
-              startContent={<HiOutlinePlus size={18} />}
+            <Checkbox
+              isSelected={image}
+              onChange={(e) => setImage(e)}
             >
-              Lisää
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+              kuva
+            </Checkbox>
+          </CheckboxGroup>
+          <Divider orientation="horizontal" />
+          <Checkbox
+            isSelected={again}
+            onChange={(e) => setAgain(e)}
+          >
+            Suorituksen voi palauttaa useamman kerran
+          </Checkbox>
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="light" onPress={onClose}>
+            Peruuta
+          </Button>
+          <Button
+            color="success"
+            variant="flat"
+            onPress={addTask}
+            startContent={<HiOutlinePlus size={18} />}
+          >
+            Lisää
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 

@@ -38,7 +38,7 @@ model Tasks {
   text      Boolean?
   again     Boolean?
   points    Int?
-  year      String
+  year      Int?
   userTasks UserTasks[]
 }
 
