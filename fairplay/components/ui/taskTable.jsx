@@ -18,6 +18,7 @@ import Loading from "@/app/loading";
 import { HiOutlinePlus } from "react-icons/hi2";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import AddTask from "@/components/modals/addNewTask";
+import EditTask from "@/components/modals/editTask";
 
 const columns = [
   { name: "TEHTÄVÄ", uid: "task" },
@@ -39,6 +40,8 @@ export default function TasksTable({ year }) {
   const [usersData, setUsersData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
+  const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
+  const [currentTask, setCurrentTask] = useState(null);
 
   useEffect(() => {
     async function fetchTasks() {
@@ -54,6 +57,10 @@ export default function TasksTable({ year }) {
           id: task.id,
           task: task.task,
           points: task.points,
+          taskdesc: task.taskdesc,
+          image: task.image,
+          text: task.text,
+          again: task.again,
         }));
         setUsersData(mappedTasks);
         setIsLoading(false);
@@ -72,6 +79,14 @@ export default function TasksTable({ year }) {
     setIsNewTaskOpen(false);
   };
 
+  const openEditTask = (task) => {
+    setCurrentTask(task);
+    setIsEditTaskOpen(true);
+  };
+  const closeEditTask = () => {
+    setIsEditTaskOpen(false);
+  };
+
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
 
@@ -80,8 +95,8 @@ export default function TasksTable({ year }) {
     );
   }, [visibleColumns]);
 
-  const renderCell = useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = useCallback((task, columnKey) => {
+    const cellValue = task[columnKey];
 
     switch (columnKey) {
       case "action":
@@ -94,7 +109,7 @@ export default function TasksTable({ year }) {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem>Muokkaa</DropdownItem>
+                <DropdownItem onClick={() => openEditTask(task)}>Muokkaa</DropdownItem>
                 <DropdownItem color="danger" className="text-danger">Poista</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -107,13 +122,11 @@ export default function TasksTable({ year }) {
 
   const topContent = useMemo(() => {
     return (
-      <>
-        <div className="flex flex-col items-center">
-          <span className="text-default-500 text-small mt-6">
-            {usersData.length} tehtävää
-          </span>
-        </div>
-      </>
+      <div className="flex flex-col items-center">
+        <span className="text-default-500 text-small mt-6">
+          {usersData.length} tehtävää
+        </span>
+      </div>
     );
   }, [visibleColumns, usersData.length]);
 
@@ -169,6 +182,14 @@ export default function TasksTable({ year }) {
         <AddTask
           isOpen={isNewTaskOpen}
           onClose={closeNewTask}
+          year={year}
+        />
+      )}
+      {isEditTaskOpen && currentTask && (
+        <EditTask
+          isOpen={isEditTaskOpen}
+          onClose={closeEditTask}
+          taskData={currentTask}
           year={year}
         />
       )}

@@ -5,9 +5,10 @@ import { populateOrUpdateUserTasks } from "@/utils/populateUserTasks";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { task, taskdesc, image, text, again, points, year } = body;
+    const { id, task, taskdesc, image, text, again, points, year } = body;
 
-    const newTaskData = await db.tasks.create({
+    const updatedTaskData = await db.tasks.update({
+      where: { id: parseInt(id, 10) },
       data: {
         task: task,
         taskdesc: taskdesc,
@@ -22,9 +23,9 @@ export async function POST(req) {
     // Populate or update UserTasks
     await populateOrUpdateUserTasks();
 
-    return NextResponse.json({ tasks: newTaskData, message: "Task created successfully" }, { status: 200 });
+    return NextResponse.json({ tasks: updatedTaskData, message: "Task updated successfully" }, { status: 200 });
   } catch (error) {
-    console.error("Error creating task:", error);
-    return NextResponse.json({ message: "Error creating task" }, { status: 500 });
+    console.error("Error updating task:", error);
+    return NextResponse.json({ message: "Error updating task" }, { status: 500 });
   }
 }

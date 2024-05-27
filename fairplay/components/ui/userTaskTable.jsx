@@ -10,16 +10,19 @@ import {
   TableCell,
   Chip,
   Progress,
+  Button,
 } from "@nextui-org/react";
 import Loading from "@/app/loading";
+import UserTaskComplete from "@/components/modals/UserTaskComplete";
 
 const columns = [
   { name: "TEHTÄVÄ", uid: "tasktitle" },
   { name: "PISTEET", uid: "points" },
   { name: "TILA", uid: "status" },
+  { name: "SUORITA", uid: "action" },
 ];
 
-const INITIAL_VISIBLE_COLUMNS = ["tasktitle", "points", "status"];
+const INITIAL_VISIBLE_COLUMNS = ["tasktitle", "points", "status", "action"];
 
 export default function TasksTable() {
   const [selectedKeys, setSelectedKeys] = useState(new Set([]));
@@ -32,6 +35,8 @@ export default function TasksTable() {
   });
   const [tasksData, setTasksData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
     async function fetchTasks() {
@@ -41,7 +46,6 @@ export default function TasksTable() {
           throw new Error("Failed to fetch tasks");
         }
         const taskData = await response.json();
-        // Map the tasks to include a status field based on the completed boolean
         const mappedTasks = taskData.task.map((task) => ({
           ...task,
           status: task.completed ? "Suoritettu" : "Suorittamatta",
@@ -58,7 +62,6 @@ export default function TasksTable() {
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
-
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
     );
@@ -66,7 +69,6 @@ export default function TasksTable() {
 
   const renderCell = useCallback((task, columnKey) => {
     const cellValue = task[columnKey];
-
     switch (columnKey) {
       case "status":
         return (
@@ -77,6 +79,19 @@ export default function TasksTable() {
           >
             {cellValue}
           </Chip>
+        );
+      case "action":
+        return (
+          <Button
+            variant="bordered"
+            size="sm"
+            onClick={() => {
+              setSelectedTask(task);
+              setIsModalOpen(true);
+            }}
+          >
+            Suorita ja lisätietoja
+          </Button>
         );
       default:
         return cellValue;
@@ -151,6 +166,13 @@ export default function TasksTable() {
           )}
         </TableBody>
       </Table>
+      {isModalOpen && selectedTask && (
+        <UserTaskComplete
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          taskData={selectedTask}
+        />
+      )}
     </div>
   );
 }

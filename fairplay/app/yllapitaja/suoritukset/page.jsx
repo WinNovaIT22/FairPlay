@@ -11,6 +11,7 @@ import {
 } from "@nextui-org/react";
 import { CiCircleInfo } from "react-icons/ci";
 import TasksTable from "@/components/ui/taskTable";
+import { ToastContainer } from "react-toastify";
 import { FaHome } from "react-icons/fa";
 
 export default function Tasks() {
@@ -24,47 +25,59 @@ export default function Tasks() {
   );
 
   return (
-    <div className="bg-gradient-to-b from-yellow-800 to-stone-900 min-h-screen w-full">
-      <div className="shadow-lg backdrop-blur-2xl text-2xl p-4 font-black rounded-lg flex justify-center items-center">
-        <div className="absolute left-2">
-          <a href="/yllapitaja" className="navigation-card">
-            <FaHome size={24} color="black" />
-          </a>
+    <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        theme="dark"
+      />
+      <div className="bg-gradient-to-b from-yellow-800 to-stone-900 min-h-screen w-full">
+        <div className="shadow-lg backdrop-blur-2xl text-2xl p-4 font-black rounded-lg flex justify-center items-center">
+          <div className="absolute left-2">
+            <a href="/yllapitaja" className="navigation-card">
+              <FaHome size={24} color="black" />
+            </a>
+          </div>
+          FairPlay suoritukset
         </div>
-        FairPlay suoritukset
-      </div>
-      <div className="flex justify-center items-center flex-row">
-        <Select
-          label="Vuosi"
-          className="w-32 mt-5"
-          defaultSelectedKeys={[currentYear.toString()]}
-          labelPlacement="outside-left"
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
-        >
-          {years.map((year) => (
-            <SelectItem key={year} value={year} textValue={year}>
-              {year}
-            </SelectItem>
-          ))}
-        </Select>
-        <Popover placement="bottom" showArrow={true}>
-          <PopoverTrigger>
-            <Button variant="light" isIconOnly>
-              <CiCircleInfo size={20} />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            <div className="px-1 py-2 w-48">
-              <div className="text-tiny break-all">
-                Kilpailijalle näkyy aina nykyisen vuoden suoritukset. Vanhat
-                suoritukset pysyvät tallessa täällä ylläpitäjiä varten.
+        <div className="flex justify-center items-center flex-row">
+          <Select
+            label="Vuosi"
+            className="w-32 mt-5"
+            defaultSelectedKeys={[currentYear.toString()]}
+            labelPlacement="outside-left"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+          >
+            {years.map((year) => (
+              <SelectItem key={year} value={year} textValue={year}>
+                {year}
+              </SelectItem>
+            ))}
+          </Select>
+          <Popover placement="bottom" showArrow={true}>
+            <PopoverTrigger>
+              <Button variant="light" isIconOnly>
+                <CiCircleInfo size={20} />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <div className="px-1 py-2 w-48">
+                <div className="text-tiny break-all">
+                  Kilpailijalle näkyy aina nykyisen vuoden suoritukset. Vanhat
+                  suoritukset pysyvät tallessa täällä ylläpitäjiä varten.
+                </div>
               </div>
-            </div>
-          </PopoverContent>
-        </Popover>
+            </PopoverContent>
+          </Popover>
+        </div>
+        <TasksTable year={year} />
       </div>
-      <TasksTable year={year} />
-    </div>
+    </>
   );
 }

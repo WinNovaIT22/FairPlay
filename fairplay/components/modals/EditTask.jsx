@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -17,47 +17,48 @@ import { HiOutlinePlus } from "react-icons/hi2";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const AddTask = ({ isOpen, onClose, year }) => {
-  const [task, setTask] = useState("");
-  const [taskdesc, setTaskdesc] = useState("");
-  const [image, setImage] = useState(false);
-  const [text, setText] = useState(false);
-  const [again, setAgain] = useState(false);
-  const [points, setPoints] = useState(0);
+const EditTask = ({ isOpen, onClose, taskData, year }) => {
+  const [task, setTask] = useState(taskData.task || "");
+  const [taskdesc, setTaskdesc] = useState(taskData.taskdesc || "");
+  const [image, setImage] = useState(taskData.image || false);
+  const [text, setText] = useState(taskData.text || false);
+  const [again, setAgain] = useState(taskData.again || false);
+  const [points, setPoints] = useState(taskData.points || 0);
 
-  const addTask = async () => {
+  const updateTask = async () => {
     try {
-      const response = await fetch("/api/admin/createTasks", {
+      const response = await fetch("/api/admin/updateTask", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          task: task,
-          taskdesc: taskdesc,
-          image: image,
-          text: text,
-          again: again,
-          points: points,
-          year: year,
+          id: taskData.id,
+          task,
+          taskdesc,
+          image,
+          text,
+          again,
+          points,
+          year,
         }),
       });
-
+  
       if (response.ok) {
-        console.log("Task created successfully.");
+        console.log("Task updated successfully.");
         window.location.reload(true);
       } else {
-        console.error("Failed to create task:", response.statusText);
+        console.error("Failed to update task:", response.statusText);
       }
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.error("Error updating task:", error);
     }
   };
 
-  const notify = () => toast.success("Suoritus lisätty ja päivittyy 2min sisällä.");
+  const notify = () => toast.success("Suoritus muokattu ja päivittyy 2min sisällä.");
 
   const handlePress = () => {
-    addTask();
+    updateTask();
     onClose();
     notify();
   };
@@ -66,7 +67,7 @@ const AddTask = ({ isOpen, onClose, year }) => {
     <Modal size={"xl"} placement={"center"} isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
-          Lisää uusi suoritus {year}
+          Muokkaa suoritus {year}
         </ModalHeader>
         <ModalBody>
           <Input
@@ -98,7 +99,9 @@ const AddTask = ({ isOpen, onClose, year }) => {
             }
           />
           <div className="mt-2">
-            <p className="text-sm mb-2 text-gray-400">Mitä kilpailijalta vaaditaan palauttaessa?</p>
+            <p className="text-sm mb-2 text-gray-400">
+              Mitä kilpailijalta vaaditaan palauttaessa?
+            </p>
             <Checkbox
               isSelected={text}
               onChange={(e) => setText(e.target.checked)}
@@ -131,7 +134,7 @@ const AddTask = ({ isOpen, onClose, year }) => {
             onPress={handlePress}
             startContent={<HiOutlinePlus size={18} />}
           >
-            Lisää
+            Tallenna
           </Button>
         </ModalFooter>
       </ModalContent>
@@ -139,4 +142,4 @@ const AddTask = ({ isOpen, onClose, year }) => {
   );
 };
 
-export default AddTask;
+export default EditTask;
