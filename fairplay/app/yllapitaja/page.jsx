@@ -65,19 +65,10 @@ const Home = async () => {
               </CardFooter>
             </Card>
           </Link>
-          <Link href="/yllapitaja/vuosikoosteet">
-            <Card shadow="sm" isPressable className="ml-5 hover:scale-95">
-              <CardBody className="h-[140px] w-[240px] overflow-visible p-0 bg-gradient-to-b from-green-400 to-stone-900 flex items-center justify-center">
-                <Image alt="Year Replays" width={120} src="/calendar.png" />
-              </CardBody>
-              <CardFooter className="text-lg">
-                <b className="mx-auto">Vuosikoosteet</b>
-              </CardFooter>
-            </Card>
-          </Link>
         </div>
         <div className="flex flex-col items-center mt-12 text-lg font-bold text-black">
           <p>Määritä FairPlay -kilpailun kesto</p>
+          <DateTime />
          </div>
       </div>
     </>

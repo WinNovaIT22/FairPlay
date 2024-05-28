@@ -1,68 +1,51 @@
-"use client";
+import { db } from "@/utils/db";
+import { NextResponse } from "next/server";
 
-import { useEffect, useState } from "react";
-import { DateRangePicker, Button } from "@nextui-org/react";
-import { parseZonedDateTime } from "@internationalized/date";
+export async function POST(req) {
+  try {
+    const { start, end } = await req.json();
 
-export default function DateTime() {
-  const [defaultValue, setDefaultValue] = useState({
-    start: new Date("2024-04-01T00:45:00.000Z"),
-    end: new Date("2024-04-08T11:15:00.000Z"),
-  });
+    // Convert received values to Date objects
+    const startDate = new Date(start);
+    const endDate = new Date(end);
 
-  useEffect(() => {
-    async function fetchDateRange() {
-      try {
-        const res = await fetch('/api/admin/datetime');
-        const data = await res.json();
-        if (data.event) {
-          setDefaultValue({
-            start: new Date(data.event.start),
-            end: new Date(data.event.end),
-          });
-        }
-      } catch (error) {
-        console.error("Failed to fetch date range:", error);
-      }
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      throw new Error("Invalid date format");
     }
 
-    fetchDateRange();
-  }, []);
+    const existingDateRange = await db.dateRange.findFirst();
+    let dateRange;
 
-  const handleSave = async () => {
-    try {
-      const res = await fetch('/api/admin/datetime', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    if (existingDateRange) {
+      dateRange = await db.dateRange.update({
+        where: { id: existingDateRange.id },
+        data: {
+          start: startDate,
+          end: endDate,
         },
-        body: JSON.stringify({
-          start: defaultValue.start.toISOString(), // Convert to ISO string
-          end: defaultValue.end.toISOString(),     // Convert to ISO string
-        }),
       });
-
-      const result = await res.json();
-      console.log(result.message);
-    } catch (error) {
-      console.error("Error saving date range:", error);
+      return NextResponse.json({ event: dateRange, message: "Event Updated" }, { status: 200 });
+    } else {
+      dateRange = await db.dateRange.create({
+        data: {
+          start: startDate,
+          end: endDate,
+        },
+      });
+      return NextResponse.json({ event: dateRange, message: "Event Created" }, { status: 200 });
     }
-  };
+  } catch (error) {
+    console.error("Error in POST handler:", error);
+    return NextResponse.json({ message: "Error Saving Event" }, { status: 500 });
+  }
+}
 
-  return (
-    <div className="w-full max-w-xl flex flex-row gap-4">
-      <DateRangePicker
-        hideTimeZone
-        visibleMonths={2}
-        value={defaultValue}
-        onChange={(value) => {
-          setDefaultValue({
-            start: new Date(value.start),
-            end: new Date(value.end),
-          });
-        }}
-      />
-      <Button onPress={handleSave}>Tallenna</Button>
-    </div>
-  );
+export async function GET() {
+  try {
+    const dateRange = await db.dateRange.findFirst();
+    return NextResponse.json({ event: dateRange }, { status: 200 });
+  } catch (error) {
+    console.error("Error in GET handler:", error);
+    return NextResponse.json({ message: "Error Fetching Event" }, { status: 500 });
+  }
 }

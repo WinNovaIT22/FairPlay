@@ -6,19 +6,22 @@ const Temperature = () => {
   const [temperature, setTemperature] = useState(null);
   const [city, setCity] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [weatherIcon, setWeatherIcon] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTemperature = async () => {
       try {
         const res = await fetch("/api/temperature");
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
         const data = await res.json();
         setTemperature(data.temperature);
         setCity(data.city);
-        setLoading(false);
-
       } catch (error) {
         console.error("Error fetching temperature:", error);
+        setError('Failed to load weather data');
+      } finally {
         setLoading(false);
       }
     };
@@ -26,18 +29,18 @@ const Temperature = () => {
     fetchTemperature();
   }, []);
 
+  if (loading) {
+    return <div>Ladataan säätä...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
-    <>
-      <div>
-        {loading ? (
-          <div>Ladataan säätä...</div>
-        ) : (
-          <div>
-            <span>{temperature}, {city}</span>
-          </div>
-        )}
-      </div>
-    </>
+    <div>
+      <span>{temperature}, {city}</span>
+    </div>
   );
 };
 
