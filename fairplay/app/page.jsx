@@ -12,7 +12,7 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import Link from "next/link";
 import Logout from "@/components/ui/logout";
 import Temperature from "@/components/ui/temperature";
-
+import ProgressBar from "@/components/ui/progessbar"
 const Home = async () => {
   const session = await getServerSession(authOptions);
   const isAdmin = session?.user.role === "ylläpitäjä";
@@ -97,14 +97,7 @@ const Home = async () => {
             <Card shadow="sm" isPressable className="hover:scale-95">
               <CardBody className="h-[200px] w-[500px] overflow-visible p-0 bg-gradient-to-b from-green-700 to-neutral-900 flex items-center justify-center">
                 <Image alt="Tasks" width={120} src="/task.png" />
-                <Progress
-                  label="Suoritettu"
-                  size="md"
-                  value="50"
-                  color="success"
-                  showValueLabel={true}
-                  className="max-w-md"
-                />
+                <ProgressBar />
               </CardBody>
               <CardFooter className="text-lg">
                 <b className="mx-auto">Suorituksesi</b>
