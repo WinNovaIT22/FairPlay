@@ -10,34 +10,34 @@ datasource db {
 model User {
   firstname String
   lastname  String
-  email     String   @unique
-  city      String   @default("Pori")
+  email     String      @unique
   password  String
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  id        Int      @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updateAt  DateTime    @updatedAt
+  id        Int         @id @default(autoincrement())
   role      String
-  blocked   Boolean  @default(false)
+  blocked   Boolean     @default(false)
+  city      String      @default("Pori")
   tasks     UserTasks[]
 }
 
 model UserVehicles {
-  id              Int       @id @default(autoincrement())
-  vehicle         String
-  inspected       Boolean   @default(false)
-  user_id         Int?
-  inspectedImage  String?
-  createdAt       DateTime  @default(now())
+  id             Int      @id @default(autoincrement())
+  vehicle        String
+  inspected      Boolean  @default(false)
+  user_id        Int?
+  inspectedImage String?
+  createdAt      DateTime @default(now())
 }
 
 model Tasks {
-  id        Int     @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   task      String?
   taskdesc  String?
-  image     Boolean?
   text      Boolean?
-  again     Boolean?
   points    Int?
+  image     Boolean?
+  again     Boolean?
   year      Int?
   userTasks UserTasks[]
 }
@@ -51,21 +51,21 @@ model DateRange {
 }
 
 model UserTasks {
-  id        Int       @id @default(autoincrement())
-  userId    Int
+  id        Int      @id @default(autoincrement())
+  points    Int?
+  admintext String?
+  completed Boolean
   taskId    Int
-  tasktitle String?
+  userId    Int
+  again     Boolean?
   taskdesc  String?
+  tasktitle String?
   image     Boolean?
   text      Boolean?
-  points    Int?
-  again     Boolean?
-  year      Int?
-  completed Boolean?
   checked   Boolean?
-  admintext String?
-  user      User      @relation(fields: [userId], references: [id])
-  task      Tasks     @relation(fields: [taskId], references: [id])
+  year      Int?
+  task      Tasks    @relation(fields: [taskId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model kaksipyoraiset_data {

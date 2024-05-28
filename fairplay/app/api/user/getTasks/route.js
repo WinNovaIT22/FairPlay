@@ -21,7 +21,7 @@ export async function GET(req) {
     const tasks = await db.userTasks.findMany({
       where: {
         year: currentYear,
-        userId: userId, // Correct the field name to match your schema
+        userId: userId,
       },
       select: {
         id: true,
