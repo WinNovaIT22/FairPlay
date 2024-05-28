@@ -1,35 +1,36 @@
 import { FaHome } from 'react-icons/fa';
+import { GrHelpBook } from "react-icons/gr";
 
 export default function MoreInfo() {
   return (
     <div
-      className="h-screen flex flex-col items-center relative"
+      className="flex flex-col h-screen"
       style={{
         backgroundImage: 'url(/backgrounds/infobg.webp)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
-      <a href="/" className="navigation-card absolute top-4 left-4">
-        <FaHome size={24} color="black" />
-      </a>
-      <h1 className="text-4xl mt-8 text-black">Ohjeet Nettisivun Käyttöön</h1>
-      <div className="flex-grow flex items-center justify-center">
-        <div className="flex">
-          <div className="w-1/2 h-[600px] p-4 border border-gray-300 rounded-lg bg-white bg-opacity-80 overflow-auto text-black mr-4">
-            <p>
-              Tämä on esimerkki ohjetekstistä. Voit lisätä tähän ohjeita, joita käyttäjät voivat lukea mutta eivät muokata.
-              <br /><br />
-              Ohje 1: Muista täyttää kaikki kentät huolellisesti.
-              <br /><br />
-              Ohje 2: Tarkista tietosi ennen lähettämistä.
-              <br /><br />
-              Ohje 3: Jos sinulla on kysyttävää, ota yhteyttä asiakaspalveluun.
-            </p>
+      <div className="shadow-lg backdrop-blur-2xl text-2xl p-4 text-white font-black rounded-lg flex justify-center items-center">
+          <div className="absolute left-2">
+            <a href="/" className="navigation-card">
+              <FaHome size={24} color="black" />
+            </a>
           </div>
-          <div className="w-1/2 h-[600px] p-4 border border-gray-300 rounded-lg bg-white bg-opacity-80 overflow-auto text-black">
+          <GrHelpBook size={35} className="mr-2"/>
+          Moottoripyörätalli
+        </div>
+      <div className="flex-grow flex items-center justify-center">
+        <div className="flex justify-center">
+          <div className="border-8 border-red-950 w-1/2 h-[600px] p-4 border border-gray-300 backdrop-blur-2xl rounded-lg  bg-opacity-80 overflow-auto text-white mr-4">
             <p>
-              Toinen kirjoituslaatikko.
+              
+              Tehtävät/Suoritukset Sivu. Tehtävät sekä suorituksesi löydät alkuvalikon suoritukset näppäintä painamalla. Siellä voit kirjata ylös kaikki tehtävät jotka olet saanut valmiiksi ja kuinka paljon sinulla on vielä suoritettavana.
+              <br /><br />
+              Ajoneuvot Sivu.
+              Ajoneuvo sivulle pääset etusivulta painamalla ajoneuvosi näppäintä, sieltä voit helposti sekä nopeasti lisätä oman ajoneuvosi se löytää melkein jokaisen tieliikenne kelpoisen ajoneuvon yli 14000 valikoima. jos sinulla vaihtuu ajoneuvo kesken kauden sen saa helposti lisättyä vanhan tilalle. Sivu myös näkee että onko ajoneuvosi katsastettu vai ei.
+              <br /><br />
+              Käyttäjätideot Sivu. Käyttäjätiedot sivulla voit tarkastella omia tietoja joilla olet sivulle kirjautunut, sieltä voit myös vaihtaa salasanan jos se on tarpellista. Pystyt myös luomaan täysin uuden profiilin itsellesi helposti painamalla poista itsesi nappia, ja kun tiedot on poistettu niin voit luoda heti uuden tilin itsellesi.
             </p>
           </div>
         </div>

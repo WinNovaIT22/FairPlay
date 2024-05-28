@@ -4,7 +4,7 @@ import { Card, CardBody, CardFooter, Chip, Image, Button } from "@nextui-org/rea
 import Link from "next/link";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import DateTime from "@/components/ui/datetime";
-
+import {Input} from "@nextui-org/react";
 const Home = async () => {
   const session = await getServerSession(authOptions);
 
@@ -79,6 +79,7 @@ const Home = async () => {
         <div className="flex flex-col items-center mt-12 text-lg font-bold text-black">
           <p>Määritä FairPlay -kilpailun kesto</p>
          </div>
+         <Input type="email" label="Email" />
       </div>
     </>
   );
