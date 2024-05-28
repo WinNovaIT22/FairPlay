@@ -1,8 +1,35 @@
+"use client"
+
 import { FaHome } from "react-icons/fa";
 import { GrTask } from "react-icons/gr";
 import UserTaskTable from "@/components/ui/userTaskTable";
+import { useState, useEffect } from "react";
 
 export default function Tasks() {
+  const [userVehicles, setUserVehicles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/user/getTasks");
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        setUserVehicles(data.vehicles);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const isAnyVehicleInspected = userVehicles.some(vehicle => vehicle.inspected);
+  const hasNoVehicles = userVehicles.length < 0;
+
   return (
     <>
       <div
@@ -22,9 +49,16 @@ export default function Tasks() {
           <GrTask size={30} className="mr-3" />
             Suoritukset
         </div>
-        <div>
-          <UserTaskTable />
-        </div>
+        {!isLoading && (isAnyVehicleInspected || hasNoVehicles) ? (
+          <div>
+            <UserTaskTable />
+          </div>
+        ) : null}
+        {!isLoading && !isAnyVehicleInspected && !hasNoVehicles && (
+          <div className="text-center text-gray-500">
+            Sinulta puuttuu ajoneuvo tai ajoneuvoasi ei ole katsastettu
+          </div>
+        )}
       </div>
     </>
   );

@@ -3,10 +3,10 @@ import { db } from "@/utils/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
 
-export async function POST(req) {
+export async function DELETE(req) {
   try {
     const session = await getServerSession(authOptions);
-    const { vehicle } = await req.json();
+    const { vehicleId } = await req.json();
 
     if (!session) {
       return NextResponse.error(new Error("Unauthorized"), { status: 401 });
@@ -14,34 +14,35 @@ export async function POST(req) {
 
     const userId = parseInt(session.user.id);
 
-    const userVehiclesCount = await db.userVehicles.count({
+    // Check if the vehicle belongs to the user
+    const vehicle = await db.userVehicles.findUnique({
       where: {
-        user_id: userId,
+        id: vehicleId,
       },
     });
 
-    if (userVehiclesCount >= 5) {
+    if (!vehicle || vehicle.user_id !== userId) {
       return NextResponse.error(
-        new Error("Maximum number of vehicles reached"),
-        { status: 400 }
+        new Error("Vehicle not found or not owned by user"),
+        { status: 404 }
       );
     }
 
-    const updatedVehicle = await db.userVehicles.create({
-      data: {
-        user_id: userId,
-        vehicle,
-        inspected: false,
+    // Delete the vehicle
+    await db.userVehicles.delete({
+      where: {
+        id: vehicleId,
       },
     });
 
     return NextResponse.json(
-      { user: updatedVehicle, message: "User vehicles updated" },
+      { message: "Vehicle deleted successfully" },
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error deleting vehicle:", error);
     return NextResponse.json(
-      { message: "Failed to update user vehicles" },
+      { message: "Failed to delete vehicle" },
       { status: 500 }
     );
   }

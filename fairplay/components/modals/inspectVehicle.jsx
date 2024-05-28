@@ -6,7 +6,7 @@ import { Link } from "@nextui-org/react";
 import UploadImage from "@/components/ui/uploadImage"
 import { BsSend } from "react-icons/bs";
 
-const InspectVehicle = ({ isOpen, onClose, vehicleName, vehicleId }) => {
+const InspectVehicle = ({ isOpen, onClose, vehicleName, vehicleId, onVehicleInspected }) => {
   const [image, setImage] = useState(null);
 
   const handleImageUpload = async () => {
@@ -26,8 +26,8 @@ const InspectVehicle = ({ isOpen, onClose, vehicleName, vehicleId }) => {
       });
 
       if (response.ok) {
-        console.log("Image uploaded successfully.");
-        window.location.reload(true);
+        const result = await response.json();
+        onVehicleAdded(result.user);
         onClose();
       } else {
         console.error("Failed to upload image:", response.statusText);

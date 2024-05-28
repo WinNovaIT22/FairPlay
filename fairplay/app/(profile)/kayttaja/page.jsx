@@ -21,7 +21,7 @@ const UserData = async () => {
           backgroundPosition: "center",
         }}
       >
-        <div className="shadow-lg backdrop-blur-2xl text-2xl p-4 font-black rounded-lg flex justify-center items-center">
+        <div className="shadow-lg backdrop-blur-2xl text-xl md:text-2xl p-4 font-black rounded-lg flex justify-center items-center">
           <div className="absolute left-2">
             <a href="/" className="navigation-card">
               <FaHome size={24} color="black" />
@@ -31,7 +31,7 @@ const UserData = async () => {
           Käyttäjätiedot
         </div>
         <div className="flex justify-center w-full mt-8">
-          <div className="flex flex-col justify-center w-2/6">
+          <div className="flex flex-col justify-center w-4/5 md:w-2/6">
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
                 <Input

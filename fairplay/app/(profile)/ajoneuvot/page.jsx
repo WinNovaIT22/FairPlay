@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
 import { FaMotorcycle } from "react-icons/fa6";
 import { HiOutlinePlus } from "react-icons/hi2";
 import InspectVehicle from "@/components/modals/inspectVehicle";
@@ -39,6 +40,32 @@ const Vehicles = () => {
     fetchUserVehicles();
   }, []);
 
+  const handleDeleteVehicle = async (vehicleId) => {
+    try {
+      const response = await fetch(`/api/user/deleteVehicle`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ vehicleId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete vehicle");
+      }
+
+      const result = await response.json();
+      console.log(result.message);
+
+      // Remove the deleted vehicle from the state
+      setUserVehicles((prevVehicles) =>
+        prevVehicles.filter((vehicle) => vehicle.id !== vehicleId)
+      );
+    } catch (error) {
+      console.error("Error deleting vehicle:", error);
+    }
+  };
+
   const openInspect = (vehicleName, vehicleId) => {
     setSelectedVehicle(vehicleName);
     setSelectedVehicleId(vehicleId);
@@ -54,6 +81,18 @@ const Vehicles = () => {
     setIsNewVehicleOpen(false);
   };
 
+  const handleVehicleAdded = (newVehicle) => {
+    setUserVehicles((prevVehicles) => [...prevVehicles, newVehicle]);
+  };
+
+  const handleVehicleInspected = (inspectedVehicle) => {
+    setUserVehicles((prevVehicles) =>
+      prevVehicles.map((vehicle) =>
+        vehicle.id === inspectedVehicle.id ? { ...vehicle, inspected: true } : vehicle
+      )
+    );
+  };
+
   const currentYear = new Date().getFullYear();
 
   return (
@@ -66,7 +105,7 @@ const Vehicles = () => {
           backgroundPosition: "center",
         }}
       >
-        <div className="shadow-lg backdrop-blur-2xl text-2xl p-4 font-black rounded-lg flex justify-center items-center">
+        <div className="shadow-lg backdrop-blur-2xl text-xl md:text-2xl p-4 font-black rounded-lg flex justify-center items-center">
           <div className="absolute left-2">
             <a href="/" className="navigation-card">
               <FaHome size={24} color="black" />
@@ -76,7 +115,7 @@ const Vehicles = () => {
           Moottoripyörätalli
         </div>
         <div className="flex justify-center items-center">
-          <div className="w-2/6 mt-8">
+          <div className="w-6/7 md:w-2/6 mt-8">
             {isLoading ? (
               <Loading />
             ) : (
@@ -109,13 +148,28 @@ const Vehicles = () => {
                           )}
                         </div>
                       </div>
-                      <div className="cursor-pointer">
-                        <RiDeleteBinLine color="red" size={20} />
-                      </div>
+                      <Dropdown>
+                        <DropdownTrigger>
+                          <Button isIconOnly color="danger" aria-label="Delete">
+                            <RiDeleteBinLine size={20}/>
+                          </Button>   
+                        </DropdownTrigger>
+                        <DropdownMenu
+                          aria-label="Delete option"
+                          onAction={() => handleDeleteVehicle(vehicle.id)}
+                        >
+                          <DropdownItem key="delete" className="text-danger" color="danger">
+                            <div className="flex items-center">
+                              <RiDeleteBinLine className="mr-2" />
+                              Vahvista poisto
+                            </div>
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
                     </div>
                   ))
                 ) : (
-                  <p className="text-center">
+                  <p className="text-center text-black">
                     Et omista vielä yhtäkään ajoneuvoa
                   </p>
                 )}
@@ -126,7 +180,7 @@ const Vehicles = () => {
         <div className="flex justify-center mt-7">
           <button
             onClick={() => openNewVehicle()}
-            className="flex items-center justify-center w-2/6 py-2 bg-red-950 rounded-md shadow-lg font-semibold"
+            className="flex items-center justify-center w-2/3 md:w-2/6 py-2 bg-red-950 rounded-md shadow-lg font-semibold"
           >
             <HiOutlinePlus size={23} className="mr-2" />
             Lisää uusi ajoneuvo
@@ -138,10 +192,15 @@ const Vehicles = () => {
             onClose={closeInspect}
             vehicleName={selectedVehicle}
             vehicleId={selectedVehicleId}
+            onVehicleInspected={handleVehicleInspected}
           />
         )}
         {isNewVehicleOpen && (
-          <AddVehicle isOpen={isNewVehicleOpen} onClose={closeNewVehicle} />
+          <AddVehicle
+            isOpen={isNewVehicleOpen}
+            onClose={closeNewVehicle}
+            onVehicleAdded={handleVehicleAdded}
+          />
         )}
       </div>
     </>

@@ -17,7 +17,7 @@ import { HiOutlinePlus } from "react-icons/hi2";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const AddTask = ({ isOpen, onClose, year }) => {
+const AddTask = ({ isOpen, onClose, year, onTaskAdded }) => {
   const [task, setTask] = useState("");
   const [taskdesc, setTaskdesc] = useState("");
   const [image, setImage] = useState(false);
@@ -45,7 +45,8 @@ const AddTask = ({ isOpen, onClose, year }) => {
 
       if (response.ok) {
         console.log("Task created successfully.");
-        window.location.reload(true);
+        // Notify parent component to fetch tasks
+        onTaskAdded();
       } else {
         console.error("Failed to create task:", response.statusText);
       }

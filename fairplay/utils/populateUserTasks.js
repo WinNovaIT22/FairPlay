@@ -56,16 +56,14 @@ export async function populateOrUpdateUserTasks() {
     }
 
     console.log('UserTasks populated or updated successfully.');
-    return NextResponse.json({ message: 'UserTasks populated or updated successfully.' }, { status: 200 });
   } catch (error) {
     console.error('Error populating or updating UserTasks:', error);
-    return NextResponse.json({ message: 'Error populating or updating UserTasks.' }, { status: 500 });
   } finally {
     await db.$disconnect();
   }
 }
 
-export async function GET(req, res) {
+export async function GET(req) {
   await populateOrUpdateUserTasks();
   return NextResponse.json({ message: 'UserTasks populated or updated successfully.' }, { status: 200 });
 }

@@ -64,7 +64,7 @@ model UserTasks {
   text      Boolean?
   checked   Boolean?
   year      Int?
-  task      Tasks    @relation(fields: [taskId], references: [id])
+  task      Tasks    @relation(fields: [taskId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id])
 }
 

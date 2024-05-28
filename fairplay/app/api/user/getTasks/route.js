@@ -18,6 +18,17 @@ export async function GET(req) {
 
     const userId = parseInt(session.user.id);
 
+    const userVehicles = await db.userVehicles.findMany({
+      where: {
+        user_id: userId,
+      },
+      select: {
+        id: true,
+        vehicle: true,
+        inspected: true,
+      },
+    });
+
     const tasks = await db.userTasks.findMany({
       where: {
         year: currentYear,
@@ -43,7 +54,7 @@ export async function GET(req) {
     }
 
     return NextResponse.json(
-      { task: tasks, message: "Tasks loaded successfully" },
+      { task: tasks, vehicles: userVehicles, message: "Tasks loaded successfully" },
       { status: 200 }
     );
   } catch (error) {

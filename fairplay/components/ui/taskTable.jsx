@@ -19,6 +19,8 @@ import { HiOutlinePlus } from "react-icons/hi2";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import AddTask from "@/components/modals/addNewTask";
 import EditTask from "@/components/modals/editTask";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const columns = [
   { name: "TEHTÄVÄ", uid: "task" },
@@ -43,34 +45,60 @@ export default function TasksTable({ year }) {
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
 
-  useEffect(() => {
-    async function fetchTasks() {
-      try {
-        const response = await fetch(`/api/admin/getTasks?year=${year}`);
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch tasks");
-        }
-
-        const taskData = await response.json();
-        const mappedTasks = taskData.task.map((task) => ({
-          id: task.id,
-          task: task.task,
-          points: task.points,
-          taskdesc: task.taskdesc,
-          image: task.image,
-          text: task.text,
-          again: task.again,
-        }));
-        setUsersData(mappedTasks);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-        setIsLoading(false);
+  const fetchTasks = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/admin/getTasks?year=${year}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch tasks");
       }
+      const taskData = await response.json();
+      const mappedTasks = taskData.task.map((task) => ({
+        id: task.id,
+        task: task.task,
+        points: task.points,
+        taskdesc: task.taskdesc,
+        image: task.image,
+        text: task.text,
+        again: task.again,
+      }));
+      setUsersData(mappedTasks);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      setIsLoading(false);
     }
-    fetchTasks();
   }, [year]);
+
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const response = await fetch(`/api/admin/deleteTask`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: taskId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
+
+      const result = await response.json();
+      console.log(result.message);
+
+      // Fetch updated tasks list
+      fetchTasks();
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
+  const notify = () => toast.success("Suoritus lisätty ja päivittyy 2min sisällä.");
 
   const openNewTask = () => {
     setIsNewTaskOpen(true);
@@ -110,7 +138,7 @@ export default function TasksTable({ year }) {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem onClick={() => openEditTask(task)}>Muokkaa</DropdownItem>
-                <DropdownItem color="danger" className="text-danger">Poista</DropdownItem>
+                <DropdownItem color="danger" className="text-danger" onPress={notify} onClick={() => handleDeleteTask(task.id)}>Poista</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -118,7 +146,7 @@ export default function TasksTable({ year }) {
       default:
         return cellValue;
     }
-  }, []);
+  }, [handleDeleteTask]);
 
   const topContent = useMemo(() => {
     return (
@@ -183,6 +211,7 @@ export default function TasksTable({ year }) {
           isOpen={isNewTaskOpen}
           onClose={closeNewTask}
           year={year}
+          onTaskAdded={fetchTasks}
         />
       )}
       {isEditTaskOpen && currentTask && (
@@ -191,6 +220,7 @@ export default function TasksTable({ year }) {
           onClose={closeEditTask}
           taskData={currentTask}
           year={year}
+          onTaskUpdated={fetchTasks}
         />
       )}
     </div>

@@ -1,10 +1,10 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
-import { Card, CardBody, CardFooter, Chip, Image, Button } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Chip, Image } from "@nextui-org/react";
 import Link from "next/link";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import DateTime from "@/components/ui/datetime";
-import {Input} from "@nextui-org/react";
+
 const Home = async () => {
   const session = await getServerSession(authOptions);
 
@@ -70,7 +70,6 @@ const Home = async () => {
           <p>Määritä FairPlay -kilpailun kesto</p>
           <DateTime />
          </div>
-         <Input type="email" label="Email" />
       </div>
     </>
   );

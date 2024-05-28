@@ -15,7 +15,7 @@ import { useAsyncList } from "@react-stately/data";
 import { HiOutlinePlus } from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
 
-const AddVehicle = ({ isOpen, onClose }) => {
+const AddVehicle = ({ isOpen, onClose, onVehicleAdded }) => {
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -28,10 +28,11 @@ const AddVehicle = ({ isOpen, onClose }) => {
         },
         body: JSON.stringify({ vehicle: selectedVehicle }),
       });
-
+  
       if (response.ok) {
-        console.log("Vehicle added successfully");
-        window.location.reload(true);
+        const result = await response.json();
+        // Update the state with the newly added vehicle
+        onVehicleAdded(result.user);
         onClose();
       } else {
         console.error("Failed to add vehicle:", response.statusText);

@@ -28,8 +28,7 @@ export default function ProgressBar() {
   }, []);
  
   const completedTasks = tasksData.filter((task) => task.completed).length;
-  const progressValue =
-    tasksData.length > 0 ? (completedTasks / tasksData.length) * 100 : 0;
+  const progressValue = tasksData.length > 0 ? (completedTasks / tasksData.length) * 100 : 0;
 
   return (
     <Progress
@@ -38,7 +37,7 @@ export default function ProgressBar() {
     value={progressValue}
     color="success"
     showValueLabel={true}
-    className="max-w-md"
-  />
+    className="w-44 md:w-64"
+    />
   );
 }
