@@ -187,15 +187,15 @@ useEffect(() => {
             {cellValue}
           </Chip>
         );
-      case "progress":
-        return (
-          <Progress 
-            aria-label="User progress" 
-            size="sm" 
-            value={cellValue} 
-            color="primary"
-          />
-        );
+      // case "progress":
+      //   return (
+      //     <Progress 
+      //       aria-label="User progress" 
+      //       size="sm" 
+      //       value={cellValue} 
+      //       color="primary"
+      //     />
+      //   );
       default:
         return cellValue;
     }
