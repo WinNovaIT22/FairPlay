@@ -99,8 +99,7 @@ export default function TasksTable() {
   }, []);
 
   const completedTasks = tasksData.filter((task) => task.completed).length;
-  const progressValue =
-    tasksData.length > 0 ? (completedTasks / tasksData.length) * 100 : 0;
+  const progressValue = tasksData.length > 0 ? (completedTasks / tasksData.length) * 100 : 0;
 
   const topContent = useMemo(() => {
     return (
