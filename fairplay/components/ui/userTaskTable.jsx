@@ -60,6 +60,12 @@ export default function TasksTable() {
     fetchTasks();
   }, []);
 
+  const sortedTasksData = useMemo(() => {
+    const completedTasks = tasksData.filter((task) => task.completed);
+    const incompleteTasks = tasksData.filter((task) => !task.completed);
+    return incompleteTasks.concat(completedTasks);
+  }, [tasksData]);
+
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
     return columns.filter((column) =>
@@ -154,7 +160,7 @@ export default function TasksTable() {
           emptyContent={
             isLoading ? <Loading /> : "Ei suorituksia valitulle vuodelle"
           }
-          items={tasksData}
+          items={sortedTasksData}
         >
           {(item) => (
             <TableRow key={item.id} className="cursor-pointer">

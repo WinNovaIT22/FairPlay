@@ -9,6 +9,7 @@ import {
   ModalFooter,
   Button,
   Input,
+  Textarea,
 } from "@nextui-org/react";
 import UploadImage from "@/components/ui/uploadImage";
 import { BsSend } from "react-icons/bs";
@@ -60,18 +61,17 @@ const UserTaskComplete = ({ isOpen, onClose, taskData }) => {
             Suorita tehtävä: {taskData.tasktitle}
           </ModalHeader>
           <ModalBody>
-            <p className="text-sm">Pisteet: {taskData.points}</p>
+            <p className="text-sm">Saatavat pisteet: {taskData.points}</p>
             <p className="text-sm">{taskData.taskdesc}</p>
 
             {taskData.text && (
               <>
                 <p className="font-semibold text-center mt-3">
-                  Syötä vaadittu teksti
+                  Palauta teksti
                 </p>
-                <Input
+                <Textarea
                   value={textValue}
                   onChange={(e) => setTextValue(e.target.value)}
-                  fullWidth
                   placeholder="Kirjoita teksti tähän"
                 />
               </>
@@ -79,7 +79,7 @@ const UserTaskComplete = ({ isOpen, onClose, taskData }) => {
 
             {taskData.image && (
               <>
-                <p className="font-semibold text-center mt-3">Lähetä kuva</p>
+                <p className="font-semibold text-center mt-3">Palauta kuva</p>
                 <UploadImage setImage={setImage} />
               </>
             )}
@@ -95,7 +95,7 @@ const UserTaskComplete = ({ isOpen, onClose, taskData }) => {
               onPress={handleImageUpload}
               endContent={<BsSend size={18} />}
             >
-              Lähetä
+              Palauta
             </Button>
           </ModalFooter>
         </ModalContent>
