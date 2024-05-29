@@ -9,12 +9,12 @@ export async function POST(req) {
 
         const userTasks = await db.userTasks.findMany({
             where: { userId: user_id, completed: true },
-            select: { tasktitle: true, points: true, image: true, text: true, completed: true, taskdesc: true }
+            select: { id: true, tasktitle: true, points: true, image: true, text: true, completed: true, taskdesc: true, textInput: true, imageFile: true, checked: true }
         });
 
         return NextResponse.json(userTasks, { status: 200 });
     } catch (error) {
         console.error('Error fetching user tasks:', error);
-        return NextResponse.error({ status: 500, statusText: "Internal Server Error", body: "Error fetching user tasks" });
+        return NextResponse.json({ error: "Error fetching user tasks" }, { status: 500 });
     }
 }

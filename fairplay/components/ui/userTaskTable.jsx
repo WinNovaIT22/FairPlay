@@ -24,8 +24,9 @@ const columns = [
 
 const INITIAL_VISIBLE_COLUMNS = ["tasktitle", "points", "status", "action"];
 
-export default function TasksTable() {
+export default function TasksTable({ initialTasks = [] }) {
   const [selectedKeys, setSelectedKeys] = useState(new Set([]));
+  const [tasks, setTasks] = useState(initialTasks);
   const [visibleColumns, setVisibleColumns] = useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
@@ -33,7 +34,6 @@ export default function TasksTable() {
     column: "tasktitle",
     direction: "ascending",
   });
-  const [tasksData, setTasksData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -50,7 +50,7 @@ export default function TasksTable() {
           ...task,
           status: task.completed ? "Suoritettu" : "Suorittamatta",
         }));
-        setTasksData(mappedTasks);
+        setTasks(mappedTasks);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -60,11 +60,20 @@ export default function TasksTable() {
     fetchTasks();
   }, []);
 
+  const handleTaskCompleted = (updatedTask) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === updatedTask.id ? updatedTask : task
+      )
+    );
+  };
+
   const sortedTasksData = useMemo(() => {
-    const completedTasks = tasksData.filter((task) => task.completed);
-    const incompleteTasks = tasksData.filter((task) => !task.completed);
+    if (!tasks) return [];
+    const completedTasks = tasks.filter((task) => task.completed);
+    const incompleteTasks = tasks.filter((task) => !task.completed);
     return incompleteTasks.concat(completedTasks);
-  }, [tasksData]);
+  }, [tasks]);
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -77,15 +86,23 @@ export default function TasksTable() {
     const cellValue = task[columnKey];
     switch (columnKey) {
       case "status":
-        return (
-          <Chip
-            color={task.completed ? "success" : "danger"}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
+        if (task.admintext !== null) {
+          return (
+            <Chip color="warning" size="sm" variant="flat">
+              Palautettu
+            </Chip>
+          );
+        } else {
+          return (
+            <Chip
+              color={task.completed ? "success" : "danger"}
+              size="sm"
+              variant="flat"
+            >
+              {task.completed ? "Suoritettu" : "Suorittamatta"}
+            </Chip>
+          );
+        }
       case "action":
         return (
           <Button
@@ -104,20 +121,20 @@ export default function TasksTable() {
     }
   }, []);
 
-  const completedTasks = tasksData.filter((task) => task.completed).length;
-  const progressValue = tasksData.length > 0 ? (completedTasks / tasksData.length) * 100 : 0;
+  const completedTasks = tasks.filter((task) => task.completed).length;
+  const progressValue = tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
 
   const topContent = useMemo(() => {
     return (
       <>
         <div className="flex flex-col items-center">
           <span className="text-black text-small mt-6">
-            {tasksData.length} tehtävää
+            {tasks.length} tehtävää
           </span>
         </div>
       </>
     );
-  }, [tasksData.length]);
+  }, [tasks.length]);
 
   const bottomContent = useMemo(() => {
     return (
@@ -125,6 +142,7 @@ export default function TasksTable() {
         <Progress
           aria-label="Task completion progress"
           size="md"
+          label="Suoritettu"
           value={progressValue}
           color="success"
           showValueLabel={true}
@@ -176,6 +194,7 @@ export default function TasksTable() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           taskData={selectedTask}
+          onTaskCompleted={handleTaskCompleted}
         />
       )}
     </div>

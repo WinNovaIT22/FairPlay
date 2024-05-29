@@ -16,7 +16,6 @@ import {
   DropdownMenu,
   DropdownItem,
   Pagination,
-  Progress
 } from "@nextui-org/react";
 import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
 import ModalComponent from "@/components/ui/usersTable";
@@ -30,8 +29,6 @@ const columns = [
   { name: "ETUNIMI", uid: "firstname" },
   { name: "SUKUNIMI", uid: "lastname" },
   { name: "SÄHKÖPOSTI", uid: "email" },
-  { name: "AJONEUVO", uid: "vehicle" },
-  { name: "EDISTYMINEN", uid: "progress", sortable: true },
   { name: "ROOLI", uid: "role", sortable: true },
 ];
 
@@ -45,7 +42,7 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const INITIAL_VISIBLE_COLUMNS = ["firstname", "lastname", "email", "role", "progress"];
+const INITIAL_VISIBLE_COLUMNS = ["firstname", "lastname", "email", "role"];
 
 export default function Users() {
   const [filterValue, setFilterValue] = useState("");
@@ -54,13 +51,14 @@ export default function Users() {
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [rowsPerPage, setRowsPerPage] = useState(50);
-  const [roleFilter, setRoleFilter] = React.useState("all");
+  const [roleFilter, setRoleFilter] = useState("all");
   const [sortDescriptor, setSortDescriptor] = useState({
     column: "firstname",
     direction: "ascending",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
+  const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
   const [usersData, setUsersData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,58 +70,48 @@ export default function Users() {
     setIsModalOpen(true);
   };
 
-useEffect(() => {
-  async function fetchData() {
-    try {
-      const [userResponse, tasksResponse] = await Promise.all([
-        fetch(`/api/admin/getUserTable`),
-        fetch(`/api/admin/getUserTasks`),
-      ]);
-
-      if (!userResponse.ok) {
-        throw new Error("Failed to fetch users");
-      }
-
-      if (!tasksResponse.ok) {
-        throw new Error("Failed to fetch user tasks");
-      }
-
-      const userData = await userResponse.json();
-      const tasksData = await tasksResponse.json();
-
-      // Map tasks to users for progress calculation
-      const userTaskMap = tasksData.tasks.reduce((acc, task) => {
-        if (!acc[task.userId]) {
-          acc[task.userId] = { tasksCompleted: 0, totalTasks: 0 };
+  const handleUpdateUserRole = (userId, newRole) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === userId ? { ...user, role: newRole } : user
+      )
+    );
+  };
+  
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Fetch user data
+        const userResponse = await fetch(`/api/admin/getUserTable`, {
+          method: 'GET',
+        });
+  
+        // Check if the userResponse is OK (status 200-299)
+        if (!userResponse.ok) {
+          const errorText = await userResponse.text();
+          throw new Error(`Failed to fetch users: ${userResponse.status} ${errorText}`);
         }
-        acc[task.userId].totalTasks += 1;
-        if (task.completed) {
-          acc[task.userId].tasksCompleted += 1;
-        }
-        return acc;
-      }, {});
-
-      const mappedUsers = userData.user.map((user) => ({
-        id: user.id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-        vehicle: user.vehicle || "",
-        role: user.role,
-        tasksCompleted: userTaskMap[user.id]?.tasksCompleted || 0,
-        totalTasks: userTaskMap[user.id]?.totalTasks || 0,
-      }));
-
-      setUsersData(mappedUsers);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      setIsLoading(false);
+  
+        const userData = await userResponse.json();
+  
+        const mappedUsers = userData.user.map((user) => ({
+          id: user.id,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+          role: user.role,
+        }));
+  
+        setUsersData(mappedUsers);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
+      }
     }
-  }
-
-  fetchData();
-}, []);
+  
+    fetchData();
+  }, []);
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -141,15 +129,11 @@ useEffect(() => {
       (user) =>
         user.firstname.toLowerCase().includes(filterValue.toLowerCase()) ||
         user.lastname.toLowerCase().includes(filterValue.toLowerCase()) ||
-        user.email.toLowerCase().includes(filterValue.toLowerCase()) ||
-        user.vehicle.toLowerCase().includes(filterValue.toLowerCase())
+        user.email.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
-    if (
-      roleFilter !== "all" &&
-      Array.from(roleFilter).length !== roleOptions.length
-    ) {
+    if (roleFilter !== "all" && Array.from(roleFilter).length !== roleOptions.length) {
       filteredUsers = filteredUsers.filter((user) =>
         Array.from(roleFilter).includes(user.role)
       );
@@ -187,15 +171,6 @@ useEffect(() => {
             {cellValue}
           </Chip>
         );
-      // case "progress":
-      //   return (
-      //     <Progress 
-      //       aria-label="User progress" 
-      //       size="sm" 
-      //       value={cellValue} 
-      //       color="primary"
-      //     />
-      //   );
       default:
         return cellValue;
     }
@@ -258,7 +233,7 @@ useEffect(() => {
             <Input
               isClearable
               className="w-full sm:max-w-[36%]"
-              placeholder="Etsi nimellä, sähköpostilla tai ajoneuvolla"
+              placeholder="Etsi nimellä tai sähköpostilla"
               value={filterValue}
               onClear={() => onClear()}
               onValueChange={onSearchChange}
@@ -406,6 +381,7 @@ useEffect(() => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           modalData={modalData}
+          onUpdateUserRole={handleUpdateUserRole}
         />
       </div>
     </>

@@ -62,6 +62,8 @@ model UserTasks {
   tasktitle String?
   image     Boolean?
   text      Boolean?
+  imageFile String?
+  textInput String?
   checked   Boolean?
   year      Int?
   task      Tasks    @relation(fields: [taskId], references: [id], onDelete: Cascade)

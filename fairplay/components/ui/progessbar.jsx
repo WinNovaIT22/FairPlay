@@ -33,6 +33,7 @@ export default function ProgressBar() {
   return (
     <Progress
     aria-label="Task completion progress"
+    label="Suoritettu"
     size="md"
     value={progressValue}
     color="success"

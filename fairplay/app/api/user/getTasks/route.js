@@ -42,6 +42,7 @@ export async function GET(req) {
         text: true,
         again: true,
         completed: true,
+        admintext: true,
         points: true,
       },
     });

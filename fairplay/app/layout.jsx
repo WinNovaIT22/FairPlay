@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 export const metadata = {
-  title: "FairPlay",
+  title: "FairPlay - Konepyöräklubi",
   description: "FairPlay kisasysteemi",
 };
 

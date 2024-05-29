@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Modal,
@@ -21,26 +19,39 @@ import {
 import {
   MdBlock,
   MdOutlineAdminPanelSettings,
-  MdOutlineRemoveCircleOutline,
   MdLockOutline,
 } from "react-icons/md";
 import { roleColorMap } from "@/utils/rolecolormap.js";
 import { FaMotorcycle } from "react-icons/fa6";
 import PasswordModal from "@/components/modals/changeUserPasswordAdmin";
 import { MdOutlineTask } from "react-icons/md";
+import AdminRejectTask from "@/components/modals/adminRecjectTask";
 
-const ModalComponent = ({ isOpen, onClose, modalData }) => {
+const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [userVehicles, setUserVehicles] = useState(null);
-  const [userTasks, setUserTasks] = useState(null);
+  const [userVehicles, setUserVehicles] = useState([]);
+  const [userTasks, setUserTasks] = useState([]);
+  const [isRejectTaskOpen, setIsRejectTaskOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userRole, setUserRole] = useState(modalData ? modalData.role : "");
+
+  const openRejectModal = (task) => {
+    setSelectedTask(task);
+    setIsRejectTaskOpen(true);
+  };
 
   const openPasswordModal = useCallback((userData) => {
     setSelectedUser(userData);
     setIsPasswordModalOpen(true);
   }, []);
+
+  const uncheckedTasks = userTasks.filter((task) => !task.checked);
+  const checkedTasks = userTasks.filter((task) => task.checked);
+
+  uncheckedTasks.sort((a, b) => a.tasktitle.localeCompare(b.tasktitle));
+  const orderedTasks = [...uncheckedTasks, ...checkedTasks];
 
   useEffect(() => {
     if (modalData && modalData.role !== userRole) {
@@ -96,6 +107,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ user_id: modalData.id }),
+          
         });
 
         if (response.ok) {
@@ -105,7 +117,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
           console.error("Failed to fetch user tasks:", response.statusText);
         }
       } catch (error) {
-        console.error("Error fetching user vehicles:", error);
+        console.error("Error fetching user tasks:", error);
       } finally {
         setIsLoading(false);
       }
@@ -131,37 +143,12 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
       if (response.ok) {
         console.log("User role updated successfully");
         setUserRole(newRole);
+        onUpdateUserRole(modalData.id, newRole);
       } else {
         console.error("Failed to update user role");
       }
     } catch (error) {
       console.error("Error updating user role:", error);
-    }
-  };
-  
-  const updateUserVehicleInspection = async (vehicleId, inspected) => {
-    try {
-      const response = await fetch("/api/user/updateVehicleInspection", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ vehicleId, inspected }),
-      });
-
-      if (response.ok) {
-        console.log("Vehicle inspection status updated successfully");
-        // Update local state to reflect the change
-        setUserVehicles(prevVehicles =>
-          prevVehicles.map(vehicle =>
-            vehicle.id === vehicleId ? { ...vehicle, inspected } : vehicle
-          )
-        );
-      } else {
-        console.error("Failed to update vehicle inspection status");
-      }
-    } catch (error) {
-      console.error("Error updating vehicle inspection status:", error);
     }
   };
 
@@ -189,11 +176,17 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
   const currentYear = new Date().getFullYear();
   const formatDateHelsinki = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' });
+    return date.toLocaleString("fi-FI", { timeZone: "Europe/Helsinki" });
   };
-  
+
   return (
-    <Modal size={"full"} placement={"center"} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      size={"full"}
+      placement={"center"}
+      isOpen={isOpen}
+      onClose={onClose}
+      scrollBehavior="inside"
+    >
       <PasswordModal
         isOpen={isPasswordModalOpen}
         onClose={() => setIsPasswordModalOpen(false)}
@@ -203,7 +196,7 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
         <ModalHeader>Profiili</ModalHeader>
         <ModalBody>
           {isLoading ? (
-            <p>Loading...</p>
+            <p>Lataa...</p>
           ) : (
             <>
               <div>
@@ -229,15 +222,17 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                         title={
                           <div className="flex items-center text-sm">
                             <FaMotorcycle size={18} className="mr-3" />
-                            <div>{vehicle.vehicle} - {vehicle.inspected ? (
-                              <span className="text-green-500">
-                                Katsastettu kaudelle {currentYear}
-                              </span>
-                            ) : (
-                              <span className="text-red-500">
-                                Ei katsastettu
-                              </span>
-                            )}
+                            <div>
+                              {vehicle.vehicle} -{" "}
+                              {vehicle.inspected ? (
+                                <span className="text-green-500">
+                                  Katsastettu kaudelle {currentYear}
+                                </span>
+                              ) : (
+                                <span className="text-red-500">
+                                  Ei katsastettu
+                                </span>
+                              )}
                             </div>
                           </div>
                         }
@@ -245,7 +240,8 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                         {vehicle.inspected && vehicle.inspectedImage ? (
                           <div className="flex justify-center items-center flex-col">
                             <p className="text-sm">
-                              Käyttäjän lähettämä kuva, {formatDateHelsinki(vehicle.createdAt)}:
+                              Käyttäjän lähettämä kuva,{" "}
+                              {formatDateHelsinki(vehicle.createdAt)}:
                             </p>
                             <Image
                               alt="InspectedTrue"
@@ -253,10 +249,13 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                               src={vehicle.inspectedImage}
                               className="my-3"
                             />
-                             <Button
+                            <Button
                               variant="flat"
                               color="danger"
-                              onClick={() => updateUserVehicleInspection(vehicle.id, false)}
+                              className="w-full"
+                              onClick={() =>
+                                updateTaskInspection(vehicle.id, false)
+                              }
                             >
                               Hylkää katsastus
                             </Button>
@@ -266,7 +265,9 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                             variant="flat"
                             color="success"
                             className="w-full"
-                            onClick={() => updateUserVehicleInspection(vehicle.id, true)}
+                            onClick={() =>
+                              updateTaskInspection(vehicle.id, true)
+                            }
                           >
                             Merkitse katsastetuksi
                           </Button>
@@ -278,98 +279,150 @@ const ModalComponent = ({ isOpen, onClose, modalData }) => {
                   <p>Käyttäjällä ei ole yhtäkään ajoneuvoa</p>
                 )}
               </div>
-              <div className="text-center text-xl">
+              <div className="text-center text-xl mt-5">
                 Suoritetut suoritukset
                 {Array.isArray(userTasks) && userTasks.length > 0 ? (
                   <Accordion className="mx-auto max-w-lg">
-                    {userTasks.map((task, index) => (
+                    {orderedTasks.map((task, index) => (
                       <AccordionItem
                         key={index}
                         title={
                           <div className="flex items-center text-sm">
                             <MdOutlineTask size={18} className="mr-3" />
-                            <div>{task.tasktitle} - <span className="text-green-500">Suoritettu</span></div>
+                            <div>
+                              {task.tasktitle} -{" "}
+                              {task.checked ? (
+                                <span className="text-green-500">
+                                  Tarkistettu
+                                </span>
+                              ) : (
+                                <span className="text-yellow-500">
+                                  Tarkistamatta
+                                </span>
+                              )}
+                            </div>
                           </div>
                         }
                       >
+                        <div className="flex justify-center items-center flex-col">
+                          {task.textInput && (
+                            <>
+                              <p className="text-sm">
+                                Käyttäjän lähettämä teksti:
+                              </p>
+                              <p className="text-sm mb-3">{task.textInput}</p>
+                            </>
+                          )}
+                          {task.imageFile && (
+                            <div>
+                              <p className="text-sm">
+                                Käyttäjän lähettämä kuva:
+                              </p>
+                              <Image
+                                alt="TaskImage"
+                                width={300}
+                                src={task.imageFile}
+                                className="my-3"
+                              />
+                            </div>
+                          )}
+                          {task.checked ? (
+                            <Button
+                              variant="flat"
+                              color="danger"
+                              className="w-full"
+                              onClick={() => openRejectModal(task)}
+                            >
+                              Hylkää suoritus
+                            </Button>
+                          ) : (
+                            <div className="flex flex-col w-full space-y-2">
+                              <Button
+                                variant="flat"
+                                color="success"
+                                onClick={() =>
+                                  updateTaskInspection(task.id, true)
+                                }
+                              >
+                                Merkitse tarkistetuksi
+                              </Button>
+                              <Button
+                                variant="flat"
+                                color="danger"
+                                onClick={() => openRejectModal(task)}
+                              >
+                                Hylkää suoritus
+                              </Button>
+                            </div>
+                          )}
+                        </div>
                       </AccordionItem>
                     ))}
                   </Accordion>
                 ) : (
-                  <p>Käyttäjällä ei ole yhtäkään ajoneuvoa</p>
+                  <p>Käyttäjä ei ole suorittanut yhtäkään suoritusta</p>
                 )}
               </div>
             </>
           )}
+          <div className="text-center mt-10 flex justify-center">
+            <div className="flex flex-wrap justify-center space-x-3">
+              <Dropdown placement="bottom-left">
+                <DropdownTrigger>
+                  <Button>
+                    <MdOutlineAdminPanelSettings size={20} className="mr-1" />
+                    Päivitä käyttäjän rooli
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Dynamic Actions">
+                  <DropdownSection title="Valitse käyttäjän rooli">
+                    {["ylläpitäjä", "kilpailija", "valvoja"].map((role) => (
+                      <DropdownItem
+                        key={role}
+                        color={roleColorMap[role]}
+                        startContent={<MdOutlineAdminPanelSettings size={18} />}
+                        onClick={() => updateUserRole(role)}
+                      >
+                        {role}
+                      </DropdownItem>
+                    ))}
+                  </DropdownSection>
+                </DropdownMenu>
+              </Dropdown>
+              <Button
+                color="danger"
+                variant="flat"
+                className="flex items-center mx-auto"
+                onClick={blockUser}
+              >
+                <MdBlock size={20} className="mr-1" />
+                Poista käyttäjä kisasta
+              </Button>
+              <Button
+                color="warning"
+                variant="flat"
+                className="flex items-center mx-auto"
+                onClick={() => openPasswordModal(modalData)}
+              >
+                <MdLockOutline size={20} className="mr-1" />
+                Vaihda käyttäjän salasana
+              </Button>
+            </div>
+          </div>
         </ModalBody>
         <ModalFooter>
-          <Button variant="light" onPress={onClose}>Sulje</Button>
-          <Dropdown>
-            <DropdownTrigger>
-              <Button variant="flat">Toiminnot</Button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Actions">
-              <DropdownSection title="Roolit" showDivider>
-                {modalData.role !== "ylläpitäjä" && (
-                  <DropdownItem
-                    key="admin"
-                    className="text-success"
-                    description="Kaikki oikeudet"
-                    color="success"
-                    onClick={() => updateUserRole("ylläpitäjä")}
-                    startContent={<MdOutlineAdminPanelSettings />}
-                  >
-                    Anna ylläpito-oikeudet
-                  </DropdownItem>
-                )}
-                {modalData.role !== "valvoja" && (
-                  <DropdownItem
-                    key="supervisor"
-                    className="text-primary"
-                    description="Näkee tehtävät ja tarkistaa niitä"
-                    color="primary"
-                    onClick={() => updateUserRole("valvoja")}
-                    startContent={<MdOutlineAdminPanelSettings />}
-                  >
-                    Anna valvoja-oikeudet
-                  </DropdownItem>
-                )}
-                {(modalData.role === "valvoja" ||
-                  modalData.role === "ylläpitäjä") && (
-                  <DropdownItem
-                    key="remove"
-                    className="text-danger"
-                    description="Antaa käyttäjälle kilpailija-roolin"
-                    color="danger"
-                    onClick={() => updateUserRole("kilpailija")}
-                    startContent={<MdOutlineRemoveCircleOutline />}
-                  >
-                    Nollaa oikeudet
-                  </DropdownItem>
-                )}
-              </DropdownSection>
-              <DropdownItem
-                key="change-password"
-                className="text-warning"
-                color="warning"
-                onClick={() => openPasswordModal(modalData)}
-                startContent={<MdLockOutline />}
-              >
-                Vaihda salasana
-              </DropdownItem>
-              <DropdownItem
-                key="block"
-                className="text-danger"
-                color="danger"
-                onClick={blockUser}
-                startContent={<MdBlock />}
-              >
-                Poista kisasta
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <Button variant="light" onPress={onClose}>
+            Sulje
+          </Button>
         </ModalFooter>
       </ModalContent>
+      {isRejectTaskOpen && (
+        <AdminRejectTask
+          isOpen={isRejectTaskOpen}
+          onClose={() => setIsRejectTaskOpen(false)}
+          modalData={selectedTask}
+        />
+      )}
     </Modal>
   );
 };
