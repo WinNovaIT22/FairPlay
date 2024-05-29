@@ -28,7 +28,49 @@ import { MdOutlineTask } from "react-icons/md";
 import { FaRegFileAlt } from "react-icons/fa";
 import AdminRejectTask from "@/components/modals/adminRecjectTask";
 import Zoom from 'react-medium-image-zoom';
+import { jsPDF } from "jspdf";
 import 'react-medium-image-zoom/dist/styles.css';
+
+const generatePDF = (userVehicles, userTasks) => {
+  if (!userVehicles || !userTasks) {
+    console.error('Missing data to generate PDF');
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  // // Add user information to the PDF
+  // doc.text(`User Information:
+  // Name: ${userData.firstname} ${userData.lastname}
+  // Email: ${userData.email}
+  // Role: ${userData.role}`, 10, 10);
+
+  // Add user vehicles to the PDF
+  doc.text("User Vehicles:", 10, 30);
+  if (Array.isArray(userVehicles) && userVehicles.length > 0) {
+    userVehicles.forEach((vehicle, index) => {
+      doc.text(`${index + 1}. ${vehicle.vehicle} - ${vehicle.inspected ? 'Inspected' : 'Not Inspected'}`, 20, 50 + (index * 20));
+    });
+  } else {
+    doc.text("No vehicles found", 20, 50);
+  }
+
+  // Add user tasks to the PDF
+  doc.text("User Tasks:", 10, 90);
+  if (Array.isArray(userTasks) && userTasks.length > 0) {
+    userTasks.forEach((task, index) => {
+      doc.text(`${index + 1}. ${task.tasktitle} - ${task.checked ? 'Checked' : 'Unchecked'}`, 20, 110 + (index * 20));
+    });
+  } else {
+    doc.text("No tasks found", 20, 110);
+  }
+
+  // Add total points to the PDF
+  // doc.text(`Total Points: ${totalPoints}`, 10, 230);
+
+  // Save the PDF
+  doc.save("user_info.pdf");
+};
 
 const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -39,6 +81,10 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userRole, setUserRole] = useState(modalData ? modalData.role : "");
+
+  const handleDownloadPDF = () => {
+    generatePDF(userVehicles, userTasks);
+  };
 
   const openRejectModal = (task) => {
     setSelectedTask(task);
@@ -462,7 +508,7 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
                 variant="flat"
                 color="primary"
                 className="flex items-center mx-auto"
-                onClick={() => openPasswordModal(modalData)}
+                onClick={handleDownloadPDF}
               >
                 <FaRegFileAlt size={20} />
                 Lataa PDF
