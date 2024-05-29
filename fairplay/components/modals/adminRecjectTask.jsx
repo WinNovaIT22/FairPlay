@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Textarea } from "@nextui-org/react";
 
-const AdminRejectTask = ({ isOpen, onClose, modalData }) => {
+const AdminRejectTask = ({ isOpen, onClose, modalData, onTaskRejected }) => {
   const [rejectReason, setRejectReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -21,6 +21,7 @@ const AdminRejectTask = ({ isOpen, onClose, modalData }) => {
 
       if (response.ok) {
         console.log("Task inspection status updated successfully");
+        onTaskRejected(modalData.id);
         onClose();
       } else {
         console.error("Failed to update task inspection status:", response.statusText);
@@ -57,5 +58,6 @@ const AdminRejectTask = ({ isOpen, onClose, modalData }) => {
     </Modal>
   );
 };
+
 
 export default AdminRejectTask;

@@ -16,19 +16,24 @@ import {
   DropdownMenu,
   DropdownItem,
   Pagination,
+  Progress,
 } from "@nextui-org/react";
-import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
+import { IoSearchOutline } from "react-icons/io5";
 import ModalComponent from "@/components/ui/usersTable";
 import Loading from "@/app/loading";
 import { roleColorMap } from "@/utils/rolecolormap.js";
 import { ToastContainer } from "react-toastify";
+import { IoMdPrint, IoMdRemoveCircle } from "react-icons/io";
+import { FiPlusSquare } from "react-icons/fi";
 import "react-toastify/dist/ReactToastify.css";
-import { FaHome } from "react-icons/fa";
+import { FaMasksTheater } from "react-icons/fa6";
+import { FaHome, FaEye } from "react-icons/fa";
 
 const columns = [
   { name: "ETUNIMI", uid: "firstname" },
   { name: "SUKUNIMI", uid: "lastname" },
   { name: "SÄHKÖPOSTI", uid: "email" },
+  { name: "EDISTYMINEN", uid: "progress", sortable: true },
   { name: "ROOLI", uid: "role", sortable: true },
 ];
 
@@ -42,20 +47,15 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const INITIAL_VISIBLE_COLUMNS = ["firstname", "lastname", "email", "role"];
+const INITIAL_VISIBLE_COLUMNS = ["firstname", "lastname", "email", "role", "progress"];
 
 export default function Users() {
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState(new Set([]));
-  const [visibleColumns, setVisibleColumns] = useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
-  );
+  const [visibleColumns, setVisibleColumns] = useState(new Set(INITIAL_VISIBLE_COLUMNS));
   const [rowsPerPage, setRowsPerPage] = useState(50);
   const [roleFilter, setRoleFilter] = useState("all");
-  const [sortDescriptor, setSortDescriptor] = useState({
-    column: "firstname",
-    direction: "ascending",
-  });
+  const [sortDescriptor, setSortDescriptor] = useState({ column: "firstname", direction: "ascending" });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [users, setUsers] = useState([]);
@@ -81,27 +81,26 @@ export default function Users() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Fetch user data
         const userResponse = await fetch(`/api/admin/getUserTable`, {
           method: 'GET',
         });
-  
-        // Check if the userResponse is OK (status 200-299)
+
         if (!userResponse.ok) {
           const errorText = await userResponse.text();
           throw new Error(`Failed to fetch users: ${userResponse.status} ${errorText}`);
         }
-  
+
         const userData = await userResponse.json();
-  
+
         const mappedUsers = userData.user.map((user) => ({
           id: user.id,
           firstname: user.firstname,
           lastname: user.lastname,
           email: user.email,
           role: user.role,
+          tasks: user.tasks,
         }));
-  
+
         setUsersData(mappedUsers);
         setIsLoading(false);
       } catch (error) {
@@ -109,13 +108,12 @@ export default function Users() {
         setIsLoading(false);
       }
     }
-  
+
     fetchData();
   }, []);
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
-
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
     );
@@ -147,29 +145,65 @@ export default function Users() {
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-
     return filteredItems.slice(start, end);
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = useMemo(() => {
     return [...items].sort((a, b) => {
+      if (sortDescriptor.column === "progress") {
+        const aCompletedTasks = a.tasks.filter(task => task.completed).length;
+        const aUncheckedTasks = a.tasks.filter(task => !task.checked).length; // Count unchecked tasks
+        const bCompletedTasks = b.tasks.filter(task => task.completed).length;
+        const bUncheckedTasks = b.tasks.filter(task => !task.checked).length; // Count unchecked tasks
+  
+        const primaryCmp = bCompletedTasks - aCompletedTasks;
+        if (primaryCmp !== 0) return sortDescriptor.direction === "ascending" ? -primaryCmp : primaryCmp;
+  
+        const secondaryCmp = bUncheckedTasks - aUncheckedTasks; // Sort by unchecked tasks count
+        return sortDescriptor.direction === "ascending" ? -secondaryCmp : secondaryCmp;
+      }
+  
       const first = a[sortDescriptor.column];
       const second = b[sortDescriptor.column];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
-
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
   const renderCell = useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
-
+  
     switch (columnKey) {
       case "role":
         return (
           <Chip color={roleColorMap[user.role]} size="sm" variant="flat">
             {cellValue}
           </Chip>
+        );
+      case "progress":
+        const completedTasks = user.tasks.filter(task => task.completed).length;
+        const checkedTasks = user.tasks.filter(task => task.checked).length;
+        const totalTasks = user.tasks.length;
+        const completedPercentage = totalTasks > 0 ? ((completedTasks - checkedTasks) / totalTasks) * 100 : 0;
+        const checkedPercentage = totalTasks > 0 ? (checkedTasks / totalTasks) * 100 : 0;
+  
+        return (
+          <div className="flex flex-col gap-1">
+            <Progress
+              aria-label="Task checked progress"
+              value={checkedPercentage}
+              color="success"
+              size="sm"
+              className="w-44 md:w-64"
+            />
+            <Progress
+              aria-label="Task completion progress"
+              value={completedPercentage}
+              color="warning"
+              size="sm"
+              className="w-44 md:w-64"
+            />
+          </div>
         );
       default:
         return cellValue;
@@ -242,7 +276,32 @@ export default function Users() {
             <div className="flex gap-3">
               <Dropdown>
                 <DropdownTrigger className="sm:flex">
-                  <Button variant="solid">Rooli</Button>
+                  <Button isIconOnly variant="solid">
+                    <FiPlusSquare size={20} />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Static Actions"
+                >
+                  <DropdownItem key="pdf">
+                    <div className="flex items-center">
+                      <IoMdPrint className="mr-2" />
+                      Tulosta PDF
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem key="remove">
+                    <div className="flex items-center">
+                      <IoMdRemoveCircle className="mr-2" />
+                      Poista katsastukset
+                    </div>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+              <Dropdown>
+                <DropdownTrigger className="sm:flex">
+                  <Button isIconOnly variant="solid">
+                    <FaMasksTheater size={20} />
+                  </Button>
                 </DropdownTrigger>
                 <DropdownMenu
                   disallowEmptySelection
@@ -253,8 +312,8 @@ export default function Users() {
                   onSelectionChange={setRoleFilter}
                 >
                   {roleOptions.map((role) => (
-                    <DropdownItem key={role.uid} className="capitalize">
-                      {capitalize(role.name)}
+                    <DropdownItem key={role.uid} >
+                      {role.name}
                     </DropdownItem>
                   ))}
                 </DropdownMenu>
@@ -262,7 +321,7 @@ export default function Users() {
               <Dropdown>
                 <DropdownTrigger className="sm:flex">
                   <Button isIconOnly variant="solid">
-                    <IoEyeOutline size={23} />
+                    <FaEye size={23} />
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu

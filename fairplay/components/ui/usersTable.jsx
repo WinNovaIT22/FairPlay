@@ -22,10 +22,13 @@ import {
   MdLockOutline,
 } from "react-icons/md";
 import { roleColorMap } from "@/utils/rolecolormap.js";
-import { FaMotorcycle } from "react-icons/fa6";
+import { FaMotorcycle, FaRegStar } from "react-icons/fa6";
 import PasswordModal from "@/components/modals/changeUserPasswordAdmin";
 import { MdOutlineTask } from "react-icons/md";
+import { FaRegFileAlt } from "react-icons/fa";
 import AdminRejectTask from "@/components/modals/adminRecjectTask";
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
 
 const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -42,6 +45,10 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
     setIsRejectTaskOpen(true);
   };
 
+  const handleTaskRejection = (taskId) => {
+    setUserTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+  };
+
   const openPasswordModal = useCallback((userData) => {
     setSelectedUser(userData);
     setIsPasswordModalOpen(true);
@@ -52,6 +59,34 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
 
   uncheckedTasks.sort((a, b) => a.tasktitle.localeCompare(b.tasktitle));
   const orderedTasks = [...uncheckedTasks, ...checkedTasks];
+
+
+  const updateTaskInspection = async (taskId) => {
+    try {
+      const response = await fetch("/api/admin/completeTask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ taskId }),
+      });
+  
+      if (response.ok) {
+        const updatedTask = await response.json();
+        console.log("Task inspection status updated successfully");
+  
+        setUserTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === taskId ? { ...task, checked: updatedTask.checked } : task
+          )
+        );
+      } else {
+        console.error("Failed to update task inspection status:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating task inspection status:", error);
+    }
+  };
 
   useEffect(() => {
     if (modalData && modalData.role !== userRole) {
@@ -243,12 +278,14 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
                               Käyttäjän lähettämä kuva,{" "}
                               {formatDateHelsinki(vehicle.createdAt)}:
                             </p>
-                            <Image
-                              alt="InspectedTrue"
-                              width={300}
-                              src={vehicle.inspectedImage}
-                              className="my-3"
-                            />
+                            <Zoom key={index}>
+                              <Image
+                                alt="InspectedTrue"
+                                width={300}
+                                src={vehicle.inspectedImage}
+                                className="my-3"
+                              />
+                            </Zoom>
                             <Button
                               variant="flat"
                               color="danger"
@@ -318,12 +355,14 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
                               <p className="text-sm">
                                 Käyttäjän lähettämä kuva:
                               </p>
-                              <Image
-                                alt="TaskImage"
-                                width={300}
-                                src={task.imageFile}
-                                className="my-3"
-                              />
+                              <Zoom key={index}>
+                                <Image
+                                  alt="TaskImage"
+                                  width={300}
+                                  src={task.imageFile}
+                                  className="my-3"
+                                />
+                              </Zoom>
                             </div>
                           )}
                           {task.checked ? (
@@ -365,13 +404,16 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
               </div>
             </>
           )}
-          <div className="text-center mt-10 flex justify-center">
+          <div className="text-center mt-20 flex justify-center">
             <div className="flex flex-wrap justify-center space-x-3">
               <Dropdown placement="bottom-left">
                 <DropdownTrigger>
-                  <Button>
-                    <MdOutlineAdminPanelSettings size={20} className="mr-1" />
-                    Päivitä käyttäjän rooli
+                  <Button
+                   color="success"
+                   variant="flat"
+                  >
+                    <MdOutlineAdminPanelSettings size={20} />
+                    Muuta rooli
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Dynamic Actions">
@@ -395,8 +437,8 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
                 className="flex items-center mx-auto"
                 onClick={blockUser}
               >
-                <MdBlock size={20} className="mr-1" />
-                Poista käyttäjä kisasta
+                <MdBlock size={20} />
+                Poista kisasta
               </Button>
               <Button
                 color="warning"
@@ -404,8 +446,26 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
                 className="flex items-center mx-auto"
                 onClick={() => openPasswordModal(modalData)}
               >
-                <MdLockOutline size={20} className="mr-1" />
-                Vaihda käyttäjän salasana
+                <MdLockOutline size={20} />
+                Vaihda salasana
+              </Button>
+              <Button
+                color="secondary"
+                variant="flat"
+                className="flex items-center mx-auto"
+                onClick={() => openPasswordModal(modalData)}
+              >
+                <FaRegStar size={20} />
+                Muuta pisteitä
+              </Button>
+              <Button
+                variant="flat"
+                color="primary"
+                className="flex items-center mx-auto"
+                onClick={() => openPasswordModal(modalData)}
+              >
+                <FaRegFileAlt size={20} />
+                Lataa PDF
               </Button>
             </div>
           </div>
@@ -421,6 +481,7 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
           isOpen={isRejectTaskOpen}
           onClose={() => setIsRejectTaskOpen(false)}
           modalData={selectedTask}
+          onTaskRejected={handleTaskRejection}
         />
       )}
     </Modal>

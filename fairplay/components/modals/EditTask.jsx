@@ -43,10 +43,11 @@ const EditTask = ({ isOpen, onClose, taskData, year }) => {
           year,
         }),
       });
-  
+
       if (response.ok) {
-        console.log("Task updated successfully.");
-        window.location.reload(true);
+        toast.success("Suoritus muokattu ja päivittyy 2min sisällä.");
+        onTaskUpdated();
+        onClose();
       } else {
         console.error("Failed to update task:", response.statusText);
       }

@@ -18,6 +18,7 @@ model User {
   role      String
   blocked   Boolean     @default(false)
   city      String      @default("Pori")
+  totalPoints Int       @default(0)
   tasks     UserTasks[]
 }
 
