@@ -239,7 +239,7 @@ export default function Users() {
                 <FaHome size={24} color="black" />
               </a>
             </div>
-            Estetyt käyttäjät - {usersData.length} estetty
+            Kisasta poistetut - {usersData.length} poistettu
           </div>
           <div className="flex justify-between gap-3 items-end">
             <Input

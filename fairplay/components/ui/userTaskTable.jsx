@@ -62,9 +62,7 @@ export default function TasksTable({ initialTasks = [] }) {
 
   const handleTaskCompleted = (updatedTask) => {
     setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === updatedTask.id ? updatedTask : task
-      )
+      prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
   };
 
@@ -108,6 +106,8 @@ export default function TasksTable({ initialTasks = [] }) {
           <Button
             variant="bordered"
             size="sm"
+            color={task.completed ? "success" : "default"}
+            isDisabled ={task.completed}
             onClick={() => {
               setSelectedTask(task);
               setIsModalOpen(true);
@@ -122,7 +122,8 @@ export default function TasksTable({ initialTasks = [] }) {
   }, []);
 
   const completedTasks = tasks.filter((task) => task.completed).length;
-  const progressValue = tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
+  const progressValue =
+    tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
 
   const topContent = useMemo(() => {
     return (
@@ -176,12 +177,12 @@ export default function TasksTable({ initialTasks = [] }) {
 
         <TableBody
           emptyContent={
-            isLoading ? <Loading /> : "Ei suorituksia valitulle vuodelle"
+            isLoading ? <Loading /> : "Ei suorituksia löydetty"
           }
           items={sortedTasksData}
         >
           {(item) => (
-            <TableRow key={item.id} className="cursor-pointer">
+            <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}

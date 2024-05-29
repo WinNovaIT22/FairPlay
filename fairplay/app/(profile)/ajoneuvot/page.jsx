@@ -150,7 +150,7 @@ const Vehicles = () => {
                       </div>
                       <Dropdown>
                         <DropdownTrigger>
-                          <Button isIconOnly color="danger" aria-label="Delete">
+                          <Button isIconOnly color="danger" variant="light" aria-label="Delete">
                             <RiDeleteBinLine size={20}/>
                           </Button>   
                         </DropdownTrigger>
