@@ -1,15 +1,19 @@
 import { NextResponse } from 'next/server';
 
+export const config = {
+  runtime: 'nodejs', // Explicitly specify that this API route uses nodejs runtime
+};
+
 export async function GET(request) {
   try {
     // Get the client's IP address from the request headers
-    const clientIP = request.headers.get("x-real-ip");
+    const clientIP = request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for') || 'default_ip';
 
     // Default location (Pori) coordinates
     let lat = 61.485199;
     let lon = 21.797461;
 
-    if (clientIP) {
+    if (clientIP && clientIP !== 'default_ip') {
       const geoLocationUrl = `https://ipapi.co/${clientIP}/json/`;
       const geoResponse = await fetch(geoLocationUrl);
       if (geoResponse.ok) {
