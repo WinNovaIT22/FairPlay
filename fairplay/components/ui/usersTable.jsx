@@ -31,45 +31,62 @@ import Zoom from 'react-medium-image-zoom';
 import { jsPDF } from "jspdf";
 import 'react-medium-image-zoom/dist/styles.css';
 
-const generatePDF = (userVehicles, userTasks) => {
-  if (!userVehicles || !userTasks) {
+const currentYear = new Date().getFullYear();
+
+const generatePDF = (userVehicles, userTasks, userData) => {
+  if (!userVehicles || !userTasks || !userData) {
     console.error('Missing data to generate PDF');
     return;
   }
 
   const doc = new jsPDF();
+  const lineHeight = 10;
+  const lineHeightsm = 7;
+  const margin = 10;
+  let verticalPosition = margin;
 
-  // // Add user information to the PDF
-  // doc.text(`User Information:
-  // Name: ${userData.firstname} ${userData.lastname}
-  // Email: ${userData.email}
-  // Role: ${userData.role}`, 10, 10);
+  const currentYear = new Date().getFullYear();
 
-  // Add user vehicles to the PDF
-  doc.text("User Vehicles:", 10, 30);
+  doc.text(`Käyttäjän PDF-lomake, FairPlay ${currentYear}`, margin, verticalPosition);
+  verticalPosition += lineHeightsm;
+  doc.text(`${userData.firstname} ${userData.lastname}, ${userData.role}`, margin, verticalPosition);
+  verticalPosition += lineHeightsm;
+  doc.text(`${userData.email}`, margin, verticalPosition);
+  verticalPosition += lineHeight * 2; 
+
+  doc.text("Ajoneuvot", margin, verticalPosition);
+  verticalPosition += lineHeight;
   if (Array.isArray(userVehicles) && userVehicles.length > 0) {
     userVehicles.forEach((vehicle, index) => {
-      doc.text(`${index + 1}. ${vehicle.vehicle} - ${vehicle.inspected ? 'Inspected' : 'Not Inspected'}`, 20, 50 + (index * 20));
+      doc.text(`${index + 1}. ${vehicle.vehicle} - ${vehicle.inspected ? 'Katsastettu' : 'Ei katsastettu'}`, margin + 10, verticalPosition);
+      verticalPosition += lineHeight;
     });
   } else {
-    doc.text("No vehicles found", 20, 50);
+    doc.text("Ei ajoneuvoja", margin + 10, verticalPosition);
+    verticalPosition += lineHeight;
   }
 
-  // Add user tasks to the PDF
-  doc.text("User Tasks:", 10, 90);
-  if (Array.isArray(userTasks) && userTasks.length > 0) {
-    userTasks.forEach((task, index) => {
-      doc.text(`${index + 1}. ${task.tasktitle} - ${task.checked ? 'Checked' : 'Unchecked'}`, 20, 110 + (index * 20));
+  verticalPosition += lineHeight;
+
+  doc.text("Tarkistetut suoritukset", margin, verticalPosition);
+  verticalPosition += lineHeight;
+  const checkedTasks = userTasks.filter(task => task.checked);
+  let totalPoints = 0;
+  if (Array.isArray(checkedTasks) && checkedTasks.length > 0) {
+    checkedTasks.forEach((task, index) => {
+      doc.text(`${index + 1}. ${task.tasktitle} - pisteet: ${task.points}`, margin + 10, verticalPosition);
+      verticalPosition += lineHeight;
+      totalPoints += task.points;
     });
   } else {
-    doc.text("No tasks found", 20, 110);
+    doc.text("Ei suorituksia tarkistettu", margin + 10, verticalPosition);
+    verticalPosition += lineHeight;
   }
 
-  // Add total points to the PDF
-  // doc.text(`Total Points: ${totalPoints}`, 10, 230);
+  verticalPosition += lineHeight;
+  doc.text(`Pisteet yhteensä: ${totalPoints}`, margin, verticalPosition);
 
-  // Save the PDF
-  doc.save("user_info.pdf");
+  doc.save(`${userData.firstname}_${userData.lastname}_${currentYear}.pdf`);
 };
 
 const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
@@ -83,7 +100,7 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
   const [userRole, setUserRole] = useState(modalData ? modalData.role : "");
 
   const handleDownloadPDF = () => {
-    generatePDF(userVehicles, userTasks);
+    generatePDF(userVehicles, userTasks, modalData);
   };
 
   const openRejectModal = (task) => {
@@ -359,7 +376,7 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
                     ))}
                   </Accordion>
                 ) : (
-                  <p>Käyttäjällä ei ole yhtäkään ajoneuvoa</p>
+                  <p className="text-sm text-red-500">Käyttäjällä ei ole yhtäkään ajoneuvoa</p>
                 )}
               </div>
               <div className="text-center text-xl mt-5">
@@ -445,7 +462,7 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
                     ))}
                   </Accordion>
                 ) : (
-                  <p>Käyttäjä ei ole suorittanut yhtäkään suoritusta</p>
+                  <p className="text-sm text-red-500">Käyttäjä ei ole suorittanut yhtäkään suoritusta</p>
                 )}
               </div>
             </>

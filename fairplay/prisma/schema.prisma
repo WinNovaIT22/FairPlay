@@ -8,18 +8,18 @@ datasource db {
 }
 
 model User {
-  firstname String
-  lastname  String
-  email     String      @unique
-  password  String
-  createdAt DateTime    @default(now())
-  updateAt  DateTime    @updatedAt
-  id        Int         @id @default(autoincrement())
-  role      String
-  blocked   Boolean     @default(false)
-  city      String      @default("Pori")
-  totalPoints Int       @default(0)
-  tasks     UserTasks[]
+  firstname   String
+  lastname    String
+  email       String      @unique
+  password    String
+  createdAt   DateTime    @default(now())
+  updateAt    DateTime    @updatedAt
+  id          Int         @id @default(autoincrement())
+  role        String
+  blocked     Boolean     @default(false)
+  city        String      @default("Pori")
+  totalPoints Int         @default(0)
+  tasks       UserTasks[]
 }
 
 model UserVehicles {
@@ -63,10 +63,10 @@ model UserTasks {
   tasktitle String?
   image     Boolean?
   text      Boolean?
-  imageFile String?
-  textInput String?
   checked   Boolean?
   year      Int?
+  imageFile String?
+  textInput String?
   task      Tasks    @relation(fields: [taskId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id])
 }
