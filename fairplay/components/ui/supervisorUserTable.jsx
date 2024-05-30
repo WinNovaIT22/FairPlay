@@ -18,7 +18,7 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import { IoSearchOutline, IoEyeOutline } from "react-icons/io5";
-import ModalComponent from "@/components/modals/usersTable";
+import ModalComponent from "@/components/ui/usersTable";
 import Loading from "@/app/loading";
 import { ToastContainer } from "react-toastify";
 import { roleColorMap } from "@/utils/rolecolormap.js"; 

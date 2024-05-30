@@ -18,7 +18,7 @@ import Loading from "@/app/loading";
 import { HiOutlinePlus } from "react-icons/hi2";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import AddTask from "@/components/modals/addNewTask";
-import EditTask from "@/components/modals/editTask";
+import EditTask from "@/components/modals/EditTask";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

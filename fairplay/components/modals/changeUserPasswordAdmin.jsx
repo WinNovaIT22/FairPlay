@@ -62,10 +62,10 @@ const PasswordModal = ({ isOpen, onClose, user }) => {
           />
         </ModalBody>
         <ModalFooter>
-          <Button variant="light" onPress={onClose} className="font-bold">
+          <Button variant="light" onPress={onClose}>
             Peruuta
           </Button>
-          <Button color="success" variant="flat" onPress={updatePassword} className="font-bold">
+          <Button color="success" variant="flat" onPress={updatePassword}>
             Vahvista
           </Button>
         </ModalFooter>

@@ -13,7 +13,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import Loading from "@/app/loading";
-import UserTaskComplete from "@/components/modals/UserTaskComplete";
+import UserTaskComplete from "@/components/modals/userTaskComplete";
 
 const columns = [
   { name: "TEHTÄVÄ", uid: "tasktitle" },
@@ -122,8 +122,7 @@ export default function TasksTable({ initialTasks = [] }) {
   }, []);
 
   const completedTasks = tasks.filter((task) => task.completed).length;
-  const progressValue =
-    tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
+  const progressValue = tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
 
   const topContent = useMemo(() => {
     return (
