@@ -22,9 +22,9 @@ export default function Info() {
           <IoInformationCircleOutline size={33} className="mr-2" />
           Käyttöohjeet
         </div>
-        <div className="flex flex-grow items-center justify-center mt-4">
-          <div className="flex justify-center space-x-4">
-            <div className="bg-gradient-to-t from-red-900 to-neutral-900 w-1/4 p-5 content-center shadow-md relative rounded-md h-96 flex flex-col">
+        <div className="flex flex-grow items-center justify-center mt-4 px-2 md:px-0">
+          <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4 w-full">
+            <div className="border-5 border-red-800 bg-gradient-to-t from-red-900 to-neutral-900 w-full md:w-1/4 p-5 content-center shadow-md relative rounded-md h-96 flex flex-col">
               <div className="text-center mt-4 flex-grow overflow-y-auto">
                 <MdLiveHelp size={30} className="text-white mb-2" />
                 <p className="text-xl font-bold text-white font-sans mb-4">
@@ -34,17 +34,17 @@ export default function Info() {
                   Tähän voit halutessasi kirjoittaa kuvauksen.
                 </p>
                 <a
-                  href="https://www.konepyoraklubi.fi/wp-content/uploads/2023/04/Konepyoraklubi-FairPlay-pistejako-ja-perusteet_2023.pdf"
+                  href="https://www.konepyoraklubi.fi/wp-content/uploads/2024/04/Konepyoraklubi-Farplay-pistejako-ja-perusteet-2024.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <button className="custom-button">
+                  <button className="custom-button px-2 py-1 text-sm md:text-base">
                     Tutustu sääntöihin täältä
                   </button>
                 </a>
               </div>
             </div>
-            <div className="bg-gradient-to-t from-red-900 to-neutral-900 w-1/4 p-5 content-center shadow-md relative rounded-md h-96 flex flex-col">
+            <div className="border-5 border-red-800 bg-gradient-to-t from-red-900 to-neutral-900 w-full md:w-1/4 p-5 content-center shadow-md relative rounded-md h-96 flex flex-col">
               <div className="text-center mt-4 flex-grow overflow-y-auto">
                 <MdLiveHelp size={30} className="text-white mb-2" />
                 <p className="text-xl font-bold text-white font-sans mb-4">
@@ -55,7 +55,7 @@ export default function Info() {
                   historiasta tai muusta kiinnostavasta.
                 </p>
                 <a href="/ohjeet/lisatieto" target="_blank" rel="noopener noreferrer">
-                  <button className="custom-button">Lisätietoa</button>
+                  <button className="custom-button px-2 py-1 text-sm md:text-base">Lisätietoa</button>
                 </a>
               </div>
             </div>
