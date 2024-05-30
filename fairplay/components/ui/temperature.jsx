@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 
 const Temperature = () => {
   const [temperature, setTemperature] = useState(null);
-  const [city, setCity] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -17,7 +16,6 @@ const Temperature = () => {
         }
         const data = await res.json();
         setTemperature(data.temperature);
-        setCity(data.city);
       } catch (error) {
         console.error("Error fetching temperature:", error);
         setError('Failed to load weather data');
@@ -39,7 +37,7 @@ const Temperature = () => {
 
   return (
     <div>
-      <span>{temperature}, {city}</span>
+      <span>{temperature}</span>
     </div>
   );
 };
