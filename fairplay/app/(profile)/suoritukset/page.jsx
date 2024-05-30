@@ -55,7 +55,7 @@ export default function Tasks() {
           </div>
         ) : null}
         {!isLoading && !isAnyVehicleInspected && !hasNoVehicles && (
-          <div className="text-center text-gray-500">
+          <div className="text-center text-red-500 font-bold text-lg mt-5">
             Sinulta puuttuu ajoneuvo tai ajoneuvoasi ei ole katsastettu
           </div>
         )}

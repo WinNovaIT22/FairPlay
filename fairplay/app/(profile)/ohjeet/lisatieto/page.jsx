@@ -18,7 +18,7 @@ export default function MoreInfo() {
             </a>
           </div>
           <GrHelpBook size={35} className="mr-2"/>
-          Moottoripyörätalli
+          Nettisivun Käyttöohjeet
         </div>
       <div className="flex-grow flex items-center justify-center">
         <div className="flex justify-center">
