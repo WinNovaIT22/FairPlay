@@ -7,6 +7,7 @@ import { FaUserAlt, FaHome } from "react-icons/fa";
 
 const UserData = async () => {
   const session = await getServerSession(authOptions);
+  const id = session?.user.id;
   const firstname = session?.user.firstname;
   const lastname = session?.user.lastname;
   const email = session?.user.email;
@@ -55,8 +56,8 @@ const UserData = async () => {
               />
             </div>
             <div className="flex flex-col justify-center mt-8">
-              <PasswordModal />
-              <DeleteModal />
+              <PasswordModal userId={id} />
+              <DeleteModal userId={id} />
             </div>
           </div>
         </div>

@@ -30,9 +30,6 @@ export default function Info() {
                 <p className="text-xl font-bold text-white font-sans mb-4">
                   Ohjeet fairplay kilpailuun saat esille nappia painamalla
                 </p>
-                <p className="mb-4 text-white">
-                  Tähän voit halutessasi kirjoittaa kuvauksen.
-                </p>
                 <a
                   href="https://www.konepyoraklubi.fi/wp-content/uploads/2024/04/Konepyoraklubi-Farplay-pistejako-ja-perusteet-2024.pdf"
                   target="_blank"
@@ -49,10 +46,6 @@ export default function Info() {
                 <MdLiveHelp size={30} className="text-white mb-2" />
                 <p className="text-xl font-bold text-white font-sans mb-4">
                   Ohjeet nettisivun käyttöön
-                </p>
-                <p className="mb-4 text-white">
-                  Tässä voit tarjota yleistä tietoa kilpailun luonteesta,
-                  historiasta tai muusta kiinnostavasta.
                 </p>
                 <a href="/ohjeet/lisatieto" target="_blank" rel="noopener noreferrer">
                   <button className="custom-button px-2 py-1 text-sm md:text-base">Lisätietoa</button>

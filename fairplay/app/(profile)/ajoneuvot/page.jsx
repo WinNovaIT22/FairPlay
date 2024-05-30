@@ -57,7 +57,6 @@ const Vehicles = () => {
       const result = await response.json();
       console.log(result.message);
 
-      // Remove the deleted vehicle from the state
       setUserVehicles((prevVehicles) =>
         prevVehicles.filter((vehicle) => vehicle.id !== vehicleId)
       );
@@ -85,13 +84,13 @@ const Vehicles = () => {
     setUserVehicles((prevVehicles) => [...prevVehicles, newVehicle]);
   };
 
-  const handleVehicleInspected = (inspectedVehicle) => {
+  const handleVehicleInspected = (vehicleId) => {
     setUserVehicles((prevVehicles) =>
       prevVehicles.map((vehicle) =>
-        vehicle.id === vehicle.id ? { ...inspectedVehicle } : vehicle
+        vehicle.id === vehicleId ? { ...vehicle, inspected: true } : vehicle
       )
     );
-    setSelectedVehicle(inspectedVehicle.vehicle);
+    setIslInspectOpen(false);
   };
 
   const currentYear = new Date().getFullYear();

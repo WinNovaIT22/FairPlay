@@ -30,6 +30,7 @@ import AdminRejectTask from "@/components/modals/adminRecjectTask";
 import Zoom from 'react-medium-image-zoom';
 import { jsPDF } from "jspdf";
 import 'react-medium-image-zoom/dist/styles.css';
+import { signOut } from "next-auth/react";
 
 const generatePDF = (userVehicles, userTasks, userData) => {
   if (!userVehicles || !userTasks || !userData) {
@@ -287,6 +288,7 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
       if (response.ok) {
         console.log("User blocked successfully");
         window.location.reload(true);
+        signOut(modalData.id)
       } else {
         console.error("Failed to block user");
       }

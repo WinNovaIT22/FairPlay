@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { DateRangePicker } from "@nextui-org/react";
 import { parseZonedDateTime, ZonedDateTime } from "@internationalized/date";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const zonedDateTimeToString = (zonedDateTime) => {
   if (zonedDateTime instanceof ZonedDateTime) {
@@ -39,6 +41,8 @@ export default function DateTime() {
     fetchDates();
   }, []);
 
+  const notify = () => toast.success("Kilpailun kesto päivitetty");
+
   const handleSave = async () => {
     try {
       const response = await fetch("/api/admin/datetime", {
@@ -48,9 +52,8 @@ export default function DateTime() {
         },
         body: JSON.stringify(dates),
       });
-      const data = await response.json();
       if (response.ok) {
-        alert(data.message);
+        notify();
       } else {
         alert("Error saving event");
       }

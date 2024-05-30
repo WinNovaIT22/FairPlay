@@ -10,48 +10,44 @@ export default function Tasks() {
   const [userVehicles, setUserVehicles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isWithinDateRange, setIsWithinDateRange] = useState(false);
+  const [startDate, setStartDate] = useState(null);
 
   useEffect(() => {
-    const fetchDates = async () => {
+    const fetchDatesAndData = async () => {
       try {
-        const response = await fetch("/api/admin/datetime");
-        if (!response.ok) {
+        const dateResponse = await fetch("/api/admin/datetime");
+        if (!dateResponse.ok) {
           throw new Error("Failed to fetch date range");
         }
-        const data = await response.json();
-        const { start, end } = data.event;
+        const dateData = await dateResponse.json();
+        const { start, end } = dateData.event;
 
         const currentDate = new Date();
-        const startDate = parseZonedDateTime(start);
+        const parsedStartDate = parseZonedDateTime(start);
         const endDate = parseZonedDateTime(end);
 
-        if (currentDate >= startDate.toDate() && currentDate <= endDate.toDate()) {
+        setStartDate(parsedStartDate); 
+
+        if (currentDate >= parsedStartDate.toDate() && currentDate <= endDate.toDate()) {
           setIsWithinDateRange(true);
         } else {
           setIsWithinDateRange(false);
         }
+
+        const vehicleResponse = await fetch("/api/user/getTasks");
+        if (!vehicleResponse.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const vehicleData = await vehicleResponse.json();
+        setUserVehicles(vehicleData.vehicles);
       } catch (error) {
-        console.error("Error fetching date range:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/user/getTasks");
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data = await response.json();
-        setUserVehicles(data.vehicles);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchDates();
-    fetchData();
+    fetchDatesAndData();
   }, []);
 
   const isAnyVehicleInspected = userVehicles.some(vehicle => vehicle.inspected);
@@ -81,7 +77,7 @@ export default function Tasks() {
         </div>
       ) : !isWithinDateRange ? (
         <div className="flex justify-center items-center h-full text-center text-red-500 font-bold text-lg mt-5">
-          Tämä sivu ei ole tällä hetkellä käytettävissä
+          Kisa alkaa {startDate.toLocaleString()}
         </div>
       ) : (
         <>

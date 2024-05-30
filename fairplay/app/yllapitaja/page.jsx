@@ -4,12 +4,24 @@ import { Card, CardBody, CardFooter, Chip, Image } from "@nextui-org/react";
 import Link from "next/link";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import DateTime from "@/components/ui/datetime";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        theme="dark"
+      />
       <div
         className="flex flex-col h-screen"
         style={{
