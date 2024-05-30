@@ -3,5 +3,4 @@ package = "@netlify/plugin-nextjs"
 
 [build]
   command = "npx prisma generate && npm run build"
-  publish = "/build"
-  base = "/"
+  publish = ".next"
