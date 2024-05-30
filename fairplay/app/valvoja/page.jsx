@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
 import { Chip } from "@nextui-org/react";
-import AdminCover from "@/public/admincover.png";
 import SupervisorUsers from "@/components/ui/supervisorUserTable"
 
 const Home = async () => {
