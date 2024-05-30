@@ -45,8 +45,8 @@ model Tasks {
 
 model DateRange {
   id        Int      @id @default(autoincrement())
-  start     DateTime
-  end       DateTime
+  start     String?
+  end       String?
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 }

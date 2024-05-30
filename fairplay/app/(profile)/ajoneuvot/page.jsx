@@ -88,9 +88,10 @@ const Vehicles = () => {
   const handleVehicleInspected = (inspectedVehicle) => {
     setUserVehicles((prevVehicles) =>
       prevVehicles.map((vehicle) =>
-        vehicle.id === inspectedVehicle.id ? { ...vehicle, inspected: true } : vehicle
+        vehicle.id === vehicle.id ? { ...inspectedVehicle } : vehicle
       )
     );
+    setSelectedVehicle(inspectedVehicle.vehicle);
   };
 
   const currentYear = new Date().getFullYear();

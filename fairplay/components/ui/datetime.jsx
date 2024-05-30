@@ -1,67 +1,87 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { DateRangePicker, Button } from "@nextui-org/react";
+import React, { useState, useEffect } from "react";
+import { DateRangePicker } from "@nextui-org/react";
+import { parseZonedDateTime, ZonedDateTime } from "@internationalized/date";
+
+const zonedDateTimeToString = (zonedDateTime) => {
+  if (zonedDateTime instanceof ZonedDateTime) {
+    return zonedDateTime.toString();
+  }
+  return zonedDateTime;
+};
 
 export default function DateTime() {
-  const [defaultValue, setDefaultValue] = useState({
-    start: new Date("2024-04-01T00:45:00.000Z"),
-    end: new Date("2024-04-08T11:15:00.000Z"),
+  const [dates, setDates] = useState({
+    start: "2024-04-01T00:45[Europe/Helsinki]",
+    end: "2024-04-08T11:15[Europe/Helsinki]",
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchDateRange() {
+    const fetchDates = async () => {
       try {
-        const res = await fetch('/api/admin/datetime');
-        const data = await res.json();
-        if (data.event) {
-          setDefaultValue({
-            start: new Date(data.event.start),
-            end: new Date(data.event.end),
+        const response = await fetch("/api/admin/datetime");
+        const data = await response.json();
+        if (response.ok && data.event) {
+          setDates({
+            start: data.event.start,
+            end: data.event.end,
           });
         }
       } catch (error) {
-        console.error("Failed to fetch date range:", error);
+        console.error("Error fetching event dates:", error);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
 
-    fetchDateRange();
+    fetchDates();
   }, []);
 
   const handleSave = async () => {
     try {
-      const res = await fetch('/api/admin/datetime', {
-        method: 'POST',
+      const response = await fetch("/api/admin/datetime", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          start: defaultValue.start,
-          end: defaultValue.end,
-        }),
+        body: JSON.stringify(dates),
       });
-
-      const result = await res.json();
-      console.log(result.message);
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+      } else {
+        alert("Error saving event");
+      }
     } catch (error) {
-      console.error("Error saving date range:", error);
+      console.error("Error saving event:", error);
+      alert("Error saving event");
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="w-full max-w-xl flex flex-row gap-4">
       <DateRangePicker
+        label="Kilpailun kesto"
         hideTimeZone
         visibleMonths={2}
-        value={defaultValue}
-        onChange={(value) => {
-          setDefaultValue({
-            start: new Date(value.start),
-            end: new Date(value.end),
-          });
+        defaultValue={{
+          start: parseZonedDateTime(dates.start),
+          end: parseZonedDateTime(dates.end),
         }}
+        onChange={(range) => setDates({
+          start: zonedDateTimeToString(range.start),
+          end: zonedDateTimeToString(range.end),
+        })}
       />
-      <Button onPress={handleSave}>Tallenna</Button>
+      <button onClick={handleSave} className="text-white">
+        Tallenna
+      </button>
     </div>
   );
 }

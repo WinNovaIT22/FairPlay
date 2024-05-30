@@ -5,11 +5,8 @@ export async function POST(req) {
   try {
     const { start, end } = await req.json();
 
-    // Convert received values to Date objects
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-
-    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    // Validate received values
+    if (!start || !end) {
       throw new Error("Invalid date format");
     }
 
@@ -20,16 +17,16 @@ export async function POST(req) {
       dateRange = await db.dateRange.update({
         where: { id: existingDateRange.id },
         data: {
-          start: startDate,
-          end: endDate,
+          start,
+          end,
         },
       });
       return NextResponse.json({ event: dateRange, message: "Event Updated" }, { status: 200 });
     } else {
       dateRange = await db.dateRange.create({
         data: {
-          start: startDate,
-          end: endDate,
+          start,
+          end,
         },
       });
       return NextResponse.json({ event: dateRange, message: "Event Created" }, { status: 200 });

@@ -31,7 +31,6 @@ const AddVehicle = ({ isOpen, onClose, onVehicleAdded }) => {
   
       if (response.ok) {
         const result = await response.json();
-        // Update the state with the newly added vehicle
         onVehicleAdded(result.user);
         onClose();
       } else {

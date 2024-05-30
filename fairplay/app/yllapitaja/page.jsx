@@ -66,9 +66,9 @@ const Home = async () => {
             </Card>
           </Link>
         </div>
-        <div className="flex flex-col items-center mt-12 text-lg font-bold text-black">
-          <p>Määritä FairPlay -kilpailun kesto</p>
-          {/* <DateTime /> */}
+        <div className="flex flex-col items-center mt-12">
+          <p className="mb-2 text-white text-lg font-bold backdrop-blur-2xl px-2">Määritä FairPlay -kilpailun kesto</p>
+          <DateTime />
          </div>
       </div>
     </>
