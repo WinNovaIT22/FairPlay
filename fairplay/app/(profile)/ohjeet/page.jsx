@@ -30,6 +30,9 @@ export default function Info() {
                 <p className="text-xl font-bold text-white font-sans mb-4">
                   Ohjeet fairplay kilpailuun saat esille nappia painamalla
                 </p>
+                <p className="mb-4 text-white">
+                  Tähän voit halutessasi kirjoittaa kuvauksen.
+                </p>
                 <a
                   href="https://www.konepyoraklubi.fi/wp-content/uploads/2023/04/Konepyoraklubi-FairPlay-pistejako-ja-perusteet_2023.pdf"
                   target="_blank"
