@@ -31,6 +31,7 @@ import Zoom from 'react-medium-image-zoom';
 import { jsPDF } from "jspdf";
 import 'react-medium-image-zoom/dist/styles.css';
 import { signOut } from "next-auth/react";
+import EditUserPoints from "@/components/modals/editUserPoints";
 
 const generatePDF = (userVehicles, userTasks, userData) => {
   if (!userVehicles || !userTasks || !userData) {
@@ -94,6 +95,7 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
   const [userVehicles, setUserVehicles] = useState([]);
   const [userTasks, setUserTasks] = useState([]);
   const [isRejectTaskOpen, setIsRejectTaskOpen] = useState(false);
+  const [isEditUserPointsOpen, setIsEditUserPointsOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userRole, setUserRole] = useState(modalData ? modalData.role : "");
@@ -301,6 +303,13 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
   const formatDateHelsinki = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString("fi-FI", { timeZone: "Europe/Helsinki" });
+  };
+
+  const handleEditPointsClick = () => {
+    setIsEditUserPointsOpen(true);
+  };
+  const handleEditUserPointsClose = () => {
+    setIsEditUserPointsOpen(false);
   };
 
   return (
@@ -546,8 +555,8 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
                 color="secondary"
                 variant="flat"
                 className="flex items-center mx-auto"
-                onClick={() => openPasswordModal(modalData)}
-              >
+                onPress={handleEditPointsClick}
+                >
                 <FaRegStar size={20} />
                 Muuta pisteitä
               </Button>
@@ -577,6 +586,11 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
           onTaskRejected={handleTaskRejection}
         />
       )}
+      <EditUserPoints
+        isOpen={isEditUserPointsOpen}
+        onClose={handleEditUserPointsClose}
+        userData={modalData}
+      />
     </Modal>
   );
 };
