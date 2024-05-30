@@ -41,14 +41,14 @@ const Home = async () => {
           backgroundPosition: "center",
         }}
       >
-        <div className="shadow-lg backdrop-blur-2xl p-2 rounded-lg flex justify-between items-center">
-          <div className="hidden md:block">
+        <div className="relative shadow-lg backdrop-blur-2xl p-4 rounded-lg flex items-center justify-center">
+          <div className="absolute left-2 hidden md:block">
             <Image alt="Logo" width={120} src="/konepyoraklubi.png" />
           </div>
-          <div className="text-center flex-grow text-2xl font-black">
+          <div className="text-center text-2xl font-black">
             {greeting}, {session?.user.firstname} {session?.user.lastname}
           </div>
-          <div className="font-black text-lg mr-3">
+          <div className="absolute right-2 font-black text-lg mr-3">
             <Temperature />
           </div>
         </div>

@@ -23,11 +23,11 @@ import ModalComponent from "@/components/ui/usersTable";
 import Loading from "@/app/loading";
 import { roleColorMap } from "@/utils/rolecolormap.js";
 import { ToastContainer } from "react-toastify";
-import { IoMdPrint, IoMdRemoveCircle } from "react-icons/io";
+import { IoMdRemoveCircle } from "react-icons/io";
 import { FiPlusSquare } from "react-icons/fi";
 import "react-toastify/dist/ReactToastify.css";
 import { FaMasksTheater } from "react-icons/fa6";
-import { FaHome, FaEye } from "react-icons/fa";
+import { FaHome, FaEye, FaRegFileAlt } from "react-icons/fa";
 
 const columns = [
   { name: "ETUNIMI", uid: "firstname" },
@@ -285,8 +285,8 @@ export default function Users() {
                 >
                   <DropdownItem key="pdf">
                     <div className="flex items-center">
-                      <IoMdPrint className="mr-2" />
-                      Tulosta PDF
+                      <FaRegFileAlt className="mr-2" />
+                      Lataa PDF
                     </div>
                   </DropdownItem>
                   <DropdownItem key="remove">
