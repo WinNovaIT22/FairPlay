@@ -9,7 +9,7 @@ export async function POST(req) {
 
         const userVehicles = await db.userVehicles.findMany({
             where: { user_id: user_id },
-            select: { vehicle: true, inspected: true, inspectedImage: true, createdAt: true }
+            select: { id: true, vehicle: true, inspected: true, inspectedImage: true, createdAt: true }
         });
 
         return NextResponse.json(userVehicles, { status: 200 });

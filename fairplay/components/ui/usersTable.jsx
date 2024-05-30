@@ -31,8 +31,6 @@ import Zoom from 'react-medium-image-zoom';
 import { jsPDF } from "jspdf";
 import 'react-medium-image-zoom/dist/styles.css';
 
-const currentYear = new Date().getFullYear();
-
 const generatePDF = (userVehicles, userTasks, userData) => {
   if (!userVehicles || !userTasks || !userData) {
     console.error('Missing data to generate PDF');
@@ -123,7 +121,6 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
   uncheckedTasks.sort((a, b) => a.tasktitle.localeCompare(b.tasktitle));
   const orderedTasks = [...uncheckedTasks, ...checkedTasks];
 
-
   const updateTaskInspection = async (taskId) => {
     try {
       const response = await fetch("/api/admin/completeTask", {
@@ -150,6 +147,33 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
       console.error("Error updating task inspection status:", error);
     }
   };
+
+  const updateVehicleInspectionStatus = async (vehicleId, inspected) => {
+    try {
+      const response = await fetch("/api/admin/inspectVehicles", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ vehicleId, inspected }),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        setUserVehicles((prevVehicles) =>
+          prevVehicles.map((vehicle) =>
+            vehicle.id === vehicleId ? { ...vehicle, inspected: data.vehicle.inspected } : vehicle
+          )
+        );
+        console.log("Vehicle inspection status updated successfully:", data.vehicle);
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to update vehicle inspection status:", errorData.message);
+      }
+    } catch (error) {
+      console.error("Error updating vehicle inspection status:", error);
+    }
+  };  
 
   useEffect(() => {
     if (modalData && modalData.role !== userRole) {
@@ -335,26 +359,30 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
                           </div>
                         }
                       >
-                        {vehicle.inspected && vehicle.inspectedImage ? (
+                        {vehicle.inspected ? (
                           <div className="flex justify-center items-center flex-col">
-                            <p className="text-sm">
-                              Käyttäjän lähettämä kuva,{" "}
-                              {formatDateHelsinki(vehicle.createdAt)}:
-                            </p>
-                            <Zoom key={index}>
-                              <Image
-                                alt="InspectedTrue"
-                                width={300}
-                                src={vehicle.inspectedImage}
-                                className="my-3"
-                              />
-                            </Zoom>
+                            {vehicle.inspectedImage && (
+                              <div>
+                                <p className="text-sm">
+                                  Käyttäjän lähettämä kuva,{" "}
+                                  {formatDateHelsinki(vehicle.createdAt)}:
+                                </p>
+                                <Zoom key={index}>
+                                  <Image
+                                    alt="InspectedTrue"
+                                    width={300}
+                                    src={vehicle.inspectedImage}
+                                    className="my-3"
+                                  />
+                                </Zoom>
+                              </div>
+                            )}
                             <Button
                               variant="flat"
                               color="danger"
                               className="w-full"
                               onClick={() =>
-                                updateTaskInspection(vehicle.id, false)
+                                updateVehicleInspectionStatus(vehicle.id, false)
                               }
                             >
                               Hylkää katsastus
@@ -366,7 +394,7 @@ const ModalComponent = ({ isOpen, onClose, modalData, onUpdateUserRole }) => {
                             color="success"
                             className="w-full"
                             onClick={() =>
-                              updateTaskInspection(vehicle.id, true)
+                              updateVehicleInspectionStatus(vehicle.id, true)
                             }
                           >
                             Merkitse katsastetuksi
