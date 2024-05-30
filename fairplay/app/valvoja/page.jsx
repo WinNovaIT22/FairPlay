@@ -9,24 +9,22 @@ const Home = async () => {
 
   return (
     <>
-      <div className="flex justify-center p-4 text-xl font-black bg-zinc-700 relative">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url(${AdminCover.src})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "repeat",
-            opacity: "20%",
-            backgroundSize: "8%",
-          }}
-        ></div>
-        {session?.user.firstname}
-        <Chip className="ml-2" color="primary" size="md" variant="flat">
-          Valvoja
-        </Chip>
-      </div>
+     <div
+        className="flex flex-col h-screen"
+        style={{
+          backgroundImage: "url(/backgrounds/adminbg.webp)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="shadow-lg backdrop-blur-2xl text-xl p-4 font-black rounded-lg flex justify-center">
+          Hallintasivu - {session?.user.firstname}
+          <Chip className="ml-2" color="primary" size="md" variant="flat">
+            Valvoja
+          </Chip>
+        </div>
       <SupervisorUsers />
+      </div>
     </>
   );
 };

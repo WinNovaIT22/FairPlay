@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/utils/db";
 import { hash } from "bcrypt";
-import { populateOrUpdateUserTasks } from "@/path/to/your/utils"; // Ensure to update the import path
+import { populateOrUpdateUserTasks } from "@/utils/populateUserTasks";
 
 export async function POST(req) {
   try {

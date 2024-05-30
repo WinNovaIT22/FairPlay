@@ -13,7 +13,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import Loading from "@/app/loading";
-import UserTaskComplete from "@/components/modals/UserTaskComplete";
+import UserTaskComplete from "@/components/modals/userTaskComplete";
 
 const columns = [
   { name: "TEHTÄVÄ", uid: "tasktitle" },
